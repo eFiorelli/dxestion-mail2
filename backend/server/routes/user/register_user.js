@@ -1,9 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+let { checkToken } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
-app.post('/register/user', (req, res) => {
+app.post('/register/user', checkToken, (req, res) => {
 	let body = req.body;
 
 	User.findOne(
