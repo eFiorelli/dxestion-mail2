@@ -1,14 +1,10 @@
 const express = require('express');
-
 const bcrypt = require('bcrypt');
-
-const User = require('../models/user');
+const User = require('../../models/user');
 const app = express();
 
 app.post('/register/user', (req, res) => {
 	let body = req.body;
-
-	console.log(body);
 
 	User.findOne(
 		{
@@ -40,7 +36,7 @@ app.post('/register/user', (req, res) => {
 					database_name: body.database_name,
 					database_port: body.database_port,
 					database_username: body.database_username,
-					database_password: body.database_password
+					database_password: bcrypt.hashSync(body.database_password, 10)
 				});
 
 				user.save((err, userDB) => {

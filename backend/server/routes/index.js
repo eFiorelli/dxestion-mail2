@@ -1,12 +1,21 @@
-const express = require('express')
-const app = express()
+const express = require('express');
+const app = express();
 
-app.use(require('./user'));
+/* Login routes */
 app.use(require('./login'));
 
-app.use(require('./register_client'));
-app.use(require('./register_user'));
+/* Client routes */
+app.use(require('./client/register_client'));
+app.use(require('./client/update_client'));
+app.use(require('./client/delete_client'));
 
+/* User routes */
+app.use(require('./user/register_user'));
+app.use(require('./user/update_user'));
+app.use(require('./user/delete_user'));
+
+/* Other stuff */
 app.use(require('./misc'));
+app.use(require('./user'));
 
 module.exports = app;
