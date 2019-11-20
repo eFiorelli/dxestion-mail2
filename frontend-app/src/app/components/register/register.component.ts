@@ -11,9 +11,15 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 	user: any = {
-		email: '',
+		username: '',
 		password: '',
-		name: ''
+		name: '',
+		email: '',
+		database_url: '',
+		database_name: '',
+		database_port: '',
+		database_username: '',
+		database_password: ''
 	};
 
 	showSpinner: boolean = false;
@@ -38,13 +44,6 @@ export class RegisterComponent implements OnInit {
 	}
 
 	register() {
-		this.user.username = this.user.name;
-		this.user.database_url = 'http:192.168.0.2';
-		this.user.database_name = 'TEST';
-		this.user.database_port = '1443';
-		this.user.database_username = 'sa';
-		this.user.database_password = 'masterkey';
-		console.log(this.user);
 		this.showSpinner = true;
 		this.userService.registerUser(this.user).subscribe(
 			(res: any) => {

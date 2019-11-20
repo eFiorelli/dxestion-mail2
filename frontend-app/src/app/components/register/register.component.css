@@ -1,16 +1,19 @@
-.reegister-icon {
-    padding: 0 14px;
+.register-icon {
+	padding: 0 14px;
 }
-
-.reegister-spacer {
-    flex: 1 1 auto;
+.register-spacer {
+	flex: 1 1 auto;
 }
-
 .register-card {
-    width: 400px;
-    margin: 10% auto;
+	width: 400px;
+	margin: 10% auto;
 }
-
 .mat-card-title {
-    font-size: 16px;
+	font-size: 16px;
+}
+.table-register {
+	width: 90%;
+}
+.register-full-width {
+	display: block;
 }
