@@ -1,4 +1,5 @@
 /virtual_env
+/node_virtualenv
 node_modules/
 
 
