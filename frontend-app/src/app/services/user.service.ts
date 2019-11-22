@@ -11,7 +11,11 @@ export class UserService {
 	constructor(private http: HttpClient, private router: Router) {}
 
 	test() {
-		return this.http.post(AppComponent.BACKEND_URL + "/test", {});
+		return this.http.post(AppComponent.BACKEND_URL + "/test", {
+			email: "test3@test.com",
+			name: "Test user",
+			phone: "666555444"
+		});
 	}
 
 	registerUser(userData: any) {

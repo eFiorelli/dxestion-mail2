@@ -12,8 +12,8 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {}
 
 	test() {
-		this.userService.test().subscribe(response => {
-			console.log(response);
+		this.userService.test().subscribe((response: any) => {
+			alert(response.message);
 		});
 	}
 }
