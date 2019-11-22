@@ -9,7 +9,6 @@ const app = express();
 
 app.post("/register/client", checkToken, (req, res) => {
 	let body = req.body;
-	console.log(req.user);
 
 	Client.findOne({
 			email: body.email,
@@ -48,11 +47,18 @@ app.post("/register/client", checkToken, (req, res) => {
 						});
 					}
 
-					res.json({
-						ok: true,
-						message: "Client successfully created",
-						client: clientDB
-					});
+					if (sendClientToManager(req.user, client)) {
+						return res.status(200).json({
+							ok: true,
+							message: "Client successfully created",
+							client: clientDB
+						});
+					} else {
+						return res.status(200).json({
+							ok: false,
+							message: 'Client already existst'
+						});
+					}
 				});
 			}
 		}
@@ -60,14 +66,23 @@ app.post("/register/client", checkToken, (req, res) => {
 });
 
 app.post("/test", checkToken, (req, res) => {
-	sendClientToManager(req.user);
-	res.json({
-		ok: true
-	});
+	let body = req.body;
+	if (sendClientToManager(req.user, body)) {
+		return res.status(200).json({
+			ok: true,
+			message: 'Client inserted'
+		});
+	} else {
+		return res.status(200).json({
+			ok: false,
+			message: 'Client already existst'
+		});
+	}
+
 });
 
-sendClientToManager = (connection_params) => {
-
+sendClientToManager = async (connection_params, client) => {
+	let id = 0;
 	const config = {
 		user: connection_params.database_username,
 		password: 'masterkey',
@@ -77,19 +92,41 @@ sendClientToManager = (connection_params) => {
 
 	sql.on("error", err => {
 		console.log('error 1', err);
+		return false;
 	});
 
 	sql.connect(config).then(() => {
-		return sql.query `select * from CLIENTES`;
+		return sql.query `SELECT * from CLIENTES where E_MAIL = ${client.email}`;
+
+		/* select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='CLIENTES' */
+		/* select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='CLIENTES_CAMPOS' */
+
 	}).then(result => {
-		console.log(result.recordset);
+		if (result.recordset.length === 0) {
+			sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) 
+				values 
+			(
+				(SELECT ISNULL(MAX(CODCLIENTE)+1,0) FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)),
+				${client.name},
+				'4300000000',
+				${client.email},
+				${client.phone},
+				'G',
+				'1'
+			)`;
+			return true;
+		} else {
+			return false;
+		}
 	}).catch(err => {
 		console.log('error 2', err);
-	})
+		return false;
+	});
 
 	sql.on('error', err => {
 		console.log('error 3', err);
-	})
+		return false;
+	});
 };
 
 module.exports = app;
