@@ -1,88 +1,72 @@
-const express = require("express");
-let {
-	checkToken
-} = require("../../middlewares/authentication");
-const Client = require("../../models/client");
+const express = require('express');
+let { checkToken } = require('../../middlewares/authentication');
+const Client = require('../../models/client');
 
-const sql = require("mssql");
+const sql = require('mssql');
 const app = express();
 
-app.post("/register/client", checkToken, (req, res) => {
+app.post('/register/client', checkToken, async (req, res) => {
 	let body = req.body;
-
-	Client.findOne({
-			email: body.email,
-			user: req.user
-		},
-		(err, clientDB) => {
-			if (err) {
-				return res.status(500).json({
-					ok: false,
-					message: "Failed on creating user",
-					err: err
-				});
-			}
-
-			if (clientDB) {
-				return res.status(400).json({
-					ok: false,
-					err: {
-						message: "There already exists a client with this email"
-					}
-				});
-			} else {
-				let client = new Client({
-					name: body.name,
-					email: body.email,
-					phone: body.phone,
-					user: req.user
-				});
-
-				client.save((err, clientDB) => {
-					if (err) {
-						return res.status(400).json({
-							ok: false,
-							message: "Failed on creating client",
-							err: err
-						});
-					}
-
-					if (sendClientToManager(req.user, client)) {
+	try {
+		const clientDB = await Client.findOne({ email: body.email, user: req.user });
+		if (clientDB) {
+			return res.status(400).json({
+				ok: false,
+				err: {
+					message: 'There already exists a client with this email for this user'
+				}
+			});
+		} else {
+			let client = new Client({
+				name: body.name,
+				email: body.email,
+				phone: body.phone,
+				user: req.user
+			});
+			const newClient = await client.save();
+			if (newClient) {
+				const client_insert = await sendClientToManager(req.user, body);
+				switch (client_insert) {
+					case 0:
 						return res.status(200).json({
 							ok: true,
-							message: "Client successfully created",
-							client: clientDB
+							message: 'Client inserted',
+							client: newClient
 						});
-					} else {
+					case 1:
 						return res.status(200).json({
 							ok: false,
 							message: 'Client already existst'
 						});
-					}
+					case 2:
+						return res.status(400).json({
+							ok: false,
+							message: 'Unable to connect with database server'
+						});
+					default:
+						return res.status(500).json({
+							ok: false,
+							message: 'Server error'
+						});
+				}
+			} else {
+				return res.status(400).json({
+					ok: false,
+					message: 'Failed on creating client',
+					err: err
 				});
 			}
 		}
-	);
-});
-
-app.post("/test", checkToken, (req, res) => {
-	let body = req.body;
-	if (sendClientToManager(req.user, body)) {
-		return res.status(200).json({
-			ok: true,
-			message: 'Client inserted'
-		});
-	} else {
-		return res.status(200).json({
+	} catch (err) {
+		return res.status(500).json({
 			ok: false,
-			message: 'Client already existst'
+			message: 'Error on creating user',
+			err: err
 		});
 	}
-
 });
 
 sendClientToManager = async (connection_params, client) => {
-	let id = 0;
 	const config = {
 		user: connection_params.database_username,
 		password: 'masterkey',
@@ -90,43 +74,32 @@ sendClientToManager = async (connection_params, client) => {
 		database: connection_params.database_name
 	};
 
-	sql.on("error", err => {
-		console.log('error 1', err);
-		return false;
-	});
-
-	sql.connect(config).then(() => {
-		return sql.query `SELECT * from CLIENTES where E_MAIL = ${client.email}`;
-
-		/* select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='CLIENTES' */
-		/* select * from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME='CLIENTES_CAMPOS' */
-
-	}).then(result => {
-		if (result.recordset.length === 0) {
-			sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) 
-				values 
-			(
-				(SELECT ISNULL(MAX(CODCLIENTE)+1,0) FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)),
-				${client.name},
-				'4300000000',
-				${client.email},
-				${client.phone},
-				'G',
-				'1'
-			)`;
-			return true;
+	try {
+		const connection = await sql.connect(
+			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
+		);
+		if (connection) {
+			const result = await sql.query`SELECT * from CLIENTES where E_MAIL = ${client.email}`;
+			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
+				.recordset[0].ID;
+			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
+			if (result.recordset.length === 0) {
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
+				if (query.code === 'EREQUEST') {
+					return 2;
+				}
+				if (query.rowsAffected[0] === 1) {
+					return 0;
+				}
+			} else {
+				return 1;
+			}
 		} else {
-			return false;
+			return 3;
 		}
-	}).catch(err => {
-		console.log('error 2', err);
-		return false;
-	});
-
-	sql.on('error', err => {
-		console.log('error 3', err);
-		return false;
-	});
+	} catch (err) {
+		return 4;
+	}
 };
 
 module.exports = app;
