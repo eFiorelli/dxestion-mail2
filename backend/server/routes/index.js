@@ -6,8 +6,6 @@ app.use(require('./login'));
 
 /* Client routes */
 app.use(require('./client/register_client'));
-app.use(require('./client/update_client'));
-app.use(require('./client/delete_client'));
 
 /* User routes */
 app.use(require('./user/register_user'));
