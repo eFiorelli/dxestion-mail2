@@ -23,6 +23,7 @@ app.post('/register/client', checkToken, async (req, res) => {
 				phone: body.phone,
 				user: req.user
 			});
+
 			const newClient = await client.save();
 			if (newClient) {
 				const client_insert = await sendClientToManager(req.user, body);
