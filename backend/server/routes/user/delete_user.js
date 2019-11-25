@@ -1,45 +1,37 @@
 const express = require('express');
-let { checkToken } = require('../../middlewares/authentication');
+let {
+	checkToken
+} = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
-app.delete('/update/user/:id', checkToken, (req, res) => {
-	let body = req.body;
+app.delete('/update/user/:id', checkToken, async (req, res) => {
 	let id = req.params.id;
 
-	User.findById(id, (err, userDB) => {
-		if (err) {
-			return res.status(500).json({
-				ok: false,
-				err: err
-			});
-		}
-		if (!userDB) {
-			return res.status(400).json({
-				ok: false,
-				err: {
-					message: 'User ID does not exists'
-				}
-			});
-		}
-
-		userDB.active = false;
-
-		userDB.save((err, deletedUser) => {
-			if (err) {
-				return res.status(500).json({
-					ok: false,
-					err: err
+	try {
+		const userDB = await User.findById(id);
+		if (userDB) {
+			userDB.active = false;
+			const deletedUser = await userDB.save();
+			if (deletedUser) {
+				return res.status(200).json({
+					ok: true,
+					message: 'User deleted'
+				});
+			} else {
+				return res.status(400).json({
+					ok: true,
+					message: 'User couldnt be deleted'
 				});
 			}
-
-			res.json({
-				ok: true,
-				user: deletedUser,
-				message: 'User deleted'
-			});
+		}
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			message: 'Error deleting user',
+			err: err
 		});
-	});
+	}
 });
 
 module.exports = app;

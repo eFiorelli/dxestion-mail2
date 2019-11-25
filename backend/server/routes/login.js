@@ -1,12 +1,11 @@
 const express = require('express');
-
 const bcrypt = require('bcrypt');
 
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const app = express();
 
-app.post('/login', (req, res) => {
+app.post('/login', async (req, res) => {
 	let credentials = req.body.credentials;
 
 	if (credentials) {
@@ -19,45 +18,23 @@ app.post('/login', (req, res) => {
 		});
 	}
 
-	User.findOne(
-		{
+	try {
+		const user = await User.findOne({
 			username: username
-		},
-		(err, userDB) => {
-			if (err) {
-				return res.status(500).json({
-					ok: false,
-					err: err
-				});
-			}
-
-			if (!userDB) {
-				return res.status(400).json({
-					ok: false,
-					err: {
-						message: 'User/password wrong'
-					}
-				});
-			}
-
+		});
+		if (user) {
 			if (!bcrypt.compareSync(password, userDB.password) && userDB.password !== password) {
 				return res.status(400).json({
 					ok: false,
-					err: {
-						message: 'User/password wrong 2'
-					}
+					message: 'Wrong password'
 				});
 			}
 
-			let token = jwt.sign(
-				{
-					user: userDB
-				},
-				process.env.SEED,
-				{
-					expiresIn: process.env.TOKEN_EXPIRATION
-				}
-			);
+			let token = jwt.sign({
+				user: userDB
+			}, process.env.SEED, {
+				expiresIn: process.env.TOKEN_EXPIRATION
+			});
 
 			let returnedUser = {
 				_id: userDB._id,
@@ -66,13 +43,25 @@ app.post('/login', (req, res) => {
 				email: userDB.email
 			};
 
-			res.json({
+			return res.status(200).json({
 				ok: true,
 				user: returnedUser,
 				token: token
 			});
+		} else {
+			return res.status(400).json({
+				ok: false,
+				message: 'User does not exists'
+			});
 		}
-	);
+
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			message: 'Login server error',
+			err: err
+		});
+	}
 });
 
 module.exports = app;
