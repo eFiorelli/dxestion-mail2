@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /* HTTP and Routes */
-import { RouterModule } from "@angular/router";
+import { RouterModule } from '@angular/router';
 
 import { APP_ROUTING } from './app.routes';
 
@@ -28,55 +28,56 @@ import { DialogComponent } from './components/dialog/dialog.component';
 import { ProfileComponent } from './components/profile/profile.component';
 
 /* Angular material modules */
-import { 
-    MatInputModule,
-    MatButtonModule, 
-    MatCheckboxModule, 
-    MatToolbarModule, 
-    MatSnackBarModule,
-    MatProgressSpinnerModule, 
-    MatFormFieldModule, MatCardModule, MatDialogModule
+import {
+	MatInputModule,
+	MatButtonModule,
+	MatCheckboxModule,
+	MatToolbarModule,
+	MatSnackBarModule,
+	MatProgressSpinnerModule,
+	MatFormFieldModule,
+	MatCardModule,
+	MatDialogModule
 } from '@angular/material';
 
-
 @NgModule({
-    declarations: [
-        AppComponent,
-        HomeComponent,
-        LoginComponent,
-        NavbarComponent,
-        ProductsComponent,
-        RegisterComponent,
-        UsersComponent,
-        DialogComponent,
-        ProfileComponent
-    ],
-    imports: [
-        RouterModule,
-        HttpClientModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        APP_ROUTING,
-        FormsModule,
-        ReactiveFormsModule,
-        MatInputModule,
-        MatSnackBarModule,
-        MatDialogModule,
-        MatButtonModule,
-        MatCheckboxModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatFormFieldModule,
-        MatProgressSpinnerModule
-    ],
-    entryComponents: [DialogComponent],
-    providers: [
-        {
-            provide: HTTP_INTERCEPTORS,
-            useClass: TokenInterceptor,
-            multi: true
-        }
-    ],
-    bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		HomeComponent,
+		LoginComponent,
+		NavbarComponent,
+		ProductsComponent,
+		RegisterComponent,
+		UsersComponent,
+		DialogComponent,
+		ProfileComponent
+	],
+	imports: [
+		RouterModule,
+		HttpClientModule,
+		BrowserModule,
+		BrowserAnimationsModule,
+		APP_ROUTING,
+		FormsModule,
+		ReactiveFormsModule,
+		MatInputModule,
+		MatSnackBarModule,
+		MatDialogModule,
+		MatButtonModule,
+		MatCheckboxModule,
+		MatToolbarModule,
+		MatCardModule,
+		MatFormFieldModule,
+		MatProgressSpinnerModule
+	],
+	entryComponents: [ DialogComponent ],
+	providers: [
+		{
+			provide: HTTP_INTERCEPTORS,
+			useClass: TokenInterceptor,
+			multi: true
+		}
+	],
+	bootstrap: [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule {}
