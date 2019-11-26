@@ -31,11 +31,15 @@ app.post('/login', async (req, res) => {
 				});
 			}
 
-			let token = jwt.sign({
-				user: userDB
-			}, process.env.SEED, {
-				expiresIn: process.env.TOKEN_EXPIRATION
-			});
+			let token = jwt.sign(
+				{
+					user: userDB
+				},
+				process.env.SEED,
+				{
+					expiresIn: process.env.TOKEN_EXPIRATION
+				}
+			);
 
 			let returnedUser = {
 				_id: userDB._id,
@@ -55,7 +59,6 @@ app.post('/login', async (req, res) => {
 				message: 'User does not exists'
 			});
 		}
-
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
