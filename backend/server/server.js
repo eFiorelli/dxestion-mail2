@@ -32,13 +32,22 @@ app.use((req, res, next) => {
   }
 });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({
-  extended: false
-}));
+var app = express();
 
-// parse application/json
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
+
+// // parse application/x-www-form-urlencoded
+// app.use(
+//   bodyParser.urlencoded({
+//     extended: false
+//   })
+// );
+
+// // parse application/json
+// app.use(bodyParser.json());
 
 // configuracion global de rutas
 app.use(require("./routes/index"));

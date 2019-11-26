@@ -13,6 +13,7 @@ app.use(require('./user/update_user'));
 app.use(require('./user/delete_user'));
 
 /* Other stuff */
+app.use(require('./upload'));
 app.use(require('./misc'));
 app.use(require('./user'));
 

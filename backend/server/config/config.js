@@ -15,8 +15,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ======================
 // Vencimiento del token
 // ======================
-// 60 segundos * 60 minutos * 24 horas * 30 dias
-process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30
+// 60 segundos * 60 minutos * 24 horas * 30 dias * 365 dias
+process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30 * 365;
 
 
 // ======================

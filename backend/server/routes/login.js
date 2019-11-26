@@ -19,10 +19,11 @@ app.post('/login', async (req, res) => {
 	}
 
 	try {
-		const user = await User.findOne({
+		const userDB = await User.findOne({
 			username: username
 		});
-		if (user) {
+
+		if (userDB) {
 			if (!bcrypt.compareSync(password, userDB.password) && userDB.password !== password) {
 				return res.status(400).json({
 					ok: false,
