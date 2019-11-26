@@ -18,6 +18,21 @@ export class UserService {
 		});
 	}
 
+	upload(file) {
+		// let headers = new HttpHeaders({
+		// 	Authorization: localStorage.getItem("token"),
+		// 	"Content-Type": "image/png"
+		// });
+		console.log(file);
+		const uploadData = new FormData();
+		uploadData.append("myFile", file, file.name);
+		console.log(uploadData);
+		let url =
+			AppComponent.BACKEND_URL +
+			"/upload/background/5ddc01ab11a3c0200207443f";
+		return this.http.post(url, uploadData);
+	}
+
 	registerUser(userData: any) {
 		return this.http.post(AppComponent.BACKEND_URL + "/register/user", {
 			email: userData.email,

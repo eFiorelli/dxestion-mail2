@@ -12,4 +12,9 @@
 	<mat-card-actions>
 		<button mat-raised-button (click)="test()" color="primary">Login</button>
 	</mat-card-actions>
+	<!-- <input #file type="file" (click)="upload(file)"> -->
+	<input (change)="selectImage($event)" type="file" id="fileUpload">
+	<mat-card-actions>
+		<button mat-raised-button (click)="uploadImage()" color="primary">Upload image</button>
+	</mat-card-actions>
 </mat-card>
