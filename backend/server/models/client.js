@@ -6,20 +6,24 @@ let Schema = mongoose.Schema;
 let clientSchema = new Schema({
 	name: {
 		type: String,
-		required: [ true, 'Name is required' ]
+		required: [true, 'Name is required']
 	},
 	email: {
 		type: String,
-		required: [ true, 'Mail is required' ]
+		required: [true, 'Mail is required']
 	},
 	phone: {
 		type: String,
-		required: [ true, 'Phone is required' ]
+		required: [true, 'Phone is required']
+	},
+	signature: {
+		type: String,
+		required: false
 	},
 	user: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
-		required: [ true, 'User is required' ]
+		required: [true, 'User is required']
 	},
 	active: {
 		type: Boolean,

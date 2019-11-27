@@ -9,7 +9,7 @@ const path = require('path');
 
 app.use(fileUpload());
 
-app.post('/upload/:type/:id', function(req, res) {
+app.post('/upload/:type/:id', function (req, res) {
 	let type = req.params.type;
 	let id = req.params.id;
 
@@ -23,21 +23,19 @@ app.post('/upload/:type/:id', function(req, res) {
 	}
 
 	// Valid image types
-	let validTypes = [ 'background', 'logo' ];
+	let validTypes = ['background', 'logo'];
 	if (validTypes.indexOf(type) < 0) {
 		return res.status(400).json({
 			ok: false,
-			err: {
-				meesage: 'Allowed types: ' + validTypes.join(', ')
-			}
+			meesage: 'Allowed types: ' + validTypes.join(', ')
 		});
 	}
 
-	// The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
+	// The name of the input field is used to retrieve the uploaded file
 	let file = req.files.image;
 
 	// Valid extensions
-	let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+	let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 	let shortedName = file.name.split('.');
 	let extension = shortedName[shortedName.length - 1];
 

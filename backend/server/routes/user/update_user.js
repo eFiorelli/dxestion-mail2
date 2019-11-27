@@ -19,7 +19,9 @@ app.put('/update/user/:id', checkToken, async (req, res) => {
 		database_name: body.database_name,
 		database_port: body.database_port,
 		database_username: body.database_username,
-		database_password: body.database_password
+		database_password: body.database_password,
+		background_img: body.background_img,
+		logo_img: body.background_logo
 	};
 
 	try {

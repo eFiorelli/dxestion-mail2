@@ -21,6 +21,20 @@ app.post('/register/client', checkToken, async (req, res) => {
 					user: req.user
 				});
 				const newClient = await client.save();
+				if (newClient._id) {
+					let filename = `${newClient.id}-${new Date().getMilliseconds()}.png`;
+					let signature = req.files.image;
+
+					signature.mv(`uploads/${type}/${filename}`, (err) => {
+						if (err) {
+							return res.status(500).json({
+								ok: false,
+								err: err
+							});
+						}
+						uploadImage(id, res, filename);
+					});
+				}
 				return res.status(200).json({
 					ok: true,
 					message: 'Client inserted',
@@ -99,6 +113,35 @@ sendClientToManager = async (connection_params, client) => {
 			/* Server error */
 			return 4;
 		}
+	}
+};
+
+uploadImage = async (id, res, filename) => {
+	try {
+		const clientDB = await Client.findById(id);
+		if (!clientDB) {
+			return res.status(400).json({
+				ok: false,
+				err: {
+					message: 'User does not exists'
+				}
+			});
+		} else {
+			clientDB.signature = filename;
+			const updatedClient = await clientDB.save();
+			if (updatedClient) {
+				return res.status(200).json({
+					ok: true,
+					user: updatedClient,
+					img: filename
+				});
+			}
+		}
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			err: err
+		});
 	}
 };
 
