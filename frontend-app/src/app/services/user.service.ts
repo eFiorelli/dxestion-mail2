@@ -8,7 +8,9 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class UserService {
-	constructor(private http: HttpClient, private router: Router) {}
+	constructor(private http: HttpClient, private router: Router) { }
+
+	userID = localStorage.getItem('userID');
 
 	test() {
 		return this.http.post(AppComponent.BACKEND_URL + '/register/client', {
@@ -25,7 +27,7 @@ export class UserService {
 			const xhr = new XMLHttpRequest();
 
 			formData.append('image', file, file.name);
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -34,7 +36,7 @@ export class UserService {
 					}
 				}
 			};
-			const url = AppComponent.BACKEND_URL + '/upload/logo/5dda91afbd61a150e0313932';
+			const url = AppComponent.BACKEND_URL + '/upload/logo/' + this.userID;
 			xhr.open('POST', url, true);
 			xhr.send(formData);
 		});
