@@ -9,6 +9,8 @@ const path = require('path');
 const https = require('https');
 const options = {};
 
+const fileUpload = require('express-fileupload');
+
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -33,6 +35,9 @@ app.use((req, res, next) => {
 	}
 });
 
+/* Allow file uploading */
+app.use(fileUpload());
+
 // parse application/x-www-form-urlencoded
 app.use(
 	bodyParser.urlencoded({
@@ -54,14 +59,14 @@ app.use(express.static(path.resolve(__dirname, '../public/')));
 app.use('/files', express.static(path.resolve(__dirname, '../uploads/')));
 
 if (process.env.NODE_ENV === 'prod') {
-	setTimeout(function () {
-		mongoose.connect(process.env.URLDB, (err, res) => {
+	setTimeout(function() {
+		mongoose.connect(process.env.URLDB, { useNewUrlParser: true }, (err, res) => {
 			if (err) throw err;
 			console.log('Database....ONLINE');
 		});
 	}, 10000);
 } else {
-	mongoose.connect(process.env.URLDB, (err, res) => {
+	mongoose.connect(process.env.URLDB, { useNewUrlParser: true }, (err, res) => {
 		if (err) throw err;
 		console.log('Database....ONLINE');
 	});

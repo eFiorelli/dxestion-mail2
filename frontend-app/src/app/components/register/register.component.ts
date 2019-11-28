@@ -11,10 +11,10 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
 	user: any = {
-		username: 'qqq',
-		password: 'qqq',
-		name: 'qqq',
-		email: 'qqq@qqq.com',
+		username: 'aaa',
+		password: 'aaa',
+		name: 'aaa',
+		email: 'aaa@aaa.com',
 		database_url: '192.168.0.2',
 		database_name: 'BD1',
 		database_port: '1443',
@@ -46,17 +46,6 @@ export class RegisterComponent implements OnInit {
 	}
 
 	register() {
-		this.showSpinner = true;
-		// this.userService.registerUser(this.user).subscribe(
-		// 	(res: any) => {
-		// 		this.showDialog(true, res.message);
-		// 	},
-		// 	err => {
-		// 		let message = err.error.err.message;
-		// 		this.showDialog(false, message);
-		// 	}
-		// );
-		console.log(this.user.background_img);
 		if (this.userService.registerUser(this.user)) {
 			this.showDialog(true, 'Success');
 		} else {

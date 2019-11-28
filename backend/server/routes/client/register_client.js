@@ -1,20 +1,14 @@
 const express = require('express');
-const fileUpload = require("express-fileupload");
-let {
-	checkUserToken
-} = require('../../middlewares/authentication');
+let { checkUserToken } = require('../../middlewares/authentication');
 const Client = require('../../models/client');
-
 const sql = require('mssql');
 const app = express();
-
-app.use(fileUpload());
 
 app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	try {
-		const client_insert = 0;
 		// const client_insert = await sendClientToManager(req.user, body);
+		const client_insert = 0;
 		switch (client_insert) {
 			case 0:
 				let client = new Client({
@@ -76,12 +70,12 @@ sendClientToManager = async (connection_params, client) => {
 			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query `SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
+			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
 				.recordset[0].ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -118,10 +112,10 @@ addSignature = async (clientDB, res, signature) => {
 				}
 			});
 		} else {
-			let file = signature[0];
+			let file = signature;
 
 			// Valid extensions
-			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
 			let shortedName = file.name.split('.');
 			let extension = shortedName[shortedName.length - 1];
 
@@ -148,6 +142,8 @@ addSignature = async (clientDB, res, signature) => {
 			});
 			if (updatedClient) {
 				updatedClient.save();
+				console.log('aaa');
+				return;
 			} else {
 				return res.status(400).json({
 					ok: true,
@@ -160,7 +156,8 @@ addSignature = async (clientDB, res, signature) => {
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 80
 		});
 	}
 };
