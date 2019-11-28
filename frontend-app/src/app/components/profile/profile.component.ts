@@ -9,7 +9,7 @@ import { DialogComponent } from '../dialog/dialog.component';
     styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-    
+
     user = {
         name: '',
         password: '',
@@ -18,27 +18,28 @@ export class ProfileComponent implements OnInit {
     };
 
     showSpinner: boolean = false;
-    
-    constructor( private userService: UserService, public dialog: MatDialog) {
-        this.userService.getUserById().subscribe( (response:any) =>{
-            if (response.ok){
+
+    constructor(private userService: UserService, public dialog: MatDialog) {
+        this.userService.getUserById().subscribe((response: any) => {
+            if (response.ok) {
                 this.user = response.user;
             }
         })
     }
-    
+
     ngOnInit() {
     }
-    
-    showDialog(result, message?){
-        const dialogRef = this.dialog.open(DialogComponent , {
+
+    showDialog(result, message?) {
+        const dialogRef = this.dialog.open(DialogComponent, {
             width: '400px',
-            data: {action: 'Update ', name: this.user.name, message: message, result: result }
+            data: { action: 'Update ', name: this.user.name, message: message, result: result }
         });
         this.showSpinner = false;
     }
-    
-    update(){
+
+    update() {
+        /*
         this.userService.updateUser(this.user).subscribe (
             (response:any) =>{
                 if (response.ok){
@@ -50,14 +51,15 @@ export class ProfileComponent implements OnInit {
             error =>{
                 this.showDialog(false, error.message)
             });
+            */
     }
-    
-    cancel(){
-        this.userService.getUserById().subscribe( (response:any) =>{
-            if (response.ok){
+
+    cancel() {
+        this.userService.getUserById().subscribe((response: any) => {
+            if (response.ok) {
                 this.user = response.user;
             }
         })
     }
-    
+
 }

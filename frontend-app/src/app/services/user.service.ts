@@ -8,7 +8,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class UserService {
-	constructor(private http: HttpClient, private router: Router) {}
+	constructor(private http: HttpClient, private router: Router) { }
 
 	userID = localStorage.getItem('userID');
 
@@ -25,7 +25,7 @@ export class UserService {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
 			formData.append('image', file, file.name);
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -40,7 +40,7 @@ export class UserService {
 		});
 	}
 
-	registerUser(userData: any) {
+	updateUser(userData: any) {
 		const bg_file = userData.background_img;
 		const logo_file = userData.logo_img;
 		return new Promise((resolve, reject) => {
@@ -51,7 +51,7 @@ export class UserService {
 			}
 			formData.append('background_image', bg_file, bg_file.name);
 			formData.append('logo_image', logo_file, logo_file.name);
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -62,6 +62,42 @@ export class UserService {
 			};
 			const url = AppComponent.BACKEND_URL + '/update/user/' + this.userID;
 			xhr.open('PUT', url, true);
+			xhr.send(formData);
+		});
+	}
+
+	registerUser(userData: any) {
+		const bg_file = userData.background_img;
+		const logo_file = userData.logo_img;
+		return new Promise((resolve, reject) => {
+			const formData = new FormData();
+			const xhr = new XMLHttpRequest();
+			const headers = new HttpHeaders({
+				Authorization: localStorage.getItem('token'),
+				'Content-Type': 'application/json',
+				Accept: 'application/json'
+			});
+			for (var key in userData) {
+				formData.append(key, userData[key]);
+			}
+			if (bg_file) {
+				formData.append('background_image', bg_file, bg_file.name);
+			}
+			if (logo_file) {
+				formData.append('logo_image', logo_file, logo_file.name);
+			}
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === 4) {
+					if (xhr.status === 200) {
+						resolve(JSON.parse(xhr.response));
+					} else {
+						reject(JSON.parse(xhr.response));
+					}
+				}
+			};
+			const url = AppComponent.BACKEND_URL + '/register/user/';
+			xhr.open('POST', url, true);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 		/*
@@ -85,11 +121,5 @@ export class UserService {
 		let currentUser = localStorage.getItem('userID');
 		// params = params.append('_id', currentUser);
 		return this.http.get(`${AppComponent.BACKEND_URL}/user/${currentUser}`);
-	}
-
-	updateUser(user: any) {
-		let currentUser = localStorage.getItem('userID');
-		// params = params.append('_id', currentUser);
-		return this.http.put(`${AppComponent.BACKEND_URL}/user/${currentUser}`, { user });
 	}
 }
