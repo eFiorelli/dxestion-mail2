@@ -36,7 +36,7 @@ rm -rf readme.MD
 rm -rf .git
 rm -rf .gitignore
 git init
-git remote add origin https://github.com/MiguelFs86/Angular-nodejs.git
+git remote add origin http://git.serantes.pro/gitadmin/dxestion-mail.git
 git pull origin master
 
 # Set permissions to SSL certs acme file

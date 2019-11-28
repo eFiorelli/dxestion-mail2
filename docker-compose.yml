@@ -3,7 +3,7 @@ version: '3'
 services:
   traefik:
     image: traefik:latest
-    # command: --api --docker --docker.domain=serantes.pro
+    # command: --api --docker --docker.domain=dxestionmail.com
     restart: always
     ports:
       - 80:80
@@ -11,14 +11,13 @@ services:
     networks:
       - web
     labels:
-      - "traefik.frontend.rule=Host:traefik.serantes.pro"
+      - "traefik.frontend.rule=Host:traefik.dxestionmail.com"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - $PWD/traefik/traefik.toml:/etc/traefik/traefik.toml
       - $PWD/traefik/acme.json:/etc/traefik/acme/acme.json
-      # - $PWD/ssl_certs/common:/etc/traefik/certs
     container_name: traefik
 
   mongo:
@@ -38,25 +37,23 @@ services:
       - mongo
     labels:
       - "traefik.backend=backend"
-      - "traefik.frontend.rule=Host:backend.serantes.pro"
+      - "traefik.frontend.rule=Host:backend.dxestionmail.com"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=3000"
-    # volumes:
-    #   - $PWD/ssl_certs/server:/user/src/app/server/config/ssl_certs
     depends_on:
       - mongo
     networks:
       - web
     container_name: backend
 
-  frontend:
+  frontend-admin:
     build: 
-      context: ./frontend-app
+      context: ./frontend-admin-app
     links:
       - backend
     labels:
-      - "traefik.backend=web"
-      - "traefik.frontend.rule=Host:serantes.pro, web.serantes.pro, www.serantes.pro"
+      - "traefik.backend=web-admin"
+      - "traefik.frontend.rule=Host:admin.dxestionmail.com"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
@@ -67,7 +64,25 @@ services:
     volumes:
       # - $PWD/ssl_certs/frontend-app:/etc/nginx/ssl
       - $PWD/nginx_conf:/etc/nginx/conf.d
-    container_name: web
+    container_name: web-admin
+  frontend-client:
+    build: 
+      context: ./frontend-client-app
+    links:
+      - backend
+    labels:
+      - "traefik.backend=web-client"
+      - "traefik.frontend.rule=Host:dxestionmail.com, www.dxestionmail.com, web.dxestionmail.com"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=80"
+    depends_on:
+      - mongo
+      - backend
+    networks:
+      - web
+    volumes:
+      - $PWD/nginx_conf:/etc/nginx/conf.d
+    container_name: web-client
 networks:
   web:
     external: true
