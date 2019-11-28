@@ -2,7 +2,10 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bcrypt = require('bcrypt');
-let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+let {
+	checkUserToken,
+	checkAdminRole
+} = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
@@ -32,16 +35,22 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 			});
 		} else {
 			if (req.files) {
-				const images = [
-					{ type: 'background', image: req.files.background_image || '' },
-					{ type: 'logo', image: req.files.logo_image || '' }
+				const images = [{
+						type: 'background',
+						image: req.files.background_image || ''
+					},
+					{
+						type: 'logo',
+						image: req.files.logo_image || ''
+					}
 				];
-				await saveImages(userDB, res, images);
+				await updateImages(userDB, res, images);
 			} else {
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
-					user: userDB
+					user: userDB,
+					type: 1
 				});
 			}
 
@@ -55,7 +64,7 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 	}
 });
 
-saveImages = async (userDB, res, images) => {
+updateImages = async (userDB, res, images) => {
 	try {
 		if (!userDB) {
 			return res.status(400).json({
@@ -113,7 +122,8 @@ saveImages = async (userDB, res, images) => {
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
-					user: updatedUser
+					user: updatedUser,
+					type: 2
 				});
 			}
 		}

@@ -1,4 +1,5 @@
 const express = require('express');
+const fileUpload = require("express-fileupload");
 let {
 	checkUserToken
 } = require('../../middlewares/authentication');
@@ -7,11 +8,13 @@ const Client = require('../../models/client');
 const sql = require('mssql');
 const app = express();
 
+app.use(fileUpload());
+
 app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
-
 	try {
-		const client_insert = await sendClientToManager(req.user, body);
+		const client_insert = 0;
+		// const client_insert = await sendClientToManager(req.user, body);
 		switch (client_insert) {
 			case 0:
 				let client = new Client({
@@ -22,18 +25,8 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 				});
 				const newClient = await client.save();
 				if (newClient._id) {
-					let filename = `${newClient.id}-${new Date().getMilliseconds()}.png`;
-					let signature = req.files.image;
-
-					signature.mv(`uploads/${type}/${filename}`, (err) => {
-						if (err) {
-							return res.status(500).json({
-								ok: false,
-								err: err
-							});
-						}
-						uploadImage(id, res, filename);
-					});
+					let signature = req.files.signature;
+					await addSignature(newClient._id, res, signature);
 				}
 				return res.status(200).json({
 					ok: true,
@@ -73,7 +66,7 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 sendClientToManager = async (connection_params, client) => {
 	const config = {
 		user: connection_params.database_username,
-		password: 'masterkey', //connection_params.database_password,
+		password: connection_params.database_password,
 		server: connection_params.database_url,
 		database: connection_params.database_name
 	};
@@ -83,12 +76,12 @@ sendClientToManager = async (connection_params, client) => {
 			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
+			const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+			const max_id = (await sql.query `SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
 				.recordset[0].ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
+				const query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -106,7 +99,6 @@ sendClientToManager = async (connection_params, client) => {
 			return 3;
 		}
 	} catch (err) {
-		console.log(err)
 		if (err.code === 'ESOCKET') {
 			return 3;
 		} else {
@@ -116,24 +108,52 @@ sendClientToManager = async (connection_params, client) => {
 	}
 };
 
-uploadImage = async (id, res, filename) => {
+addSignature = async (clientDB, res, signature) => {
 	try {
-		const clientDB = await Client.findById(id);
 		if (!clientDB) {
 			return res.status(400).json({
 				ok: false,
 				err: {
-					message: 'User does not exists'
+					message: 'Client does not exists'
 				}
 			});
 		} else {
-			clientDB.signature = filename;
-			const updatedClient = await clientDB.save();
+			let file = signature[0];
+
+			// Valid extensions
+			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let shortedName = file.name.split('.');
+			let extension = shortedName[shortedName.length - 1];
+
+			if (validExtensions.indexOf(extension) < 0) {
+				return res.status(400).json({
+					ok: false,
+					meesage: 'Allowed extensions: ' + validExtensions.join(', ')
+				});
+			}
+
+			let filename = `${clientDB._id}-${new Date().getMilliseconds()}.${extension}`;
+
+			file.mv(`uploads/signature/${filename}`, (err) => {
+				if (err) {
+					return res.status(500).json({
+						ok: false,
+						err: err
+					});
+				}
+			});
+
+			const updatedClient = await Client.findByIdAndUpdate(clientDB._id, {
+				signature: filename
+			});
 			if (updatedClient) {
-				return res.status(200).json({
+				updatedClient.save();
+			} else {
+				return res.status(400).json({
 					ok: true,
-					user: updatedClient,
-					img: filename
+					message: 'Error updating client',
+					client: updatedClient,
+					type: 2
 				});
 			}
 		}
