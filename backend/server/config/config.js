@@ -1,38 +1,37 @@
 // ======================
-// Puerto
+// Ports
 // ======================
-process.env.PORT = process.env.PORT || 3000
+process.env.PORT = process.env.PORT || 3000;
 
-process.env.SSL_PORT = process.env.SSL_PORT || 8080
+process.env.SSL_PORT = process.env.SSL_PORT || 8080;
 
 
 // ======================
-// Entorno
+// Environment
 // ======================
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 
 // ======================
-// Vencimiento del token
+// Token expiracy
 // ======================
 // 60 segundos * 60 minutos * 24 horas * 30 dias * 365 dias
 process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30 * 365;
 
 
 // ======================
-// SEED del token
+// Token SEED
 // ======================
 process.env.SEED = process.env.SEED || 'develop-seed';
 
 
 // ======================
-// Base de datos
+// Database
 // ======================
 let urlDB;
 
 if (process.env.NODE_ENV === 'dev') {
     urlDB = 'mongodb://localhost:27017/dxestionMail';
-    // urlDB = 'mongodb://mongo:27017/angular-node-test';
 } else {
     urlDB = process.env.MONGO_URI;
 }

@@ -1,19 +1,21 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const fileUpload = require('express-fileupload');
-let { checkToken } = require('../../middlewares/authentication');
+let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
 app.use(fileUpload());
 
-app.post('/register/user', async (req, res) => {
+app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) => {
 	let body = req.body;
 
 	try {
 		const userDB = await User.findOne({
-			email: body.email
+			username: body.username
 		});
+		console.log('aaaa')
+		console.log(userDB)
 		if (userDB) {
 			return res.status(400).json({
 				ok: false,
@@ -36,11 +38,19 @@ app.post('/register/user', async (req, res) => {
 
 			const savedUser = await user.save();
 			if (savedUser) {
-				const images = [
-					{ type: 'background', image: req.files.background_image },
-					{ type: 'logo', image: req.files.logo_image }
-				];
-				await saveImages(savedUser._id, res, images);
+				if (req.files) {
+					const images = [
+						{ type: 'background', image: req.files.background_image || '' },
+						{ type: 'logo', image: req.files.logo_image || '' }
+					];
+					await saveImages(savedUser._id, res, images);
+				} else {
+					return res.status(200).json({
+						ok: true,
+						message: 'User successfully created',
+						user: savedUser
+					});
+				}
 			} else {
 				return res.status(400).json({
 					ok: false,
@@ -50,6 +60,7 @@ app.post('/register/user', async (req, res) => {
 			}
 		}
 	} catch (err) {
+		console.log(err)
 		return res.status(500).json({
 			ok: false,
 			err: err
@@ -71,39 +82,42 @@ saveImages = async (id, res, images) => {
 			for (let i = 0; i < images.length; i++) {
 				let file = images[i].image;
 
-				// Valid extensions
-				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-				let shortedName = file.name.split('.');
-				let extension = shortedName[shortedName.length - 1];
+				console.log('File: ', file);
+				if (file) {
+					// Valid extensions
+					let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+					let shortedName = file.name.split('.');
+					let extension = shortedName[shortedName.length - 1];
 
-				if (validExtensions.indexOf(extension) < 0) {
-					return res.status(400).json({
-						ok: false,
-						meesage: 'Allowed extensions: ' + validExtensions.join(', ')
-					});
-				}
-
-				// Change filename
-				let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
-
-				// Use the mv() method to place the file somewhere on your server
-				if (images[i].type === 'background') {
-					userDB.background_img = `${filename}`;
-				}
-				if (images[i].type === 'logo') {
-					userDB.logo_img = `${filename}`;
-				}
-
-				file.mv(`uploads/${images[i].type}/${filename}`, (err) => {
-					if (err) {
-						return res.status(500).json({
+					if (validExtensions.indexOf(extension) < 0) {
+						return res.status(400).json({
 							ok: false,
-							err: err
+							meesage: 'Allowed extensions: ' + validExtensions.join(', ')
 						});
 					}
-				});
-			}
 
+					// Change filename
+					let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
+
+					// Use the mv() method to place the file somewhere on your server
+					if (images[i].type === 'background') {
+						userDB.background_img = `${filename}`;
+					}
+					if (images[i].type === 'logo') {
+						userDB.logo_img = `${filename}`;
+					}
+
+					file.mv(`uploads/${images[i].type}/${filename}`, (err) => {
+						if (err) {
+							console.log(err)
+							return res.status(500).json({
+								ok: false,
+								err: err
+							});
+						}
+					});
+				}
+			}
 			const updatedUser = await userDB.save();
 			if (updatedUser) {
 				return res.status(200).json({
@@ -114,6 +128,7 @@ saveImages = async (id, res, images) => {
 			}
 		}
 	} catch (err) {
+		console.log(err)
 		return res.status(500).json({
 			ok: false,
 			err: err

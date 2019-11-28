@@ -1,14 +1,11 @@
 const express = require('express');
-
-let {
-    checkToken
-} = require('../middlewares/authentication');
+let { checkUserToken } = require('../middlewares/authentication');
 const Client = require('../models/client');
 
 let app = express();
 
 // Mostrar todas las categorías
-app.get('/test', checkToken, (req, res) => {
+app.get('/test', checkUserToken, (req, res) => {
     Client.find({
         user: req.user
     }, (err, response) => {

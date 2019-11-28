@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let validRoles = {
-	values: [ 'ADMIN_ROLE', 'USER_ROLE' ],
+	values: ['ADMIN_ROLE', 'USER_ROLE'],
 	message: '{VALUE} is not a valid role'
 };
 
 let themeColors = {
-	values: [ 'Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Yellow', 'Orange' ],
+	values: ['Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Yellow', 'Orange'],
 	message: '{VALUE} is not a valid theme color'
 };
 
@@ -16,40 +16,40 @@ let Schema = mongoose.Schema;
 let userSchema = new Schema({
 	name: {
 		type: String,
-		required: [ true, 'Name is required' ]
+		required: [true, 'Name is required']
 	},
 	username: {
 		type: String,
 		unique: true,
-		required: [ true, 'Name is required' ]
+		required: [true, 'Name is required']
 	},
 	email: {
 		type: String,
-		required: [ true, 'Mail is required' ]
+		required: [true, 'Mail is required']
 	},
 	password: {
 		type: String,
-		required: [ true, 'Password is required' ]
+		required: [true, 'Password is required']
 	},
 	database_url: {
 		type: String,
-		required: [ true, 'Database URL is required' ]
+		required: [true, 'Database URL is required']
 	},
 	database_name: {
 		type: String,
-		required: [ true, 'Database NAME is required' ]
+		required: [true, 'Database NAME is required']
 	},
 	database_port: {
 		type: String,
-		required: [ true, 'Database PORT is required' ]
+		required: [true, 'Database PORT is required']
 	},
 	database_username: {
 		type: String,
-		required: [ true, 'Database username is required' ]
+		required: [true, 'Database username is required']
 	},
 	database_password: {
 		type: String,
-		required: [ true, 'Database password is required' ]
+		required: [true, 'Database password is required']
 	},
 	free_fields: {
 		type: Object,
@@ -79,7 +79,7 @@ let userSchema = new Schema({
 	}
 });
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
 	let user = this;
 	let userObject = user.toObject();
 	delete userObject.password;

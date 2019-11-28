@@ -1,13 +1,13 @@
 const express = require('express');
 let {
-	checkToken
+	checkUserToken
 } = require('../../middlewares/authentication');
 const Client = require('../../models/client');
 
 const sql = require('mssql');
 const app = express();
 
-app.post('/register/client', checkToken, async (req, res) => {
+app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -83,12 +83,12 @@ sendClientToManager = async (connection_params, client) => {
 			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query `SELECT * from CLIENTES where E_MAIL = ${client.email}`;
-			const max_id = (await sql.query `SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
+			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
 				.recordset[0].ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;

@@ -1,15 +1,16 @@
 require('./config/config');
-var express = require('express');
-var mongoose = require('mongoose');
-var path = require('path');
+require('./utils/folder_tree');
+require('./utils/admin_user');
 
-var https = require('https');
-var fs = require('fs');
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
 
-var options = {};
+const https = require('https');
+const options = {};
 
-var app = express();
-var bodyParser = require('body-parser');
+const app = express();
+const bodyParser = require('body-parser');
 
 // Add headers
 app.use((req, res, next) => {
@@ -49,28 +50,6 @@ app.use(require('./routes/index'));
 
 /* Enable public directory */
 app.use(express.static(path.resolve(__dirname, '../public/')));
-
-/* Create uploads folder tree */
-const uploads_dir = './uploads/';
-const background_dir = './uploads/background/';
-const background_logo = './uploads/logo/';
-const signature = './uploads/signature/';
-
-if (!fs.existsSync(uploads_dir)) {
-	fs.mkdirSync(uploads_dir);
-}
-
-if (!fs.existsSync(background_dir)) {
-	fs.mkdirSync(background_dir);
-}
-
-if (!fs.existsSync(background_logo)) {
-	fs.mkdirSync(background_logo);
-}
-
-if (!fs.existsSync(signature)) {
-	fs.mkdirSync(signature);
-}
 
 app.use('/files', express.static(path.resolve(__dirname, '../uploads/')));
 

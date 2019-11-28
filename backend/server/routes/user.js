@@ -3,11 +3,11 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const _ = require('underscore');
 const User = require('../models/user');
-const { checkToken, checkAdminRole } = require('../middlewares/authentication');
+const { checkUserToken, checkAdminRole } = require('../middlewares/authentication');
 const app = express();
 
 
-app.get('/users', checkToken, (req, res) => {
+app.get('/users', checkUserToken, (req, res) => {
 
     let from = req.query.from || 0;
     from = Number(from);
@@ -37,7 +37,7 @@ app.get('/users', checkToken, (req, res) => {
 });
 
 
-app.get('/user/:id', checkToken, (req, res) => {
+app.get('/user/:id', checkUserToken, (req, res) => {
 
     let id = req.params.id;
 
@@ -67,7 +67,7 @@ app.get('/user/:id', checkToken, (req, res) => {
 });
 
 
-app.post('/user', [checkToken, checkAdminRole], function(req, res) {
+app.post('/user', [checkUserToken, checkAdminRole], function (req, res) {
     let body = req.body;
 
     let user = new User({
@@ -93,7 +93,7 @@ app.post('/user', [checkToken, checkAdminRole], function(req, res) {
 });
 
 
-app.put('/user/:id', [checkToken, checkAdminRole], function(req, res) {
+app.put('/user/:id', [checkUserToken, checkAdminRole], function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body.user, ['name', 'img', 'role', 'status']);
 
@@ -114,7 +114,7 @@ app.put('/user/:id', [checkToken, checkAdminRole], function(req, res) {
 });
 
 
-app.delete('/user/:id', [checkToken, checkAdminRole], function(req, res) {
+app.delete('/user/:id', [checkUserToken, checkAdminRole], function (req, res) {
     let id = req.params.id;
 
     // User.findByIdAndRemove( id, (err, deletedUser)=>{

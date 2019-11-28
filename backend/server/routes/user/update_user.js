@@ -2,11 +2,11 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bcrypt = require('bcrypt');
-let { checkToken, checkAdminRole } = require('../../middlewares/authentication');
+let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
-app.put('/update/user/:id', async (req, res) => {
+app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
 
@@ -31,11 +31,20 @@ app.put('/update/user/:id', async (req, res) => {
 				}
 			});
 		} else {
-			const images = [
-				{ type: 'background', image: req.files.background_image },
-				{ type: 'logo', image: req.files.logo_image }
-			];
-			await saveImages(userDB, res, images);
+			if (req.files) {
+				const images = [
+					{ type: 'background', image: req.files.background_image || '' },
+					{ type: 'logo', image: req.files.logo_image || '' }
+				];
+				await saveImages(userDB, res, images);
+			} else {
+				return res.status(200).json({
+					ok: true,
+					message: 'User updated successfully',
+					user: userDB
+				});
+			}
+
 		}
 	} catch (err) {
 		return res.status(500).json({
@@ -60,7 +69,7 @@ saveImages = async (userDB, res, images) => {
 				let file = images[i].image;
 
 				// Valid extensions
-				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+				let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 				let shortedName = file.name.split('.');
 				let extension = shortedName[shortedName.length - 1];
 
@@ -75,7 +84,7 @@ saveImages = async (userDB, res, images) => {
 				let filename = `${userDB._id}-${new Date().getMilliseconds()}.${extension}`;
 
 				// Use the mv() method to place the file somewhere on your server
-				const oldFilenames = [ userDB.background_img, userDB.logo_img ];
+				const oldFilenames = [userDB.background_img, userDB.logo_img];
 				if (images[i].type === 'background') {
 					userDB.background_img = `${filename}`;
 					deleteFiles('background', oldFilenames[0]);

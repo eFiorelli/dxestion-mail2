@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 // =================
 // Check for token
 // =================
-let checkToken = (req, res, next) => {
+let checkUserToken = (req, res, next) => {
 	// let token = req.get('token');
 	let token = '';
 	if (req.headers.authorization) {
@@ -14,6 +14,7 @@ let checkToken = (req, res, next) => {
 
 	jwt.verify(token, process.env.SEED, (err, decoded) => {
 		if (err) {
+			console.log(err)
 			return res.status(401).json({
 				ok: false,
 				err: {
@@ -49,6 +50,6 @@ let checkAdminRole = (req, res, next) => {
 };
 
 module.exports = {
-	checkToken,
+	checkUserToken,
 	checkAdminRole
 };
