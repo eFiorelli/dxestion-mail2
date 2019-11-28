@@ -45,7 +45,8 @@ app.post('/login', async (req, res) => {
 				_id: userDB._id,
 				username: userDB.username,
 				name: userDB.name,
-				email: userDB.email
+				email: userDB.email,
+				role: userDB.role
 			};
 
 			return res.status(200).json({

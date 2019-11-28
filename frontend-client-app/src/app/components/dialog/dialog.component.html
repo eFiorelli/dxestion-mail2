@@ -1,0 +1,8 @@
+<h2 *ngIf="data.result" mat-dialog-title>{{ data.action }} success!</h2>
+<h2 *ngIf="!data.result" mat-dialog-title>{{ data.action }} failed!</h2>
+<mat-dialog-content class="mat-typography">
+    <p *ngIf="data.message"> {{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Ok</button>
+</mat-dialog-actions>

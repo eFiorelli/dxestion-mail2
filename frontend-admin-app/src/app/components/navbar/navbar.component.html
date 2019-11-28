@@ -1,0 +1,13 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span><img src=""></span>
+        <span class="example-fill-remaining-space"></span>
+        <span class="align-center"></span>
+        <span class="example-spacer"></span>
+
+        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="home()" mat-button>Home</button>
+        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="registerUser()" mat-button>Add new user</button>
+        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="users()" mat-button>User list</button>
+        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="logout()" mat-button>Logout</button>
+    </mat-toolbar-row>
+</mat-toolbar>
