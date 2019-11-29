@@ -3,9 +3,9 @@ const Store = require('../../models/store');
 const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/stores', [checkUserToken, checkAdminRole, checkUserRole], (req, res) => {
+app.get('/stores', [ checkUserToken, checkAdminRole, checkUserRole ], (req, res) => {
 	Store.find(
-		{ active: true, user: req.user },
+		{ active: true, user: req.query.user_id },
 		'_id name email username database_url database_name database_port database_username database_password logo_img'
 	).exec((err, stores) => {
 		if (err) {
@@ -15,7 +15,7 @@ app.get('/stores', [checkUserToken, checkAdminRole, checkUserRole], (req, res) =
 			});
 		}
 
-		User.countDocuments({ active: true, user: req.user }, (err, count) => {
+		Store.countDocuments({ active: true, user: req.user }, (err, count) => {
 			return res.status(200).json({
 				ok: true,
 				stores: stores,
@@ -25,7 +25,7 @@ app.get('/stores', [checkUserToken, checkAdminRole, checkUserRole], (req, res) =
 	});
 });
 
-app.get('/store/:id', [checkUserToken, checkAdminRole], (req, res) => {
+app.get('/store/:id', [ checkUserToken, checkAdminRole ], (req, res) => {
 	let id = req.params.id;
 
 	Store.findById(id, (err, storeDB) => {

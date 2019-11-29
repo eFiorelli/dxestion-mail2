@@ -52,6 +52,7 @@ app.post('/login', async (req, res) => {
 			return res.status(200).json({
 				ok: true,
 				user: returnedUser,
+				is_admin: userDB.role === 'ADMIN_ROLE',
 				token: token
 			});
 		} else {

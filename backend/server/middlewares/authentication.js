@@ -45,19 +45,18 @@ let checkAdminRole = (req, res, next) => {
 	}
 };
 
-
 // =================
 // check admin user role
 // =================
 let checkUserRole = (req, res, next) => {
 	let user = req.user;
 
-	if (user.role === 'USER_ROLE') {
+	if (user.role === 'USER_ROLE' || user.role === 'ADMIN_ROLE') {
 		next();
 	} else {
 		return res.status(400).json({
 			ok: false,
-			message: 'User is not admin user'
+			message: 'User has no permissions to do this'
 		});
 	}
 };
