@@ -1,4 +1,4 @@
-FROM node:10
+FROM node:10.12-slim
 
 #Create app directory
 WORKDIR /user/src/app
@@ -18,7 +18,7 @@ COPY . .
 RUN mkdir server/config/ssl_certs
 
 ENV NODE_ENV prod
-ENV MONGO_URI mongodb://mongo:27017/angular-node-test
+ENV MONGO_URI mongodb://mongo:27017/dxestionMail
 
 EXPOSE 3000 8081
 

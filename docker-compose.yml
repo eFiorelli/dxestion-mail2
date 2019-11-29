@@ -1,12 +1,12 @@
-version: '3'
+version: "3"
 
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:1.7
     # command: --api --docker --docker.domain=dxestionmail.com
     restart: always
     ports:
-      - 80:80
+      - 82:8080
       - 443:443
     networks:
       - web
@@ -31,7 +31,7 @@ services:
     container_name: mongo
 
   backend:
-    build: 
+    build:
       context: ./backend
     links:
       - mongo
@@ -42,12 +42,14 @@ services:
       - "traefik.port=3000"
     depends_on:
       - mongo
+    ports:
+      - "3000:3000"
     networks:
       - web
     container_name: backend
 
   frontend-admin:
-    build: 
+    build:
       context: ./frontend-admin-app
     links:
       - backend
@@ -59,6 +61,8 @@ services:
     depends_on:
       - mongo
       - backend
+    ports:
+      - "80:80"
     networks:
       - web
     volumes:
@@ -66,7 +70,7 @@ services:
       - $PWD/nginx_conf:/etc/nginx/conf.d
     container_name: web-admin
   frontend-client:
-    build: 
+    build:
       context: ./frontend-client-app
     links:
       - backend
@@ -78,6 +82,8 @@ services:
     depends_on:
       - mongo
       - backend
+    ports:
+      - "90:80"
     networks:
       - web
     volumes:
