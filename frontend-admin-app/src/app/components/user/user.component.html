@@ -1,0 +1,124 @@
+<mat-card class="register-card text-center">
+	<mat-card-header style="width: 100%">
+		<mat-card-title class="text-center">
+			<h3>User detail</h3>
+		</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>
+		<div class="row">
+			<div class="col-sm-6">
+				<form class="register-form">
+					<table class="table-register" style="width: 100%" *ngIf="user" cellspacing="0">
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="Username" [(ngModel)]="user.username" name="username"
+										required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="Password" [(ngModel)]="user.password" type="password"
+										name="password" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="Name" [(ngModel)]="user.name" name="name" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="Email" [(ngModel)]="user.email" type="email"
+										name="email" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="DB URL" [(ngModel)]="user.database_url"
+										name="database_url" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="DB Name" [(ngModel)]="user.database_name"
+										name="database_name" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="DB Port" [(ngModel)]="user.database_port"
+										name="database_port" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="DB Username" [(ngModel)]="user.database_username"
+										name="database_username" required>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input matInput placeholder="DB Password" [(ngModel)]="user.database_password"
+										type="password" name="database_password" required>
+								</mat-form-field>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+			<div class="col-md-1"></div>
+			<div class="col-md-5">
+				<h4 class="text-center">Logo</h4>
+				<tr style="height: 150px;">
+					<td style="border: 1px solid lightgray">
+						<img *ngIf="user.logo_img" [src]="logo_imgURL" style="height: 150px">
+						<input *ngIf="!user.logo_img"
+							(change)="selectLogoImage($event); preview(0, $event.target.files)" type="file"
+							id="logo_file">
+					</td>
+					<td>
+						<button (click)="removeImage(0)" class="btn btn-danger" *ngIf="user.logo_img"
+							style="margin-left: 20px; width: 40px; height: 150px;">X</button>
+					</td>
+				</tr>
+				<br>
+				<h4 class="text-center">Background</h4>
+				<tr style="height: 250px;">
+					<td style="border: 1px solid lightgray">
+						<img *ngIf="user.background_img" [src]="background_imgURL" style="height: 250px">
+						<input *ngIf="!user.background_img"
+							(change)="selectBGImage($event); preview(1, $event.target.files)" type="file" id="bg_file">
+					</td>
+					<td>
+						<button (click)="removeImage(1)" class="btn btn-danger" *ngIf="user.background_img"
+							style="margin-left: 20px; width: 40px; height: 250px;">X</button>
+					</td>
+				</tr>
+				<br>
+			</div>
+		</div>
+
+		<mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+	</mat-card-content>
+	<mat-card-actions>
+		<button mat-raised-button (click)="updateUser()" color="primary">Save changes</button>
+		<button mat-raised-button (click)="cancel()" color="primary">Discard changes</button>
+	</mat-card-actions>
+</mat-card>
