@@ -15,12 +15,6 @@ export class RegisterComponent implements OnInit {
 		password: 'aaa',
 		name: 'aaa',
 		email: 'aaa@aaa.com',
-		database_url: '192.168.0.2',
-		database_name: 'BD1',
-		database_port: '1443',
-		database_username: 'sa',
-		database_password: 'masterkey',
-		background_img: '',
 		logo_img: ''
 	};
 
@@ -45,11 +39,11 @@ export class RegisterComponent implements OnInit {
 		// this.router.navigate(["/login"]);
 	}
 
-	register() {
+	registerUser() {
 		if (this.userService.registerUser(this.user)) {
-			this.showDialog(true, 'Success');
+			this.showDialog(true, 'Success user');
 		} else {
-			this.showDialog(false, 'Error');
+			this.showDialog(false, 'Error user');
 		}
 	}
 

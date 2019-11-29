@@ -42,6 +42,8 @@ import {
 	MatDialogModule
 } from '@angular/material';
 import { UserComponent } from './components/user/user.component';
+import { StoresComponent } from './components/stores/stores.component';
+import { StoreComponent } from './components/store/store.component';
 
 @NgModule({
 	declarations: [
@@ -54,7 +56,9 @@ import { UserComponent } from './components/user/user.component';
 		UsersComponent,
 		DialogComponent,
 		FilterUsersPipe,
-		UserComponent
+		UserComponent,
+		StoresComponent,
+		StoreComponent
 	],
 	imports: [
 		RouterModule,

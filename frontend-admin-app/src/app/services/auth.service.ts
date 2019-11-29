@@ -8,12 +8,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class AuthService {
+	currentUser = {};
 	constructor(private http: HttpClient, private router: Router) {}
 
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login', { credentials }).pipe(
 			map((res: any) => {
 				let data = res;
+				this.currentUser = res;
 				localStorage.setItem('token', data.token);
 				localStorage.setItem('user', data.user.name);
 				localStorage.setItem('userID', data.user._id);
