@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { UserService } from "src/app/services/user.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-	selector: 'app-user',
-	templateUrl: './user.component.html',
-	styleUrls: ['./user.component.css']
+	selector: "app-user",
+	templateUrl: "./user.component.html",
+	styleUrls: ["./user.component.css"]
 })
 export class UserComponent implements OnInit {
-
-	constructor(private userService: UserService, private activatedRoute: ActivatedRoute) { }
+	constructor(
+		private userService: UserService,
+		private activatedRoute: ActivatedRoute
+	) {}
 
 	user: any;
 	public imagePath;
 	background_imgURL: any;
 	logo_imgURL: any;
 	public message: string;
+	showSpinner: boolean = false;
 
 	preview(type: number, files: any) {
 		if (files.length === 0) {
@@ -24,14 +27,14 @@ export class UserComponent implements OnInit {
 
 		const mimeType = files[0].type;
 		if (mimeType.match(/image\/*/) == null) {
-			this.message = 'Only images are supported.';
+			this.message = "Only images are supported.";
 			return;
 		}
 
 		const reader = new FileReader();
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
-		reader.onload = (_event) => {
+		reader.onload = _event => {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
@@ -48,7 +51,7 @@ export class UserComponent implements OnInit {
 				if (user.ok) {
 					this.user = user.user;
 				} else {
-					alert('Error');
+					alert("Error");
 				}
 			});
 		});
@@ -74,4 +77,7 @@ export class UserComponent implements OnInit {
 		}
 	}
 
+	updateUser() {}
+
+	cancel() {}
 }
