@@ -7,7 +7,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class UserService {
-	constructor(private http: HttpClient, private router: Router) {}
+	constructor(private http: HttpClient, private router: Router) { }
 
 	userID = localStorage.getItem('userID');
 
@@ -17,13 +17,13 @@ export class UserService {
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
-			for (var key in userData) {
+			for (const key in userData) {
 				if (key !== 'signature') {
 					formData.append(key, userData[key]);
 				}
 			}
 			formData.append('signature', signature_file, signature_file.name);
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -47,20 +47,18 @@ export class UserService {
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
-			for (var key in userData) {
+			for (const key in userData) {
 				if (key !== 'background_img' && key !== 'logo_img') {
 					formData.append(key, userData[key]);
 				}
 			}
 			if (bg_file) {
 				formData.append('background_image', bg_file, bg_file.name);
-				console.log(bg_file);
 			}
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
-				console.log(logo_file);
 			}
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -83,12 +81,14 @@ export class UserService {
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
-			for (var key in userData) {
-				formData.append(key, userData[key]);
+			for (const key in userData) {
+				if (key !== 'background_img' && key !== 'logo_img') {
+					formData.append(key, userData[key]);
+				}
 			}
 			formData.append('background_image', bg_file, bg_file.name);
 			formData.append('logo_image', logo_file, logo_file.name);
-			xhr.onreadystatechange = function() {
+			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -103,10 +103,8 @@ export class UserService {
 		});
 	}
 
-	getUserById() {
-		let currentUser = localStorage.getItem('userID');
-		// params = params.append('_id', currentUser);
-		return this.http.get(`${AppComponent.BACKEND_URL}/user/${currentUser}`);
+	getUserById(id: string) {
+		return this.http.get(`${AppComponent.BACKEND_URL}/user/${id}`);
 	}
 
 	getUsers() {

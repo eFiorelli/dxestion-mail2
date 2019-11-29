@@ -26,7 +26,6 @@ import { ProductsComponent } from './components/products/products.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UsersComponent } from './components/users/users.component';
 import { DialogComponent } from './components/dialog/dialog.component';
-import { ProfileComponent } from './components/profile/profile.component';
 
 import { FilterUsersPipe } from './pipes/filter-users.pipe';
 
@@ -42,6 +41,7 @@ import {
 	MatCardModule,
 	MatDialogModule
 } from '@angular/material';
+import { UserComponent } from './components/user/user.component';
 
 @NgModule({
 	declarations: [
@@ -53,8 +53,8 @@ import {
 		RegisterComponent,
 		UsersComponent,
 		DialogComponent,
-		ProfileComponent,
-		FilterUsersPipe
+		FilterUsersPipe,
+		UserComponent
 	],
 	imports: [
 		RouterModule,
@@ -74,7 +74,7 @@ import {
 		MatFormFieldModule,
 		MatProgressSpinnerModule
 	],
-	entryComponents: [ DialogComponent ],
+	entryComponents: [DialogComponent],
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
@@ -82,6 +82,6 @@ import {
 			multi: true
 		}
 	],
-	bootstrap: [ AppComponent ]
+	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

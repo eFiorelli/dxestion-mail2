@@ -4,7 +4,7 @@ let { checkUserToken, checkAdminRole } = require('../../middlewares/authenticati
 const User = require('../../models/user');
 const app = express();
 
-app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -75,16 +75,14 @@ saveImages = async (id, res, images) => {
 		if (!userDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'User does not exists'
-				}
+				message: 'User does not exists'
 			});
 		} else {
 			for (let i = 0; i < images.length; i++) {
 				let file = images[i].image;
 				if (file) {
 					// Valid extensions
-					let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+					let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 					let shortedName = file.name.split('.');
 					let extension = shortedName[shortedName.length - 1];
 

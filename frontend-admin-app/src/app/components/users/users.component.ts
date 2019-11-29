@@ -2,15 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AppComponent } from '../../app.component';
 import { FilterUsersPipe } from '../../pipes/filter-users.pipe';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-users',
 	templateUrl: './users.component.html',
-	styleUrls: [ './users.component.css' ],
-	providers: [ FilterUsersPipe ]
+	styleUrls: ['./users.component.css'],
+	providers: [FilterUsersPipe]
 })
 export class UsersComponent implements OnInit {
-	constructor(public userService: UserService, public filterUsersPipe: FilterUsersPipe) {}
+	constructor(public userService: UserService, public filterUsersPipe: FilterUsersPipe, private router: Router) { }
 
 	users: any[];
 	userList: any[];
@@ -44,8 +45,9 @@ export class UsersComponent implements OnInit {
 		if (!this.usersListFiltered) {
 			return;
 		}
+	}
 
-		// this.pagedItems = this.filterOrdersPipe.transform(this.orders, this.searchText);
-		// this.setPage(1);
+	userDetail(id: string) {
+		this.router.navigate(['/user/', id]);
 	}
 }

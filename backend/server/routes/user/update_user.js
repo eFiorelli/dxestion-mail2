@@ -6,7 +6,7 @@ let { checkUserToken, checkAdminRole } = require('../../middlewares/authenticati
 const User = require('../../models/user');
 const app = express();
 
-app.put('/update/user/:id', [ checkUserToken, checkAdminRole ], async (req, res) => {
+app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
 
@@ -75,7 +75,7 @@ updateImages = async (userDB, res, images) => {
 				let file = images[i].image;
 
 				// Valid extensions
-				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+				let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 				let shortedName = file.name.split('.');
 				let extension = shortedName[shortedName.length - 1];
 
@@ -90,7 +90,7 @@ updateImages = async (userDB, res, images) => {
 				let filename = `${userDB._id}-${new Date().getMilliseconds()}.${extension}`;
 
 				// Use the mv() method to place the file somewhere on your server
-				const oldFilenames = [ userDB.background_img, userDB.logo_img ];
+				const oldFilenames = [userDB.background_img, userDB.logo_img];
 				if (images[i].type === 'background') {
 					userDB.background_img = `${filename}`;
 					deleteFiles('background', oldFilenames[0]);

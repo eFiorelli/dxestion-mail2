@@ -4,14 +4,16 @@ import { AdminGuardService } from './services/admin-guard.service';
 
 import { HomeComponent } from './components/home/home.component';
 import { UsersComponent } from './components/users/users.component';
+import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 
 const APP_ROUTES: Routes = [
-	{ path: 'home', component: HomeComponent, canActivate: [ AuthGuardService, AdminGuardService ] },
-	{ path: 'users', component: UsersComponent, canActivate: [ AuthGuardService, AdminGuardService ] },
+	{ path: 'home', component: HomeComponent, canActivate: [AuthGuardService, AdminGuardService] },
+	{ path: 'users', component: UsersComponent, canActivate: [AuthGuardService, AdminGuardService] },
+	{ path: 'user/:id', component: UserComponent, canActivate: [AuthGuardService, AdminGuardService] },
 	{ path: 'login', component: LoginComponent },
-	{ path: 'register', component: RegisterComponent, canActivate: [ AuthGuardService, AdminGuardService ] },
+	{ path: 'register', component: RegisterComponent, canActivate: [AuthGuardService, AdminGuardService] },
 	{ path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
 
