@@ -1,32 +1,32 @@
 const express = require('express');
 let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
-const User = require('../../models/user');
+const Store = require('../../models/store');
 const app = express();
 
-app.delete('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) => {
+app.delete('/update/store/:id', [checkUserToken, checkAdminRole], async (req, res) => {
 	let id = req.params.id;
 
 	try {
-		const userDB = await User.findById(id);
-		if (userDB) {
-			userDB.active = false;
-			const deletedUser = await userDB.save();
-			if (deletedUser) {
+		const storeDB = await Store.findById(id);
+		if (storeDB) {
+			storeDB.active = false;
+			const deletedStore = await storeDB.save();
+			if (deletedStore) {
 				return res.status(200).json({
 					ok: true,
-					message: 'User deleted'
+					message: 'Store deleted'
 				});
 			} else {
 				return res.status(400).json({
 					ok: true,
-					message: 'User couldnt be deleted'
+					message: 'Store couldnt be deleted'
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			message: 'Error deleting user',
+			message: 'Error deleting store',
 			err: err
 		});
 	}

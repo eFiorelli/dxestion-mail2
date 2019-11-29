@@ -2,13 +2,8 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let validRoles = {
-	values: ['ADMIN_ROLE', 'USER_ADMIN_ROLE', 'USER_ROLE'],
+	values: ['ADMIN_ROLE', 'USER_ROLE'],
 	message: '{VALUE} is not a valid role'
-};
-
-let themeColors = {
-	values: ['Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Yellow', 'Orange'],
-	message: '{VALUE} is not a valid theme color'
 };
 
 let Schema = mongoose.Schema;
@@ -31,52 +26,14 @@ let userSchema = new Schema({
 		type: String,
 		required: [true, 'Password is required']
 	},
-	database_url: {
-		type: String,
-		required: [true, 'Database URL is required']
-	},
-	database_name: {
-		type: String,
-		required: [true, 'Database NAME is required']
-	},
-	database_port: {
-		type: String,
-		required: [true, 'Database PORT is required']
-	},
-	database_username: {
-		type: String,
-		required: [true, 'Database username is required']
-	},
-	database_password: {
-		type: String,
-		required: [true, 'Database password is required']
-	},
-	free_fields: {
-		type: Object,
-		required: false
-	},
-	background_img: {
-		type: String,
-		required: false
-	},
 	logo_img: {
 		type: String,
 		required: false
-	},
-	theme_color: {
-		type: String,
-		default: 'Black',
-		enum: themeColors
 	},
 	role: {
 		type: String,
 		default: 'USER_ROLE',
 		enum: validRoles
-	},
-	admin_user: {
-		type: Schema.Types.ObjectId,
-		ref: 'AdminUser',
-		required: [true, 'Admin user is required']
 	},
 	active: {
 		type: Boolean,
@@ -89,7 +46,7 @@ userSchema.methods.toJSON = function () {
 	let userObject = user.toObject();
 	delete userObject.password;
 
-	return userObject;
+	return adminUserObject;
 };
 
 userSchema.plugin(uniqueValidator, {

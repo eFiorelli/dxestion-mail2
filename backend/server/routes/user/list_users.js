@@ -1,12 +1,12 @@
 const express = require('express');
 const User = require('../../models/user');
-const { checkUserToken, checkAdminRole, checkAdminUserRole } = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/users', [checkUserToken, checkAdminRole, checkAdminUserRole], (req, res) => {
+app.get('/users', [checkUserToken, checkAdminRole], (req, res) => {
 	User.find(
-		{ active: true, role: 'USER_ROLE', admin_user: req.user },
-		'_id name email username database_url database_name database_port database_username database_password logo_img'
+		{ active: true, role: 'USER_ROLE' },
+		'_id name email username logo_img'
 	).exec((err, users) => {
 		if (err) {
 			return res.status(400).json({
@@ -15,7 +15,7 @@ app.get('/users', [checkUserToken, checkAdminRole, checkAdminUserRole], (req, re
 			});
 		}
 
-		User.countDocuments({ active: true, role: 'USER_ROLE', admin_user: req.user }, (err, count) => {
+		User.countDocuments({ active: true, role: 'USER_ROLE' }, (err, count) => {
 			return res.status(200).json({
 				ok: true,
 				users: users,

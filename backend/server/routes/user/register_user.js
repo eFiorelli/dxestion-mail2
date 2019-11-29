@@ -2,20 +2,19 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 let {
 	checkUserToken,
-	checkAdminUserRole,
 	checkAdminRole
 } = require("../../middlewares/authentication");
-const User = require("../../models/user");
+const AdminUser = require("../../models/user");
 const app = express();
 
 app.post(
 	"/register/user",
-	[checkUserToken, checkAdminRole, checkAdminUserRole],
+	[checkUserToken, checkAdminRole],
 	async (req, res) => {
 		let body = req.body;
 
 		try {
-			const userDB = await User.findOne({
+			const userDB = await AdminUser.findOne({
 				username: body.username
 			});
 			if (userDB) {
@@ -24,34 +23,24 @@ app.post(
 					message: "There already exists an user with this username"
 				});
 			} else {
-				let user = new User({
+				let adminUser = new AdminUser({
 					name: body.name,
 					email: body.email,
 					password: bcrypt.hashSync(body.password, 10),
 					username: body.username,
-					role: 'USER_ROLE',
-					database_url: body.database_url,
-					database_name: body.database_name,
-					database_port: body.database_port,
-					database_username: body.database_username,
-					database_password: body.database_password,
-					admin_user: req.user
+					role: 'USER_ROLE'
 				});
 
-				const savedUser = await user.save();
+				const savedUser = await adminUser.save();
 				if (savedUser) {
 					if (req.files) {
 						const images = [
-							{
-								type: "background",
-								image: req.files.background_image
-							},
 							{
 								type: "logo",
 								image: req.files.logo_image
 							}
 						];
-						await saveImages(savedUser._id, res, images);
+						await saveUserImages(savedUser._id, res, images);
 					} else {
 						return res.status(200).json({
 							ok: true,
@@ -76,7 +65,7 @@ app.post(
 	}
 );
 
-saveImages = async (id, res, images) => {
+saveUserImages = async (id, res, images) => {
 	try {
 		const userDB = await User.findById(id);
 		if (!userDB) {
@@ -105,10 +94,6 @@ saveImages = async (id, res, images) => {
 					// Change filename
 					let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
 
-					// Use the mv() method to place the file somewhere on your server
-					if (images[i].type === "background") {
-						userDB.background_img = `${filename}`;
-					}
 					if (images[i].type === "logo") {
 						userDB.logo_img = `${filename}`;
 					}

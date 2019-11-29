@@ -49,10 +49,10 @@ let checkAdminRole = (req, res, next) => {
 // =================
 // check admin user role
 // =================
-let checkAdminUserRole = (req, res, next) => {
+let checkUserRole = (req, res, next) => {
 	let user = req.user;
 
-	if (user.role === 'ADMIN_USER_ROLE') {
+	if (user.role === 'USER_ROLE') {
 		next();
 	} else {
 		return res.status(400).json({
@@ -65,5 +65,5 @@ let checkAdminUserRole = (req, res, next) => {
 module.exports = {
 	checkUserToken,
 	checkAdminRole,
-	checkAdminUserRole
+	checkUserRole
 };

@@ -42,7 +42,7 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 						image: req.files.logo_image || ''
 					}
 				];
-				await updateImages(userDB, res, images);
+				await updateUserImages(userDB, res, images);
 			} else {
 				return res.status(200).json({
 					ok: true,
@@ -61,7 +61,7 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 	}
 });
 
-updateImages = async (userDB, res, images) => {
+updateUserImages = async (userDB, res, images) => {
 	try {
 		if (!userDB) {
 			return res.status(400).json({
@@ -93,11 +93,11 @@ updateImages = async (userDB, res, images) => {
 				const oldFilenames = [userDB.background_img, userDB.logo_img];
 				if (images[i].type === 'background') {
 					userDB.background_img = `${filename}`;
-					deleteFiles('background', oldFilenames[0]);
+					deleteUserFiles('background', oldFilenames[0]);
 				}
 				if (images[i].type === 'logo') {
 					userDB.logo_img = `${filename}`;
-					deleteFiles('logo', oldFilenames[1]);
+					deleteUserFiles('logo', oldFilenames[1]);
 				}
 
 				file.mv(`uploads/${images[i].type}/${filename}`, (err) => {
@@ -132,7 +132,7 @@ updateImages = async (userDB, res, images) => {
 	}
 };
 
-deleteFiles = (type, filename) => {
+deleteUserFiles = (type, filename) => {
 	let imagePath = path.resolve(`uploads/${type}/${filename}`);
 	if (fs.existsSync(imagePath)) {
 		fs.unlinkSync(imagePath);

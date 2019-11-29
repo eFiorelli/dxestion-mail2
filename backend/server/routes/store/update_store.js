@@ -2,16 +2,16 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bcrypt = require('bcrypt');
-let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
-const User = require('../../models/user');
+let { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
+const Store = require('../../models/store');
 const app = express();
 
-app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) => {
+app.put('/update/store/:id', [checkUserToken, checkAdminRole, checkUserRole], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
 
 	try {
-		const userDB = await User.findByIdAndUpdate(id, {
+		const storeDB = await Store.findByIdAndUpdate(id, {
 			name: body.name,
 			email: body.email,
 			password: bcrypt.hashSync(body.password, 10),
@@ -22,12 +22,12 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 			database_username: body.database_username,
 			database_password: body.database_password
 		});
-		userDB.save();
-		if (!userDB) {
+		storeDB.save();
+		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
 				err: {
-					message: 'There is no user with that ID'
+					message: 'There is no store with that ID'
 				}
 			});
 		} else {
@@ -42,12 +42,12 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 						image: req.files.logo_image || ''
 					}
 				];
-				await updateImages(userDB, res, images);
+				await updateStoreImages(storeDB, res, images);
 			} else {
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
-					user: userDB,
+					store: storeDB,
 					type: 1
 				});
 			}
@@ -61,13 +61,13 @@ app.put('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res) =
 	}
 });
 
-updateImages = async (userDB, res, images) => {
+updateStoreImages = async (storeDB, res, images) => {
 	try {
-		if (!userDB) {
+		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
 				err: {
-					message: 'User does not exists'
+					message: 'Store does not exists'
 				}
 			});
 		} else {
@@ -87,17 +87,17 @@ updateImages = async (userDB, res, images) => {
 				}
 
 				// Change filename
-				let filename = `${userDB._id}-${new Date().getMilliseconds()}.${extension}`;
+				let filename = `${storeDB._id}-${new Date().getMilliseconds()}.${extension}`;
 
 				// Use the mv() method to place the file somewhere on your server
-				const oldFilenames = [userDB.background_img, userDB.logo_img];
+				const oldFilenames = [storeDB.background_img, storeDB.logo_img];
 				if (images[i].type === 'background') {
-					userDB.background_img = `${filename}`;
-					deleteFiles('background', oldFilenames[0]);
+					storeDB.background_img = `${filename}`;
+					deleteStoreFiles('background', oldFilenames[0]);
 				}
 				if (images[i].type === 'logo') {
-					userDB.logo_img = `${filename}`;
-					deleteFiles('logo', oldFilenames[1]);
+					storeDB.logo_img = `${filename}`;
+					deleteStoreFiles('logo', oldFilenames[1]);
 				}
 
 				file.mv(`uploads/${images[i].type}/${filename}`, (err) => {
@@ -110,16 +110,16 @@ updateImages = async (userDB, res, images) => {
 				});
 			}
 
-			const updatedUser = await User.findByIdAndUpdate(userDB._id, {
-				background_image: userDB.background_image,
-				logo_image: userDB.logo_image
+			const updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
+				background_image: storeDB.background_image,
+				logo_image: storeDB.logo_image
 			});
-			if (updatedUser) {
-				updatedUser.save();
+			if (updatedStore) {
+				updatedStore.save();
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
-					user: updatedUser,
+					store: updatedStore,
 					type: 2
 				});
 			}
@@ -132,7 +132,7 @@ updateImages = async (userDB, res, images) => {
 	}
 };
 
-deleteFiles = (type, filename) => {
+deleteStoreFiles = (type, filename) => {
 	let imagePath = path.resolve(`uploads/${type}/${filename}`);
 	if (fs.existsSync(imagePath)) {
 		fs.unlinkSync(imagePath);

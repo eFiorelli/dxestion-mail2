@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
 
 let Schema = mongoose.Schema;
 
 let clientSchema = new Schema({
 	name: {
 		type: String,
-		required: [ true, 'Name is required' ]
+		required: [true, 'Name is required']
 	},
 	email: {
 		type: String,
-		required: [ true, 'Mail is required' ]
+		required: [true, 'Mail is required']
 	},
 	phone: {
 		type: String,
-		required: [ true, 'Phone is required' ]
+		required: [true, 'Phone is required']
 	},
 	signature: {
 		type: String,
@@ -22,8 +21,8 @@ let clientSchema = new Schema({
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: 'User',
-		required: [ true, 'User is required' ]
+		ref: 'Store',
+		required: [true, 'Store is required']
 	},
 	active: {
 		type: Boolean,

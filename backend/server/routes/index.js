@@ -7,11 +7,11 @@ app.use(require('./login/login'));
 /* Client routes */
 app.use(require('./client/register_client'));
 
-/* */
-app.use(require('./user/register_admin_user'));
-app.use(require('./user/update_admin_user'));
-app.use(require('./user/delete_admin_user'));
-app.use(require('./user/list_admin_users'));
+/* Store routes */
+app.use(require('./store/register_store'));
+app.use(require('./store/update_store'));
+app.use(require('./store/delete_store'));
+app.use(require('./store/list_stores'));
 
 /* User routes */
 app.use(require('./user/register_user'));

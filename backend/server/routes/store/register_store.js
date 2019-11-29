@@ -2,58 +2,67 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 let {
 	checkUserToken,
-	checkAdminUserRole,
+	checkUserRole,
 	checkAdminRole
 } = require("../../middlewares/authentication");
-const AdminUser = require("../../models/user");
+const Store = require("../../models/store");
 const app = express();
 
 app.post(
-	"/register/user",
-	[checkUserToken, checkAdminUserRole, checkAdminRole],
+	"/register/store",
+	[checkUserToken, checkAdminRole, checkUserRole],
 	async (req, res) => {
 		let body = req.body;
 
 		try {
-			const adminUserDB = await AdminUser.findOne({
+			const storeDB = await Store.findOne({
 				username: body.username
 			});
-			if (adminUserDB) {
+			if (storeDB) {
 				return res.status(400).json({
 					ok: false,
-					message: "There already exists an user with this username"
+					message: "There already exists an store with this username"
 				});
 			} else {
-				let adminUser = new AdminUser({
+				let store = new Store({
 					name: body.name,
 					email: body.email,
 					password: bcrypt.hashSync(body.password, 10),
 					username: body.username,
-					role: 'USER_ADMIN_ROLE'
+					database_url: body.database_url,
+					database_name: body.database_name,
+					database_port: body.database_port,
+					database_username: body.database_username,
+					database_password: body.database_password,
+					user: req.user
 				});
 
-				const savedAdminUser = await adminUser.save();
-				if (savedAdminUser) {
+				const savedStore = await store.save();
+				if (savedStore) {
 					if (req.files) {
 						const images = [
+							{
+								type: "background",
+								image: req.files.background_image
+							},
 							{
 								type: "logo",
 								image: req.files.logo_image
 							}
 						];
-						await saveAdminImages(savedAdminUser._id, res, images);
+						await saveStoreImages(savedStore._id, res, images);
 					} else {
 						return res.status(200).json({
 							ok: true,
-							message: "User successfully created",
-							user: savedAdminUser,
+							message: "Store successfully created",
+							store: savedStore,
 							type: 1
 						});
 					}
 				} else {
 					return res.status(400).json({
 						ok: false,
-						message: "Failed on creating user"
+						message: "Failed on creating store"
 					});
 				}
 			}
@@ -66,13 +75,13 @@ app.post(
 	}
 );
 
-saveAdminImages = async (id, res, images) => {
+saveStoreImages = async (id, res, images) => {
 	try {
-		const adminUserDB = await User.findById(id);
-		if (!adminUserDB) {
+		const storeDB = await Store.findById(id);
+		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
-				message: "User does not exists"
+				message: "Store does not exists"
 			});
 		} else {
 			for (let i = 0; i < images.length; i++) {
@@ -95,8 +104,12 @@ saveAdminImages = async (id, res, images) => {
 					// Change filename
 					let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
 
+					// Use the mv() method to place the file somewhere on your server
+					if (images[i].type === "background") {
+						storeDB.background_img = `${filename}`;
+					}
 					if (images[i].type === "logo") {
-						adminUserDB.logo_img = `${filename}`;
+						storeDB.logo_img = `${filename}`;
 					}
 
 					file.mv(`uploads/${images[i].type}/${filename}`, err => {
@@ -109,12 +122,12 @@ saveAdminImages = async (id, res, images) => {
 					});
 				}
 			}
-			const updatedAdminUser = await adminUserDB.save();
-			if (updatedAdminUser) {
+			const updatedStore = await storeDB.save();
+			if (updatedStore) {
 				return res.status(200).json({
 					ok: true,
-					message: "User successfully created",
-					user: updatedAdminUser,
+					message: "Store successfully created",
+					store: updatedStore,
 					type: 2
 				});
 			}
