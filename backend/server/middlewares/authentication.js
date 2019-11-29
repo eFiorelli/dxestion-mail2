@@ -45,7 +45,25 @@ let checkAdminRole = (req, res, next) => {
 	}
 };
 
+
+// =================
+// check admin user role
+// =================
+let checkAdminUserRole = (req, res, next) => {
+	let user = req.user;
+
+	if (user.role === 'ADMIN_USER_ROLE') {
+		next();
+	} else {
+		return res.status(400).json({
+			ok: false,
+			message: 'User is not admin user'
+		});
+	}
+};
+
 module.exports = {
 	checkUserToken,
-	checkAdminRole
+	checkAdminRole,
+	checkAdminUserRole
 };
