@@ -4,7 +4,7 @@ let { checkUserToken, checkAdminRole } = require('../../middlewares/authenticati
 const User = require('../../models/user');
 const app = express();
 
-app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -67,47 +67,40 @@ saveUserImages = async (id, res, images) => {
 				message: 'User does not exists'
 			});
 		} else {
-			for (let i = 0; i < images.length; i++) {
-				let file = images[i].image;
-				if (file) {
-					// Valid extensions
-					let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-					let shortedName = file.name.split('.');
-					let extension = shortedName[shortedName.length - 1];
 
-					if (validExtensions.indexOf(extension) < 0) {
-						return res.status(400).json({
-							ok: false,
-							meesage: 'Allowed extensions: ' + validExtensions.join(', ')
-						});
-					}
+			let file = images[0].image;
+			// Valid extensions
+			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let shortedName = file.name.split('.');
+			let extension = shortedName[shortedName.length - 1];
 
-					// Change filename
-					let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
-
-					if (images[i].type === 'logo') {
-						userDB.logo_img = `${filename}`;
-					}
-
-					file.mv(`uploads/${images[i].type}/${filename}`, (err) => {
-						if (err) {
-							return res.status(500).json({
-								ok: false,
-								err: err
-							});
-						}
-					});
-				}
-			}
-			const updatedUser = await userDB.save();
-			if (updatedUser) {
-				return res.status(200).json({
-					ok: true,
-					message: 'User successfully created',
-					user: updatedUser,
-					type: 2
+			if (validExtensions.indexOf(extension) < 0) {
+				return res.status(400).json({
+					ok: false,
+					meesage: 'Allowed extensions: ' + validExtensions.join(', ')
 				});
 			}
+
+			// Change filename
+			let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
+
+			file.mv(`uploads/user/${filename}`, (err) => {
+				if (err) {
+					return res.status(500).json({
+						ok: false,
+						err: err
+					});
+				}
+			});
+
+			userDB.logo_img = filename;
+			await userDB.save();
+			return res.status(200).json({
+				ok: true,
+				message: 'User successfully created',
+				user: userDB,
+				type: 2
+			});
 		}
 	} catch (err) {
 		return res.status(500).json({

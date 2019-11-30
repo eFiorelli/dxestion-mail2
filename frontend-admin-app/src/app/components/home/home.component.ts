@@ -1,29 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
+import { StoreService } from '../../services/store.service';
 import { AppComponent } from '../../app.component';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	styleUrls: [ './home.component.css' ]
+	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-	constructor(public userService: UserService) {}
+	constructor(public userService: UserService, private storeService: StoreService) { }
 
 	selectedFile: any;
 	userList: any[];
 	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
 
-	ngOnInit() {}
+	ngOnInit() { }
 
 	test() {
-		let userData = {
+		const userData = {
 			email: 'test8@test.com',
 			name: 'Test user',
 			phone: '666555444',
 			signature: this.selectedFile
 		};
-		this.userService.registerClient(userData);
+		this.storeService.registerClient(userData);
 	}
 
 	selectImage(event) {

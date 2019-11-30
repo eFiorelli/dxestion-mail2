@@ -14,11 +14,6 @@ createAdminUser = async () => {
 				email: 'soporte@dxestion.com',
 				password: 'Dxestion0180',
 				username: 'dxestion',
-				database_url: '-',
-				database_name: '-',
-				database_port: '-',
-				database_username: '-',
-				database_password: '-',
 				role: 'ADMIN_ROLE'
 			});
 

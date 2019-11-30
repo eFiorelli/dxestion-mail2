@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../services/auth.service';
@@ -6,15 +6,19 @@ import { AuthService } from '../../services/auth.service';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: [ './login.component.css' ]
+	styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
-	constructor(private auth: AuthService, private router: Router, public snackBar: MatSnackBar) {}
+export class LoginComponent implements OnInit {
+	constructor(private auth: AuthService, private router: Router, public snackBar: MatSnackBar) { }
 
 	username: string = 'dxestion';
 	password: string = 'Dxestion0180';
 	credentials: Object;
 	showSpinner: boolean;
+
+	ngOnInit(): void {
+		localStorage.clear();
+	}
 
 	login(): void {
 		this.showSpinner = true;
@@ -23,7 +27,7 @@ export class LoginComponent {
 			(res) => {
 				if (res) {
 					this.showSpinner = false;
-					this.router.navigate([ '/home' ]);
+					this.router.navigate(['/home']);
 				}
 			},
 			(error) => {

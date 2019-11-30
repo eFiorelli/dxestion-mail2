@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { AppComponent } from '../app.component';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class AuthService {
 	currentUser = {};
-	constructor(private http: HttpClient, private router: Router) {}
+	constructor(private http: HttpClient, private router: Router) { }
 
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login', { credentials }).pipe(
@@ -27,7 +27,7 @@ export class AuthService {
 
 	logout() {
 		localStorage.removeItem('token');
-		this.router.navigate([ '/login' ]);
+		this.router.navigate(['/login']);
 	}
 
 	getToken() {

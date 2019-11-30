@@ -1,23 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
+import { StoreService } from 'src/app/services/store.service';
+import { AppComponent } from '../../app.component';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
 	selector: 'app-user',
 	templateUrl: './user.component.html',
-	styleUrls: [ './user.component.css' ]
+	styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-	constructor(private userService: UserService, private activatedRoute: ActivatedRoute) {}
+	constructor(private userService: UserService, private storeService: StoreService, private activatedRoute: ActivatedRoute) { }
 
 	user: any;
 	public imagePath;
 	background_imgURL: any;
+	backendImgUrl = AppComponent.BACKEND_URL + '/files/user/';
 	logo_imgURL: any;
 	public message: string;
-	showSpinner: boolean = false;
+	showSpinner = false;
 
-	preview(type: number, files: any) {
+	preview(files: any) {
 		if (files.length === 0) {
 			return;
 		}
@@ -32,19 +35,14 @@ export class UserComponent implements OnInit {
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
 		reader.onload = (_event) => {
-			if (type === 0) {
-				this.logo_imgURL = reader.result;
-			}
-			if (type === 1) {
-				this.background_imgURL = reader.result;
-			}
+			this.logo_imgURL = reader.result;
 		};
 	}
 
 	ngOnInit() {
 		this.activatedRoute.params.subscribe((params) => {
 			const id = params.id;
-			this.userService.getStoreById(id).subscribe((user: any) => {
+			this.userService.getUserById(id).subscribe((user: any) => {
 				if (user.ok) {
 					this.user = user.user;
 				} else {
@@ -52,10 +50,6 @@ export class UserComponent implements OnInit {
 				}
 			});
 		});
-	}
-
-	selectBGImage(event) {
-		this.user.background_img = event.target.files[0];
 	}
 
 	selectLogoImage(event) {
@@ -67,14 +61,15 @@ export class UserComponent implements OnInit {
 			this.logo_imgURL = null;
 			this.user.logo_img = null;
 		}
+	}
 
-		if (type === 1) {
-			this.background_imgURL = null;
-			this.user.background_img = null;
+	updateUser() {
+		if (this.userService.updateUser(this.user)) {
+			alert('Success');
+		} else {
+			alert('Error');
 		}
 	}
 
-	updateUser() {}
-
-	cancel() {}
+	cancel() { }
 }

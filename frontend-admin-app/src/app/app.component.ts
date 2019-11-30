@@ -6,7 +6,7 @@ import { Component } from "@angular/core";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  title = "frontend-app";
+  title = "frontend-admin-app";
   // static BACKEND_URL = 'https://backend.serantes.pro';
   static BACKEND_URL = "http://localhost:3000";
 }

@@ -6,11 +6,12 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { AppComponent } from '../../app.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { StoreService } from '../../services/store.service';
 
 @Component({
 	selector: 'app-stores',
 	templateUrl: './stores.component.html',
-	styleUrls: [ './stores.component.css' ]
+	styleUrls: ['./stores.component.css']
 })
 export class StoresComponent implements OnInit {
 	store: any = {
@@ -39,11 +40,11 @@ export class StoresComponent implements OnInit {
 
 	constructor(
 		private auth: AuthService,
-		private userService: UserService,
+		private storeService: StoreService,
 		// public filterUsersPipe: FilterUsersPipe,
 		public dialog: MatDialog,
 		private router: Router
-	) {}
+	) { }
 
 	ngOnInit() {
 		this.getStores();
@@ -80,14 +81,14 @@ export class StoresComponent implements OnInit {
 	}
 
 	getStores() {
-		this.userService.getStores(localStorage.getItem('selectedUsedID')).subscribe((response: any) => {
+		this.storeService.getStores(localStorage.getItem('selectedUsedID')).subscribe((response: any) => {
 			this.storeList = response.stores;
 		});
 	}
 
 	registerStore() {
 		this.store.user = localStorage.getItem('selectedUsedID');
-		if (this.userService.registerStore(this.store)) {
+		if (this.storeService.registerStore(this.store)) {
 			this.showDialog(true, 'Success store');
 		} else {
 			this.showDialog(false, 'Error store');

@@ -7,22 +7,22 @@ import { Router } from '@angular/router';
 @Component({
 	selector: 'app-register',
 	templateUrl: './register.component.html',
-	styleUrls: [ './register.component.css' ]
+	styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
 	user: any = {
-		username: 'aaa',
-		password: 'aaa',
-		name: 'aaa',
-		email: 'aaa@aaa.com',
+		username: 'ddd',
+		password: 'ddd',
+		name: 'ddd',
+		email: 'ddd@ddd.com',
 		logo_img: ''
 	};
 
-	showSpinner: boolean = false;
+	showSpinner = false;
 
-	constructor(private userService: UserService, public dialog: MatDialog, private router: Router) {}
+	constructor(private userService: UserService, public dialog: MatDialog, private router: Router) { }
 
-	ngOnInit() {}
+	ngOnInit() { }
 
 	showDialog(result, message?) {
 		const dialogRef = this.dialog.open(DialogComponent, {

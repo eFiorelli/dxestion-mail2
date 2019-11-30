@@ -56,10 +56,10 @@ app.use(require('./routes/index'));
 /* Enable public directory */
 app.use(express.static(path.resolve(__dirname, '../public/')));
 
-app.use('/files', express.static(path.resolve(__dirname, '../uploads/')));
+app.use('/files', express.static(path.resolve(__dirname, '../uploads')));
 
 if (process.env.NODE_ENV === 'prod') {
-	setTimeout(function() {
+	setTimeout(function () {
 		mongoose.connect(process.env.URLDB, { useNewUrlParser: true }, (err, res) => {
 			if (err) throw err;
 			console.log('Database....ONLINE');

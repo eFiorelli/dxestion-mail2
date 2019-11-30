@@ -7,15 +7,15 @@ import { Router } from '@angular/router';
 @Component({
 	selector: 'app-users',
 	templateUrl: './users.component.html',
-	styleUrls: [ './users.component.css' ],
-	providers: [ FilterUsersPipe ]
+	styleUrls: ['./users.component.css'],
+	providers: [FilterUsersPipe]
 })
 export class UsersComponent implements OnInit {
-	constructor(public userService: UserService, public filterUsersPipe: FilterUsersPipe, private router: Router) {}
+	constructor(public userService: UserService, public filterUsersPipe: FilterUsersPipe, private router: Router) { }
 
 	users: any[];
 	userList: any[];
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
+	imagePath = AppComponent.BACKEND_URL + '/files/user/';
 	noImage = './assets/no-image.jpg';
 	searchText = '';
 	usersListFiltered: any[];
@@ -48,11 +48,11 @@ export class UsersComponent implements OnInit {
 	}
 
 	userDetail(id: string) {
-		this.router.navigate([ '/user/', id ]);
+		this.router.navigate(['/user/', id]);
 	}
 
 	userStores(user: any) {
 		localStorage.setItem('selectedUsedID', user._id);
-		this.router.navigate([ '/stores/' ]);
+		this.router.navigate(['/stores/']);
 	}
 }

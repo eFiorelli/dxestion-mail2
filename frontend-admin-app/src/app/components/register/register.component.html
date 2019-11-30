@@ -18,7 +18,8 @@
                 <tr>
                     <td>
                         <mat-form-field class="register-full-width">
-                            <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password" required>
+                            <input matInput placeholder="Password" [(ngModel)]="user.password" type="password"
+                                name="password" required>
                         </mat-form-field>
                     </td>
                 </tr>
@@ -32,48 +33,9 @@
                 <tr>
                     <td>
                         <mat-form-field class="register-full-width">
-                            <input matInput placeholder="Email" [(ngModel)]="user.email" type="email" name="email" required>
+                            <input matInput placeholder="Email" [(ngModel)]="user.email" type="email" name="email"
+                                required>
                         </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field class="register-full-width">
-                            <input matInput placeholder="DB URL" [(ngModel)]="user.database_url" name="database_url" required>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field class="register-full-width">
-                            <input matInput placeholder="DB Name" [(ngModel)]="user.database_name" name="database_name" required>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field class="register-full-width">
-                            <input matInput placeholder="DB Port" [(ngModel)]="user.database_port" name="database_port" required>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field class="register-full-width">
-                            <input matInput placeholder="DB Username" [(ngModel)]="user.database_username" name="database_username" required>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <mat-form-field class="register-full-width">
-                            <input matInput placeholder="DB Password" [(ngModel)]="user.database_password" type="password" name="database_password" required>
-                        </mat-form-field>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input (change)="selectBGImage($event)" type="file" id="bg_file">
                     </td>
                 </tr>
                 <tr>
