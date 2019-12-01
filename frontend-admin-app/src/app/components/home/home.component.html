@@ -1,1 +1,49 @@
-<p>Home</p>
+<div class="container container-fluid">
+    <div class="row">
+        <div class="col-4" (click)="goToUsers()" *ngIf="auth.isAdmin()" style="margin-top: 40px; cursor: pointer;">
+            <div class="card custom-card" style="width: 18rem;">
+                <img src="assets/user_icon.png" class="card-img-top custom_img custom_img" alt="user_icon">
+                <div class="card-body">
+                    <h5 class="card-title">Users</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+        <div (click)="goToStores()" class="col-4" style="margin-top: 40px; cursor: pointer;">
+            <div class="card custom-card" style="width: 18rem;">
+                <img src="assets/store_icon.png" class="card-img-top custom_img" alt="store_icon">
+                <div class="card-body">
+                    <h5 class="card-title">Stores</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" (click)="goToProfile()" style="margin-top: 40px; cursor: pointer;">
+            <div class="card custom-card" style="width: 18rem;">
+                <img src="assets/profile_icon.png" class="card-img-top custom_img" alt="profile_icon">
+                <div class="card-body">
+                    <h5 class="card-title">Profile</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" (click)="goToProfile()" *ngIf="auth.isAdmin()" style="margin-top: 40px; cursor: pointer;">
+            <div class="card custom-card" style="width: 18rem;">
+                <img src="assets/settings_icon.png" class="card-img-top custom_img" alt="settings_icon">
+                <div class="card-body">
+                    <h5 class="card-title">Settings</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4" (click)="logout()" style="margin-top: 40px; cursor: pointer;">
+            <div class="card custom-card" style="width: 18rem;">
+                <img src="assets/logout_icon.png" class="card-img-top custom_img" alt="logout_icon">
+                <div class="card-body">
+                    <h5 class="card-title">Logout</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

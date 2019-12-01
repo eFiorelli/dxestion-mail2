@@ -1,0 +1,18 @@
+.custom-card {
+	/* border: 2px solid lightgray; */
+	border-radius: 15px;
+	transition: all .3s ease-in-out;
+	-webkit-box-shadow: 0px 0px 30px 10px rgba(199, 189, 199, 0.8);
+	-moz-box-shadow: 0px 0px 30px 10px rgba(199, 189, 199, 0.8);
+	box-shadow: 0px 0px 30px 10px rgba(199, 189, 199, 0.8);
+}
+
+.custom-card:hover {
+	transform: scale(1.05);
+}
+
+.custom_img {
+	margin: 0px auto;
+	margin-top: 15px;
+	width: 50%;
+}

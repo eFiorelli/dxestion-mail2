@@ -1,51 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { StoreService } from '../../services/store.service';
-import { AppComponent } from '../../app.component';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.css']
+	styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
-	constructor(public userService: UserService, private storeService: StoreService) { }
+	constructor(public auth: AuthService, private router: Router) {}
 
-	selectedFile: any;
-	userList: any[];
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
+	ngOnInit() {}
 
-	ngOnInit() { }
-
-	test() {
-		const userData = {
-			email: 'test8@test.com',
-			name: 'Test user',
-			phone: '666555444',
-			signature: this.selectedFile
-		};
-		this.storeService.registerClient(userData);
+	goToUsers() {
+		this.router.navigate([ '/users' ]);
 	}
 
-	selectImage(event) {
-		this.selectedFile = event.target.files[0];
+	goToStores() {
+		this.router.navigate([ '/stores' ]);
 	}
 
-	getUsers() {
-		this.userService.getUsers().subscribe((response: any) => {
-			console.log(response);
-			this.userList = response.users;
-		});
+	goToProfile() {
+		this.router.navigate([ '/profile' ]);
 	}
 
-	// uploadImage() {
-	// 	this.userService
-	// 		.upload(this.selectedFile)
-	// 		.then((response) => {
-	// 			console.log(response);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
+	logout() {
+		this.auth.logout();
+	}
 }
