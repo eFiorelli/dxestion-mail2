@@ -1,35 +1,49 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { AuthService } from "../../services/auth.service";
+import { Router } from "@angular/router";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-	selector: 'app-navbar',
-	templateUrl: './navbar.component.html',
-	styleUrls: [ './navbar.component.css' ]
+	selector: "app-navbar",
+	templateUrl: "./navbar.component.html",
+	styleUrls: ["./navbar.component.css"]
 })
 export class NavbarComponent implements OnInit {
-	constructor(public auth: AuthService, private router: Router) {}
+	activeLang = "es";
+
+	constructor(
+		public auth: AuthService,
+		private router: Router,
+		private translate: TranslateService
+	) {
+		this.translate.setDefaultLang(this.activeLang);
+	}
 
 	ngOnInit() {}
 
+	changeLanguage(lang: string) {
+		this.activeLang = lang;
+		this.translate.use(lang);
+	}
+
 	registerUser() {
-		this.router.navigate([ '/register' ]);
+		this.router.navigate(["/register"]);
 	}
 
 	userProfile() {
-		this.router.navigate([ '/profile' ]);
+		this.router.navigate(["/profile"]);
 	}
 
 	users() {
-		this.router.navigate([ '/users' ]);
+		this.router.navigate(["/users"]);
 	}
 
 	home() {
-		this.router.navigate([ '/home' ]);
+		this.router.navigate(["/home"]);
 	}
 
 	login() {
-		this.router.navigate([ '/login' ]);
+		this.router.navigate(["/login"]);
 	}
 
 	logout() {

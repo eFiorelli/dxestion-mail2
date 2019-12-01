@@ -1,13 +1,22 @@
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <span><img src=""></span>
-        <span class="example-fill-remaining-space"></span>
-        <span class="align-center"></span>
-        <span class="example-spacer"></span>
-
-        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="home()" mat-button>Home</button>
-        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="registerUser()" mat-button>Add new user</button>
-        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="users()" mat-button>User list</button>
-        <button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="logout()" mat-button>Logout</button>
-    </mat-toolbar-row>
+	<mat-toolbar-row>
+		<span (click)="changeLanguage('es')" class="navbar-flag">
+			<img src="assets/es_flag.png">
+		</span>
+		<span (click)="changeLanguage('en')" class="navbar-flag">
+			<img src="assets/en_flag.png">
+		</span>
+		<span><img src=""></span>
+		<span class="example-fill-remaining-space"></span>
+		<span class="align-center"></span>
+		<span class="example-spacer"></span>
+		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="home()"
+			mat-button>{{ 'NAVBAR_PAGE.HOME' | translate }}</button>
+		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="registerUser()"
+			mat-button>{{ 'NAVBAR_PAGE.ADD_NEW_USER' | translate }}</button>
+		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="users()"
+			mat-button>{{ 'NAVBAR_PAGE.LIST_USERS' | translate }}</button>
+		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="logout()"
+			mat-button>{{ 'NAVBAR_PAGE.LOGOUT' | translate }}</button>
+	</mat-toolbar-row>
 </mat-toolbar>

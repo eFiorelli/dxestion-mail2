@@ -1,0 +1,13 @@
+{
+	"LOGIN_PAGE": {
+		"TITLE": "Iniciar sesión",
+		"USER_PLACEHOLDER": "Nombre de usuario",
+		"PASSWORD_PLACEHOLDER": "Contraseña"
+	},
+	"NAVBAR_PAGE": {
+		"HOME": "Inicio",
+		"ADD_NEW_USER": "Añadir usuario",
+		"LIST_USERS": "Lista de usuarios",
+		"LOGOUT": "Salir"
+	}
+}
