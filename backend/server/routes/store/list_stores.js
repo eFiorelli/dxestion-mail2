@@ -5,11 +5,9 @@ const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlew
 const app = express();
 
 app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
-	const user_id = req.query.user_id;
 	try {
-		const is_admin = await User.findById(user_id);
 		let query = '';
-		if (is_admin.role === 'ADMIN_ROLE') {
+		if (req.user.role === 'ADMIN_ROLE') {
 			query = Store.find({});
 		} else {
 			query = Store.find({ active: true, user: req.query.user_id });
@@ -41,18 +39,8 @@ app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 });
 
 app.get('/store/:id', [ checkUserToken ], async (req, res) => {
-	let id = req.params.id;
-	let is_admin = false;
-
-	try {
-		const user = await User.findById(req.user._id);
-		is_admin = user.role === 'ADMIN_ROLE';
-	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err
-		});
-	}
+	const id = req.params.id;
+	const is_admin = req.user.role === 'ADMIN_ROLE';
 
 	if (id !== req.user._id && !is_admin) {
 		return res.status(400).json({

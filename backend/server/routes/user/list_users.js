@@ -28,17 +28,8 @@ app.get('/users', [ checkUserToken, checkAdminRole ], async (req, res) => {
 });
 
 app.get('/user/:id', [ checkUserToken ], async (req, res) => {
-	let id = req.params.id;
-	let is_admin = false;
-	try {
-		const user = await User.findById(req.user._id);
-		is_admin = user.role === 'ADMIN_ROLE';
-	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err
-		});
-	}
+	const id = req.params.id;
+	const is_admin = req.user.role === 'ADMIN_ROLE';
 
 	if (id !== req.user._id && !is_admin) {
 		return res.status(400).json({
