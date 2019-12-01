@@ -4,7 +4,7 @@ const User = require('../../models/user');
 const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
+app.get('/stores', [checkUserToken, checkUserRole], async (req, res) => {
 	try {
 		let query = '';
 		if (req.user.role === 'ADMIN_ROLE') {
@@ -20,7 +20,8 @@ app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 		if (!stores) {
 			return res.status(400).json({
 				ok: false,
-				err: err
+				err: 'Error getting stores',
+				type: 13
 			});
 		}
 
@@ -33,19 +34,21 @@ app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });
 
-app.get('/store/:id', [ checkUserToken ], async (req, res) => {
+app.get('/store/:id', [checkUserToken], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 
 	if (id !== req.user._id && !is_admin) {
 		return res.status(400).json({
 			ok: false,
-			err: 'You are not allowed to view this store'
+			err: 'You are not allowed to view this store',
+			type: 14
 		});
 	} else {
 		try {

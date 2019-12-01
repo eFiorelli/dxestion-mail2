@@ -19,15 +19,16 @@ app.delete('/update/user/:id', [checkUserToken, checkAdminRole], async (req, res
 			} else {
 				return res.status(400).json({
 					ok: true,
-					message: 'User couldnt be deleted'
+					message: 'User couldnt be deleted',
+					type: 8
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			message: 'Error deleting user',
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });

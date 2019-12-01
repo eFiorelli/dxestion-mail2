@@ -33,3 +33,54 @@ if (process.env.NODE_ENV === 'dev') {
 }
 
 process.env.URLDB = urlDB;
+
+
+/**************************      ERROR CODES:      **************************/
+/*
+**** Register user ****
+1.- Server error
+2.- There already exists an user with this username
+3.- Failed on creating user
+4.- User not found
+
+**** Update user ****
+5.- There is no user with that ID
+
+**** List users ****
+6.- Error getting users
+7.- You are not allowed to view this user
+
+**** Delete users ****
+8.- User couldnt be deleted
+
+
+**** Register store ****
+9.- There already exists an store with this name
+10.- Failed on creating store
+11.- Store not found
+
+**** Update store ****
+12.- There is no store with that ID
+
+**** List stores ****
+13.- Error getting stores
+14.- You are not allowed to view this store
+
+**** Delete store ****
+15.- Store couldnt be deleted
+
+
+**** Create client ****
+16.- Client already exists
+17.- Bad SQL statement
+18.- Unable to connect with database server
+19.- Client not found
+20.- Error updating client
+
+
+**** Login ****
+21.- No user/password were provided
+22.- Wrong username/password
+
+*/
+/**************************      ERROR CODES      **************************/

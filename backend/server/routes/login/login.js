@@ -14,7 +14,8 @@ app.post('/login', async (req, res) => {
 	} else {
 		return res.status(500).json({
 			ok: false,
-			err: 'No user/password were provided'
+			err: 'No user/password were provided',
+			type: 21
 		});
 	}
 
@@ -27,19 +28,12 @@ app.post('/login', async (req, res) => {
 			if (!bcrypt.compareSync(password, userDB.password) && userDB.password !== password) {
 				return res.status(400).json({
 					ok: false,
-					message: 'Wrong password'
+					message: 'Wrong username/password',
+					type: 22
 				});
 			}
 
-			let token = jwt.sign(
-				{
-					user: userDB
-				},
-				process.env.SEED,
-				{
-					expiresIn: process.env.TOKEN_EXPIRATION
-				}
-			);
+			let token = jwt.sign({ user: userDB }, process.env.SEED, { expiresIn: process.env.TOKEN_EXPIRATION });
 
 			let returnedUser = {
 				_id: userDB._id,
@@ -58,14 +52,15 @@ app.post('/login', async (req, res) => {
 		} else {
 			return res.status(400).json({
 				ok: false,
-				message: 'User does not exists'
+				message: 'User not found',
+				type: 4
 			});
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			message: 'Login server error',
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });

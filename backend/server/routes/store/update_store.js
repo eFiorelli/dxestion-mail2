@@ -26,9 +26,8 @@ app.put('/update/store/:id', [checkUserToken, checkAdminRole, checkUserRole], as
 		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'There is no store with that ID'
-				}
+				message: 'There is no store with that ID',
+				type: 12
 			});
 		} else {
 			if (req.files) {
@@ -66,9 +65,8 @@ updateStoreImages = async (storeDB, res, images) => {
 		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'Store does not exists'
-				}
+				message: 'Store not found',
+				type: 11
 			});
 		} else {
 			for (let i = 0; i < images.length; i++) {
@@ -104,7 +102,8 @@ updateStoreImages = async (storeDB, res, images) => {
 					if (err) {
 						return res.status(500).json({
 							ok: false,
-							err: err
+							err: err,
+							type: 1
 						});
 					}
 				});
@@ -127,7 +126,8 @@ updateStoreImages = async (storeDB, res, images) => {
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 };

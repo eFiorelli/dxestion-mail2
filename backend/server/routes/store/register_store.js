@@ -4,7 +4,7 @@ let { checkUserToken, checkUserRole, checkAdminRole } = require('../../middlewar
 const Store = require('../../models/store');
 const app = express();
 
-app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], async (req, res) => {
+app.post('/register/store', [checkUserToken, checkAdminRole, checkUserRole], async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -14,7 +14,8 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 		if (storeDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'There already exists an store with this username'
+				message: 'There already exists an store with this name',
+				type: 9
 			});
 		} else {
 			let store = new Store({
@@ -55,14 +56,16 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 			} else {
 				return res.status(400).json({
 					ok: false,
-					message: 'Failed on creating store'
+					message: 'Failed on creating store',
+					type: 10
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });
@@ -73,14 +76,15 @@ saveStoreImages = async (id, res, images) => {
 		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'Store does not exists'
+				message: 'Store not found',
+				type: 11
 			});
 		} else {
 			for (let i = 0; i < images.length; i++) {
 				let file = images[i].image;
 				if (file) {
 					// Valid extensions
-					let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+					let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 					let shortedName = file.name.split('.');
 					let extension = shortedName[shortedName.length - 1];
 
@@ -106,7 +110,8 @@ saveStoreImages = async (id, res, images) => {
 						if (err) {
 							return res.status(500).json({
 								ok: false,
-								err: err
+								err: err,
+								type: 1
 							});
 						}
 					});
@@ -125,7 +130,8 @@ saveStoreImages = async (id, res, images) => {
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 };

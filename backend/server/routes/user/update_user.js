@@ -23,9 +23,8 @@ app.put('/update/user', [checkUserToken, checkAdminRole], async (req, res) => {
 		if (!userDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'There is no user with that ID'
-				}
+				message: 'There is no user with that ID',
+				type: 5
 			});
 		} else {
 			if (req.files) {
@@ -59,9 +58,8 @@ updateUserImages = async (userDB, res, images) => {
 		if (!userDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'User does not exists'
-				}
+				message: 'User not found',
+				type: 4
 			});
 		} else {
 			let file = images[0].image;
@@ -89,7 +87,8 @@ updateUserImages = async (userDB, res, images) => {
 				if (err) {
 					return res.status(500).json({
 						ok: false,
-						err: err
+						err: err,
+						type: 1
 					});
 				}
 			});
@@ -106,7 +105,8 @@ updateUserImages = async (userDB, res, images) => {
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 };

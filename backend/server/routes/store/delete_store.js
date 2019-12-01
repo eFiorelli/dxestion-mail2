@@ -19,15 +19,16 @@ app.delete('/update/store/:id', [checkUserToken, checkAdminRole], async (req, re
 			} else {
 				return res.status(400).json({
 					ok: true,
-					message: 'Store couldnt be deleted'
+					message: 'Store couldnt be deleted',
+					type: 15
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			message: 'Error deleting store',
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });

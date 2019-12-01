@@ -30,29 +30,33 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 			case 1:
 				return res.status(400).json({
 					ok: false,
-					message: 'Client already existst'
+					message: 'Client already exists',
+					type: 16
 				});
 			case 2:
 				return res.status(400).json({
 					ok: false,
-					message: 'Bad SQL statement'
+					message: 'Bad SQL statement',
+					type: 17
 				});
 			case 3:
 				return res.status(400).json({
 					ok: false,
-					message: 'Unable to connect with database server'
+					message: 'Unable to connect with database server',
+					type: 18
 				});
 			default:
 				return res.status(500).json({
 					ok: false,
-					message: 'Server error'
+					message: 'Server error',
+					type: 1
 				});
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			message: 'Server error',
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });
@@ -107,15 +111,14 @@ addSignature = async (clientDB, res, signature) => {
 		if (!clientDB) {
 			return res.status(400).json({
 				ok: false,
-				err: {
-					message: 'Client does not exists'
-				}
+				message: 'Client not found',
+				type: 19
 			});
 		} else {
 			let file = signature;
 
 			// Valid extensions
-			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
 			let shortedName = file.name.split('.');
 			let extension = shortedName[shortedName.length - 1];
 
@@ -132,7 +135,8 @@ addSignature = async (clientDB, res, signature) => {
 				if (err) {
 					return res.status(500).json({
 						ok: false,
-						err: err
+						err: err,
+						type: 1
 					});
 				}
 			});
@@ -142,14 +146,12 @@ addSignature = async (clientDB, res, signature) => {
 			});
 			if (updatedClient) {
 				updatedClient.save();
-				console.log('aaa');
 				return;
 			} else {
 				return res.status(400).json({
 					ok: true,
 					message: 'Error updating client',
-					client: updatedClient,
-					type: 2
+					type: 20
 				});
 			}
 		}
@@ -157,7 +159,7 @@ addSignature = async (clientDB, res, signature) => {
 		return res.status(500).json({
 			ok: false,
 			err: err,
-			type: 80
+			type: 1
 		});
 	}
 };

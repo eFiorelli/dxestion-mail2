@@ -14,7 +14,8 @@ app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) =>
 		if (userDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'There already exists an user with this username'
+				message: 'There already exists an user with this username',
+				type: 2
 			});
 		} else {
 			let user = new User({
@@ -39,21 +40,22 @@ app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) =>
 					return res.status(200).json({
 						ok: true,
 						message: 'User successfully created',
-						user: savedUser,
-						type: 1
+						user: savedUser
 					});
 				}
 			} else {
 				return res.status(400).json({
 					ok: false,
-					message: 'Failed on creating user'
+					message: 'Failed on creating user',
+					type: 3
 				});
 			}
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 });
@@ -64,7 +66,8 @@ saveUserImages = async (id, res, images) => {
 		if (!userDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'User does not exists'
+				message: 'User not found',
+				type: 4
 			});
 		} else {
 
@@ -98,14 +101,14 @@ saveUserImages = async (id, res, images) => {
 			return res.status(200).json({
 				ok: true,
 				message: 'User successfully created',
-				user: userDB,
-				type: 2
+				user: userDB
 			});
 		}
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,
-			err: err
+			err: err,
+			type: 1
 		});
 	}
 };
