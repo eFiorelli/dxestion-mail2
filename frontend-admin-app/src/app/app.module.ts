@@ -22,7 +22,6 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { ProductsComponent } from './components/products/products.component';
 import { RegisterComponent } from './components/register/register.component';
 import { UsersComponent } from './components/users/users.component';
 import { DialogComponent } from './components/dialog/dialog.component';
@@ -44,6 +43,7 @@ import {
 import { UserComponent } from './components/user/user.component';
 import { StoresComponent } from './components/stores/stores.component';
 import { StoreComponent } from './components/store/store.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
 	declarations: [
@@ -51,14 +51,14 @@ import { StoreComponent } from './components/store/store.component';
 		HomeComponent,
 		LoginComponent,
 		NavbarComponent,
-		ProductsComponent,
 		RegisterComponent,
 		UsersComponent,
 		DialogComponent,
 		FilterUsersPipe,
 		UserComponent,
 		StoresComponent,
-		StoreComponent
+		StoreComponent,
+		ProfileComponent
 	],
 	imports: [
 		RouterModule,
@@ -78,7 +78,7 @@ import { StoreComponent } from './components/store/store.component';
 		MatFormFieldModule,
 		MatProgressSpinnerModule
 	],
-	entryComponents: [DialogComponent],
+	entryComponents: [ DialogComponent ],
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
@@ -86,6 +86,6 @@ import { StoreComponent } from './components/store/store.component';
 			multi: true
 		}
 	],
-	bootstrap: [AppComponent]
+	bootstrap: [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule {}

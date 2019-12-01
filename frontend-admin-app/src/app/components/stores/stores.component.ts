@@ -11,7 +11,7 @@ import { StoreService } from '../../services/store.service';
 @Component({
 	selector: 'app-stores',
 	templateUrl: './stores.component.html',
-	styleUrls: ['./stores.component.css']
+	styleUrls: [ './stores.component.css' ]
 })
 export class StoresComponent implements OnInit {
 	store: any = {
@@ -44,7 +44,7 @@ export class StoresComponent implements OnInit {
 		// public filterUsersPipe: FilterUsersPipe,
 		public dialog: MatDialog,
 		private router: Router
-	) { }
+	) {}
 
 	ngOnInit() {
 		this.getStores();
@@ -81,13 +81,14 @@ export class StoresComponent implements OnInit {
 	}
 
 	getStores() {
-		this.storeService.getStores(localStorage.getItem('selectedUsedID')).subscribe((response: any) => {
+		this.storeService.getStores(localStorage.getItem('userID')).subscribe((response: any) => {
 			this.storeList = response.stores;
 		});
 	}
 
 	registerStore() {
-		this.store.user = localStorage.getItem('selectedUsedID');
+		this.store.user = localStorage.getItem('userID');
+
 		if (this.storeService.registerStore(this.store)) {
 			this.showDialog(true, 'Success store');
 		} else {
