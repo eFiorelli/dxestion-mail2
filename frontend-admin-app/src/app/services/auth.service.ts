@@ -12,7 +12,7 @@ export class AuthService {
 	constructor(private http: HttpClient, private router: Router) { }
 
 	login(credentials) {
-		return this.http.post(AppComponent.BACKEND_URL + '/login', { credentials }).pipe(
+		return this.http.post(AppComponent.BACKEND_URL + '/login/user', { credentials }).pipe(
 			map((res: any) => {
 				const data = res;
 				this.currentUser = res;
