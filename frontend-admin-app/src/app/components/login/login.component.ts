@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
 import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-login',
@@ -9,7 +10,7 @@ import { AuthService } from '../../services/auth.service';
 	styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-	constructor(private auth: AuthService, private router: Router, public snackBar: MatSnackBar) { }
+	constructor(private auth: AuthService, private router: Router, private translate: TranslateService) { }
 
 	username: string = 'dxestion';
 	password: string = 'Dxestion0180';
@@ -31,11 +32,16 @@ export class LoginComponent implements OnInit {
 				}
 			},
 			(error) => {
-				this.snackBar.open('Incorrect login', 'dismiss', {
-					duration: 3000
+				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.error.type}`);
+				Swal.fire('Error', error_text, 'error').then(() => {
+					this.showSpinner = false;
 				});
-				this.showSpinner = false;
 			}
 		);
+	}
+
+	test() {
+
+
 	}
 }

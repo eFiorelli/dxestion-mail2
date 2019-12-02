@@ -1,27 +1,37 @@
-<div class="container container-fluid">
-    <button (click)="registerStore()" class="btn btn-primary">Register store</button>
-    <div class="row">
-        <div class="col-md-11 col-sm-6">
-            <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
+<mat-tab-group style="height: 100vh;">
+    <mat-tab label="Register store" style="height: 100vh;">
+        <div class="container container-fluid">
+            <button (click)="registerStore()" class="btn btn-primary">Register store</button>
         </div>
-    </div>
-    <br>
-    <div class="row" *ngIf="storeList">
-        <div *ngFor="let store of storeList" class="card" style="width: 15rem; margin: 0px 15px 35px 15px;">
-            <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top" alt="{{ store.name }}" style="height: 140px;">
-            <div class="card-body">
-                <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
-                <br>
-                <p class="card-text"><b>Username: </b>{{ store.username }}</p>
-                <p class="card-text"><b>Email: </b>{{ store.email }}</p>
-                <p class="card-text"><b>Database URL: </b>{{ store.database_url }}</p>
-                <p class="card-text"><b>Database NAME: </b>{{ store.database_name }}</p>
-                <br>
-                <div class="row text-center">
-                    <!-- <button (click)="userDetail(user._id)" class="btn btn-primary">Edit user</button> -->
-                    <!-- <button (click)="userStores(user._id)" class="btn btn-primary">View stores</button> -->
+    </mat-tab>
+    <mat-tab label="Stores list" style="height: 100vh;">
+        <div *ngIf="storeList">
+            <br>
+            <div class="col-md-11 col-sm-6">
+                <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)"
+                    [ngModel]="searchText" name="search" placeholder="Buscar...">
+            </div>
+            <br>
+            <div *ngFor="let store of storeList" class="col-3" (click)="goToUsers()"
+                style="margin-top: 40px; cursor: pointer;">
+                <div class="card custom-store-card">
+                    <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage"
+                        class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 140px;">
+                    <div class="card-body">
+                        <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
+                        <p class="card-text custom-store-card-text"><b>Username: </b>{{ store.username }}</p>
+                        <p class="card-text custom-store-card-text"><b>Email: </b>{{ store.email }}</p>
+                        <p class="card-text custom-store-card-text"><b>Database URL: </b>{{ store.database_url }}</p>
+                        <p class="card-text custom-store-card-text"><b>Database NAME: </b>{{ store.database_name }}</p>
+                        <div class="row text-center">
+                            <!-- <button (click)="userDetail(user._id)" class="btn btn-primary">Edit user</button> -->
+                            <!-- <button (click)="userStores(user._id)" class="btn btn-primary">View stores</button> -->
+                        </div>
+                    </div>
                 </div>
             </div>
+
+
         </div>
-    </div>
-</div>
+    </mat-tab>
+</mat-tab-group>
