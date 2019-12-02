@@ -14,7 +14,7 @@ export class AuthService {
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login', { credentials }).pipe(
 			map((res: any) => {
-				let data = res;
+				const data = res;
 				this.currentUser = res;
 				localStorage.setItem('token', data.token);
 				localStorage.setItem('user', data.user.name);
@@ -26,7 +26,7 @@ export class AuthService {
 	}
 
 	logout() {
-		localStorage.removeItem('token');
+		localStorage.clear();
 		this.router.navigate(['/login']);
 	}
 
