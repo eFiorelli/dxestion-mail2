@@ -1,67 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-import { UserService } from '../../services/user.service';
-import { MatDialog } from '@angular/material';
-import { DialogComponent } from '../dialog/dialog.component';
+import { Component, OnInit } from "@angular/core";
+import { UserService } from "../../services/user.service";
 // import { FilterUsersPipe } from '../../pipes/filter-users.pipe';
-import { AppComponent } from '../../app.component';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { StoreService } from '../../services/store.service';
+import { AppComponent } from "../../app.component";
+import { Router } from "@angular/router";
+import { AuthService } from "../../services/auth.service";
+import { StoreService } from "../../services/store.service";
+import Swal from "sweetalert2";
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
-	selector: 'app-stores',
-	templateUrl: './stores.component.html',
-	styleUrls: ['./stores.component.css']
+	selector: "app-stores",
+	templateUrl: "./stores.component.html",
+	styleUrls: ["./stores.component.css"]
 })
 export class StoresComponent implements OnInit {
-	store: any = {
-		username: 'ccc',
-		password: 'ccc',
-		name: 'ccc',
-		email: 'ccc@ccc.com',
-		database_url: '192.168.0.2',
-		database_name: 'BD2',
-		database_port: '1443',
-		database_username: 'sa',
-		database_password: 'masterkey',
-		background_img: '',
-		logo_img: '',
+	username = Math.random()
+		.toString(36)
+		.substring(2, 15);
+
+	newStore: any = {
+		username: this.username,
+		password: "1234",
+		name: this.username,
+		email: `${this.username}@${this.username}.com`,
+		database_url: "192.168.0.2",
+		database_name: "BD2",
+		database_port: "1443",
+		database_username: "sa",
+		database_password: "masterkey",
+		background_img: "",
+		logo_img: "",
 		user: {}
 	};
 
+	userList: any[];
 	storeList: any[];
 	stores: any[];
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
-	noImage = './assets/no-image.jpg';
-	searchText = '';
+	imagePath = AppComponent.BACKEND_URL + "/files/logo/";
+	noImage = "./assets/no-image.jpg";
+	searchText = "";
 	storesListFiltered: any[];
-
-	showSpinner: boolean = false;
+	selectedTab;
+	showSpinner = false;
 
 	constructor(
-		private auth: AuthService,
+		public auth: AuthService,
 		private storeService: StoreService,
+		private userService: UserService,
 		// public filterUsersPipe: FilterUsersPipe,
-		public dialog: MatDialog,
-		private router: Router
-	) { }
+		private router: Router,
+		private translate: TranslateService
+	) {}
 
 	ngOnInit() {
 		this.getStores();
-	}
-
-	showDialog(result, message?) {
-		const dialogRef = this.dialog.open(DialogComponent, {
-			width: '400px',
-			data: {
-				action: 'Register ',
-				message: message,
-				result: result
-			}
-		});
-		this.showSpinner = false;
-		// this.user = {};
-		// this.router.navigate(["/login"]);
+		if (this.auth.isAdmin()) {
+			this.userService.getUsers().subscribe((response: any) => {
+				this.userList = response.users;
+			});
+		}
 	}
 
 	searchStores(text?: string) {
@@ -81,19 +78,54 @@ export class StoresComponent implements OnInit {
 	}
 
 	getStores() {
-		this.storeService.getStores(localStorage.getItem('userID')).subscribe((response: any) => {
-			console.log(response)
-			this.storeList = response.stores;
-		});
+		this.storeService
+			.getStores(localStorage.getItem("userID"))
+			.subscribe((response: any) => {
+				console.log(response);
+				this.storeList = response.stores;
+			});
 	}
 
 	registerStore() {
-		this.store.user = localStorage.getItem('userID');
+		this.showSpinner = true;
+		const username = Math.random()
+			.toString(36)
+			.substring(2, 15);
+		const randomStore = {
+			username: username,
+			password: "1234",
+			name: username,
+			email: `${username}@${username}.com`,
+			database_url: "192.168.0.2",
+			database_name: "BD2",
+			database_port: "1443",
+			database_username: "sa",
+			database_password: "masterkey",
+			background_img: "",
+			logo_img: "",
+			user: {}
+		};
 
-		if (this.storeService.registerStore(this.store)) {
-			this.showDialog(true, 'Success store');
-		} else {
-			this.showDialog(false, 'Error store');
-		}
+		this.storeService
+			.registerStore(this.newStore)
+			.then((response: any) => {
+				this.showSpinner = false;
+				const success_text = "Store created successfully";
+				Swal.fire("Exito", success_text, "success").then(() => {
+					this.ngOnInit();
+					this.selectedTab = 0;
+				});
+			})
+			.catch((error: any) => {
+				this.showSpinner = false;
+				const error_text = this.translate.instant(
+					`ERRORS.ERROR_TYPE_${error.type}`
+				);
+				Swal.fire("Error", error_text, "error");
+			});
+	}
+
+	goToStore(store: any) {
+		this.router.navigate(["/store", store._id]);
 	}
 }

@@ -16,7 +16,7 @@
 			mat-button>{{ 'NAVBAR_PAGE.ADD_NEW_USER' | translate }}</button>
 		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="users()"
 			mat-button>{{ 'NAVBAR_PAGE.LIST_USERS' | translate }}</button>
-		<button *ngIf="auth.isAuthenticated() && auth.isAdmin()" (click)="logout()"
+		<button *ngIf="auth.isAuthenticated()" (click)="logout()"
 			mat-button>{{ 'NAVBAR_PAGE.LOGOUT' | translate }}</button>
 	</mat-toolbar-row>
 </mat-toolbar>
