@@ -46,7 +46,8 @@ import {
 	MatProgressSpinnerModule,
 	MatFormFieldModule,
 	MatCardModule,
-	MatDialogModule
+	MatDialogModule,
+	MatTabsModule
 } from "@angular/material";
 import { UserComponent } from "./components/user/user.component";
 import { StoresComponent } from "./components/stores/stores.component";
@@ -84,6 +85,7 @@ import { ProfileComponent } from "./components/profile/profile.component";
 		MatToolbarModule,
 		MatCardModule,
 		MatFormFieldModule,
+		MatTabsModule,
 		MatProgressSpinnerModule,
 		TranslateModule.forRoot({
 			loader: {
@@ -105,4 +107,4 @@ import { ProfileComponent } from "./components/profile/profile.component";
 	],
 	bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
