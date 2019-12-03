@@ -4,11 +4,18 @@
 		"USER_PLACEHOLDER": "Username",
 		"PASSWORD_PLACEHOLDER": "Password"
 	},
-	"NAVBAR_PAGE": {
-		"HOME": "Home",
-		"ADD_NEW_USER": "Add user",
-		"LIST_USERS": "List user",
-		"LOGOUT": "Logout"
+	"HOME_PAGE": {
+		"TITLE": "Client register",
+		"NAME": "Name",
+		"EMAIL": "Email",
+		"PHONE": "Phone",
+		"SIGNATURE": "Signature",
+		"SEND": "Send"
+	},
+	"EXIT_POPUP": {
+		"TITLE": "Enter code to exit",
+		"ACCEPT": "Accept",
+		"CANCEL": "Cancel"
 	},
 	"SUCCESS": {
 		"REGISTER_USER": "User created successfully",

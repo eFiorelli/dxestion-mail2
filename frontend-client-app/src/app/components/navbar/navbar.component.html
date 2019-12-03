@@ -1,12 +1,13 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <span (click)="changeLanguage('es')" class="navbar-flag">
+        <!-- <span (click)="changeLanguage('es')" class="navbar-flag">
             <img src="assets/es_flag.png">
         </span>
         <span (click)="changeLanguage('en')" class="navbar-flag">
             <img src="assets/en_flag.png">
-        </span>
-
-        <button *ngIf="auth.isAuthenticated()" (click)="logout()" mat-button>Logout</button>
+        </span> -->
+        <a style="position: absolute; right: 20px; cursor: pointer" *ngIf="auth.isAuthenticated()" (click)="logout()">
+            <i style="font-size: 50px" class="fa fa-power-off"></i>
+        </a>
     </mat-toolbar-row>
 </mat-toolbar>

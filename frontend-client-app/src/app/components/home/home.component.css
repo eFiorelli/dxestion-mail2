@@ -205,6 +205,10 @@ h6 {
 	padding-top: 180px;
 }
 
+.p-t-140 {
+	padding-top: 140px;
+}
+
 .p-t-20 {
 	padding-top: 20px;
 }
@@ -271,6 +275,9 @@ h6 {
 
 .btn--green {
 	background: #57b846;
+	width: 90%;
+	height: 50px;
+	margin-top: 10px;
 }
 
 .btn--green:hover {
@@ -510,8 +517,9 @@ input {
 	-webkit-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
 	-moz-box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
 	box-shadow: 0px 8px 20px 0px rgba(0, 0, 0, 0.15);
-	width: 100%;
+	width: 90%;
 	display: table;
+	margin: 0px auto;
 }
 
 .card-3 .card-heading {

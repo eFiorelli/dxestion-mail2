@@ -13,7 +13,6 @@ export class UserService {
 
 	/* Register client */
 	registerClient(clientData: any) {
-		console.log(clientData);
 		const signature_file = clientData.signature;
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();

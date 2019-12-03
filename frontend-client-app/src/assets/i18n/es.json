@@ -4,11 +4,18 @@
 		"USER_PLACEHOLDER": "Nombre de usuario",
 		"PASSWORD_PLACEHOLDER": "Contraseña"
 	},
-	"NAVBAR_PAGE": {
-		"HOME": "Inicio",
-		"ADD_NEW_USER": "Añadir usuario",
-		"LIST_USERS": "Lista de usuarios",
-		"LOGOUT": "Salir"
+	"HOME_PAGE": {
+		"TITLE": "Alta de cliente",
+		"NAME": "Nombre",
+		"EMAIL": "Email",
+		"PHONE": "Teléfono",
+		"SIGNATURE": "Firma",
+		"SEND": "Enviar"
+	},
+	"EXIT_POPUP": {
+		"TITLE": "Introduce la clave para salir",
+		"ACCEPT": "Aceptar",
+		"CANCEL": "Cancelar"
 	},
 	"SUCCESS": {
 		"REGISTER_USER": "Usuario creado correctamente",

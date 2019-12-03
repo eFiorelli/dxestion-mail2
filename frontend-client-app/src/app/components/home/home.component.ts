@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 
-declare var $: JQuery;
+declare var $: any;
 
 @Component({
 	selector: 'app-home',
@@ -18,20 +18,17 @@ export class HomeComponent implements OnInit {
 	constructor(public userService: UserService, private translate: TranslateService) {}
 
 	selectedFile: any;
-	imagePath = AppComponent.BACKEND_URL + '/files/client/signature/';
-
-	random = Math.random().toString(36).substring(2, 15);
-
-	randomPhone = Math.floor(Math.random() * (699999999 - 600000000 + 1)) + 600000000;
+	imagePath = AppComponent.BACKEND_URL + '/files/store/background/';
+	backgroundImg = '';
 
 	client = {
-		email: `${this.random}@${this.random}.com`,
-		name: this.random,
-		phone: this.randomPhone,
+		email: '',
+		name: '',
+		phone: '',
 		signature: new Blob()
 	};
 
-	private signaturePadOptions: Object = {
+	public signaturePadOptions: Object = {
 		// passed through to szimek/signature_pad constructor
 		minWidth: 5,
 		canvasWidth: 250,
@@ -48,7 +45,7 @@ export class HomeComponent implements OnInit {
 
 	drawComplete() {
 		// will be notified of szimek/signature_pad's onEnd event
-		console.log(this.signaturePad.toDataURL('image/png'));
+		// console.log(this.signaturePad.toDataURL('image/png'));
 	}
 
 	drawStart() {
@@ -56,14 +53,39 @@ export class HomeComponent implements OnInit {
 		console.log('begin drawing');
 	}
 
-	ngOnInit() {}
-
-	selectImage(event) {}
+	ngOnInit() {
+		if (localStorage.getItem('bg_image')) {
+			this.backgroundImg = this.imagePath + localStorage.getItem('bg_image');
+			console.log(this.backgroundImg);
+		}
+	}
 
 	registerClient() {
 		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
+			.then((response) => {
+				const success_text = 'Cliente creado con exito';
+				Swal.fire('Exito', success_text, 'success');
+			})
+			.catch((error) => {
+				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				Swal.fire('Error', error_text, 'error');
+			});
+	}
+
+	randomClient() {
+		let random = Math.random().toString(36).substring(2, 15);
+		let randomPhone = Math.floor(Math.random() * (699999999 - 600000000 + 1)) + 600000000;
+		let client = {
+			email: `${random}@${random}.com`,
+			name: random,
+			phone: randomPhone,
+			signature: new Blob()
+		};
+		client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
+		this.userService
+			.registerClient(client)
 			.then((response) => {
 				const success_text = 'Cliente creado con exito';
 				Swal.fire('Exito', success_text, 'success');

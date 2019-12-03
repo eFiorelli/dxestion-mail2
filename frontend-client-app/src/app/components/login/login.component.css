@@ -1,16 +1,36 @@
-.login-icon {
-    padding: 0 14px;
-}
-
-.login-spacer {
-    flex: 1 1 auto;
-}
-
 .login-card {
-    width: 400px;
-    margin: 10% auto;
+	width: 480px;
+	margin: 0px auto;
+	top: 180px;
+	/* margin: 10% auto; */
 }
 
 .mat-card-title {
-    font-size: 16px;
+	font-size: 42px;
+}
+
+mat-card-header .mat-card-header-text {
+	margin: 0px auto !important;
+	margin-bottom: 20px !important;
+}
+
+.bg-gradient {
+	background: #2bc0e4; /* fallback for old browsers */
+	background: -webkit-linear-gradient(to bottom, #eaecc6, #2bc0e4); /* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(
+		to bottom,
+		#eaecc6,
+		#2bc0e4
+	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.wrapper {
+	min-height: 100vh;
+	margin-top: -65px;
+}
+
+.mat-form-field {
+	width: 90%;
+	margin: 0px auto;
+	font-size: 22px;
 }
