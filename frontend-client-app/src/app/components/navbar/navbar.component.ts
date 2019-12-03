@@ -1,35 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { TranslateService } from "@ngx-translate/core";
 
 @Component({
 	selector: 'app-navbar',
 	templateUrl: './navbar.component.html',
-	styleUrls: [ './navbar.component.css' ]
+	styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-	constructor(public auth: AuthService, private router: Router) {}
+	activeLang = "es";
 
-	ngOnInit() {}
-
-	registerUser() {
-		this.router.navigate([ '/register' ]);
+	constructor(
+		public auth: AuthService,
+		private router: Router,
+		private translate: TranslateService
+	) {
+		this.translate.setDefaultLang(this.activeLang);
 	}
 
-	userProfile() {
-		this.router.navigate([ '/profile' ]);
-	}
+	ngOnInit() { }
 
-	users() {
-		this.router.navigate([ '/users' ]);
-	}
-
-	home() {
-		this.router.navigate([ '/home' ]);
-	}
-
-	login() {
-		this.router.navigate([ '/login' ]);
+	changeLanguage(lang: string) {
+		this.activeLang = lang;
+		this.translate.use(lang);
 	}
 
 	logout() {

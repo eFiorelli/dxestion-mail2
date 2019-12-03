@@ -1,50 +1,48 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { AppComponent } from '../../app.component';
+import Swal from 'sweetalert2';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	styleUrls: [ './home.component.css' ]
+	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-	constructor(public userService: UserService) {}
+	constructor(public userService: UserService, private translate: TranslateService) { }
 
 	selectedFile: any;
-	userList: any[];
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
+	imagePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 
-	ngOnInit() {}
+	random = Math.random()
+		.toString(36)
+		.substring(2, 15);
 
-	test() {
-		let userData = {
-			email: 'test8@test.com',
-			name: 'Test user',
-			phone: '666555444',
-			signature: this.selectedFile
-		};
-		this.userService.registerClient(userData);
-	}
+	randomPhone = Math.floor(Math.random() * (699999999 - 600000000 + 1)) + 600000000;
+
+	client = {
+		email: `${this.random}@${this.random}.com`,
+		name: this.random,
+		phone: this.randomPhone,
+		signature: ''
+	};
+
+	ngOnInit() { }
 
 	selectImage(event) {
 		this.selectedFile = event.target.files[0];
 	}
 
-	getUsers() {
-		this.userService.getUsers().subscribe((response: any) => {
-			console.log(response);
-			this.userList = response.users;
-		});
+	registerClient() {
+		this.client.signature = this.selectedFile;
+		this.userService.registerClient(this.client).then((response) => {
+			const success_text = 'Cliente creado con exito';
+			Swal.fire('Exito', success_text, 'success');
+		}).catch((error) => {
+			const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+			Swal.fire('Error', error_text, 'error');
+		})
 	}
 
-	// uploadImage() {
-	// 	this.userService
-	// 		.upload(this.selectedFile)
-	// 		.then((response) => {
-	// 			console.log(response);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.log(err);
-	// 		});
-	// }
 }
