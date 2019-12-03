@@ -23,7 +23,9 @@ export class StoreService {
 					formData.append(key, userData[key]);
 				}
 			}
-			formData.append('signature', signature_file, signature_file.name);
+			if (signature_file) {
+				formData.append('signature', signature_file, signature_file.name);
+			}
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
@@ -42,7 +44,6 @@ export class StoreService {
 
 	/* Register new store */
 	registerStore(storeData: any) {
-		console.log(storeData);
 		const bg_file = storeData.background_img;
 		const logo_file = storeData.logo_img;
 		return new Promise((resolve, reject) => {

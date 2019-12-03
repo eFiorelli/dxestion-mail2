@@ -24,17 +24,6 @@ export class RegisterComponent implements OnInit {
 
 	ngOnInit() { }
 
-	/*
-	import Swal from 'sweetalert2';
-	import { TranslateService } from '@ngx-translate/core';
-	private translate: TranslateService
-	const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.error.type}`);
-	Swal.fire('Error', error_text, 'error').then(() => {
-		this.showSpinner = false;
-	});
-
-	*/
-
 	registerUser() {
 		this.showSpinner = true;
 		this.userService.registerUser(this.user).then((response: any) => {
