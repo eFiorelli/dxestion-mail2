@@ -14,3 +14,7 @@
 	width: 30px;
 	height: 30px;
 }
+
+.mat-toolbar.mat-primary {
+	background: transparent !important;
+}

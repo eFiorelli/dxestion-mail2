@@ -9,8 +9,8 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTING } from './app.routes';
 
 /* Translations */
-import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
-import { TranslateHttpLoader } from "@ngx-translate/http-loader";
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 /* HTTP Interceptors */
 import { HTTP_INTERCEPTORS, HttpClientModule, HttpClient } from '@angular/common/http';
@@ -26,6 +26,9 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
+/* Signature pad */
+import { SignaturePadModule } from 'angular2-signaturepad';
+
 /* Angular material modules */
 import {
 	MatInputModule,
@@ -40,12 +43,7 @@ import {
 } from '@angular/material';
 
 @NgModule({
-	declarations: [
-		AppComponent,
-		HomeComponent,
-		LoginComponent,
-		NavbarComponent
-	],
+	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent ],
 	imports: [
 		RouterModule,
 		HttpClientModule,
@@ -69,9 +67,10 @@ import {
 				useFactory: (http: HttpClient) => {
 					return new TranslateHttpLoader(http);
 				},
-				deps: [HttpClient]
+				deps: [ HttpClient ]
 			}
-		})
+		}),
+		SignaturePadModule
 	],
 	providers: [
 		{
@@ -80,6 +79,6 @@ import {
 			multi: true
 		}
 	],
-	bootstrap: [AppComponent]
+	bootstrap: [ AppComponent ]
 })
-export class AppModule { }
+export class AppModule {}

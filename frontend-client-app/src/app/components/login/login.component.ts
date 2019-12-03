@@ -11,8 +11,8 @@ import { AuthService } from '../../services/auth.service';
 export class LoginComponent {
 	constructor(private auth: AuthService, private router: Router, public snackBar: MatSnackBar) {}
 
-	username: string = 'dxestion';
-	password: string = 'Dxestion0180';
+	username: string = 'b02f1uo4eb4';
+	password: string = '1234';
 	credentials: Object;
 	showSpinner: boolean;
 
