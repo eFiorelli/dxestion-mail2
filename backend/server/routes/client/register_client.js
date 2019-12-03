@@ -7,8 +7,8 @@ const app = express();
 app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	try {
-		const client_insert = await sendClientToManager(req.store, body);
-		//const client_insert = 0;
+		// const client_insert = await sendClientToManager(req.store, body);
+		const client_insert = 0;
 		switch (client_insert) {
 			case 0:
 				let client = new Client({
@@ -74,7 +74,9 @@ sendClientToManager = async (connection_params, client) => {
 	};
 
 	try {
-		const connection = await sql.connect(`mssql://${config.user}:${config.password}@${config.server}/${config.database}`);
+		const connection = await sql.connect(
+			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
+		);
 		if (connection) {
 			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
 			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
@@ -120,7 +122,7 @@ addSignature = async (clientDB, res, signature) => {
 			let file = signature;
 
 			// Valid extensions
-			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
 			let shortedName = file.name.split('.');
 			let extension = shortedName[shortedName.length - 1];
 
