@@ -25,6 +25,7 @@ let checkUserToken = (req, res, next) => {
 		}
 
 		req.user = decoded.user;
+		req.store = decoded.store;
 		next();
 	});
 };

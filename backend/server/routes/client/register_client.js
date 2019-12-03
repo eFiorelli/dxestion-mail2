@@ -7,25 +7,29 @@ const app = express();
 app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	try {
-		// const client_insert = await sendClientToManager(req.user, body);
-		const client_insert = 0;
+		const client_insert = await sendClientToManager(req.store, body);
+		//const client_insert = 0;
 		switch (client_insert) {
 			case 0:
 				let client = new Client({
 					name: body.name,
 					email: body.email,
 					phone: body.phone,
-					user: req.user
+					store: req.store
 				});
-				const newClient = await client.save();
-				if (newClient._id) {
-					let signature = req.files.signature;
-					await addSignature(newClient._id, res, signature);
+				const existingClient = await Client.find({ email: body.email, phone: body.phone });
+				if (existingClient.length === 0) {
+					const newClient = await client.save();
+					if (newClient._id) {
+						if (req.files) {
+							let signature = req.files.signature;
+							await addSignature(newClient._id, res, signature);
+						}
+					}
 				}
 				return res.status(200).json({
 					ok: true,
-					message: 'Client inserted',
-					client: newClient
+					message: 'Client inserted'
 				});
 			case 1:
 				return res.status(400).json({
@@ -70,9 +74,7 @@ sendClientToManager = async (connection_params, client) => {
 	};
 
 	try {
-		const connection = await sql.connect(
-			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
-		);
+		const connection = await sql.connect(`mssql://${config.user}:${config.password}@${config.server}/${config.database}`);
 		if (connection) {
 			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
 			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)

@@ -19,7 +19,7 @@ let clientSchema = new Schema({
 		type: String,
 		required: false
 	},
-	user: {
+	store: {
 		type: Schema.Types.ObjectId,
 		ref: 'Store',
 		required: [true, 'Store is required']
