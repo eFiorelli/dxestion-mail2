@@ -24,13 +24,19 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 						if (req.files) {
 							let signature = req.files.signature;
 							await addSignature(newClient._id, res, signature);
+							return res.status(200).json({
+								ok: true,
+								message: 'Client inserted'
+							});
 						}
 					}
+				} else {
+					return res.status(400).json({
+						ok: false,
+						message: 'Client already exists',
+						type: 16
+					});
 				}
-				return res.status(200).json({
-					ok: true,
-					message: 'Client inserted'
-				});
 			case 1:
 				return res.status(400).json({
 					ok: false,
@@ -120,18 +126,7 @@ addSignature = async (clientDB, res, signature) => {
 			});
 		} else {
 			let file = signature;
-
-			// Valid extensions
-			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-			let shortedName = file.name.split('.');
-			let extension = shortedName[shortedName.length - 1];
-
-			if (validExtensions.indexOf(extension) < 0) {
-				return res.status(400).json({
-					ok: false,
-					meesage: 'Allowed extensions: ' + validExtensions.join(', ')
-				});
-			}
+			extension = 'png';
 
 			let filename = `${clientDB._id}-${new Date().getMilliseconds()}.${extension}`;
 

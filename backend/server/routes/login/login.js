@@ -42,7 +42,6 @@ app.post('/login/:type', async (req, res) => {
 	}
 });
 
-
 userLogin = async (res, userDB, credentials) => {
 	if (userDB) {
 		if (!bcrypt.compareSync(credentials.password, userDB.password) && userDB.password !== credentials.password) {
@@ -95,6 +94,8 @@ storeLogin = async (res, storeDB, credentials) => {
 			username: storeDB.username,
 			name: storeDB.name,
 			email: storeDB.email,
+			background_img: storeDB.background_img,
+			logo_img: storeDB.logo_img
 		};
 
 		return res.status(200).json({

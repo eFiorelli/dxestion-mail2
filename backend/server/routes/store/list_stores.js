@@ -1,14 +1,10 @@
 const express = require('express');
 const Store = require('../../models/store');
 const User = require('../../models/user');
-const {
-	checkUserToken,
-	checkAdminRole,
-	checkUserRole
-} = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/stores', [checkUserToken, checkUserRole], async (req, res) => {
+app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 	try {
 		let query = '';
 		if (req.user.role === 'ADMIN_ROLE') {
@@ -19,7 +15,7 @@ app.get('/stores', [checkUserToken, checkUserRole], async (req, res) => {
 				user: req.query.user_id
 			});
 			query.select(
-				'_id name email username database_url database_name database_port database_username database_password logo_img'
+				'_id name email username database_url database_name database_port database_username database_password background_img logo_img'
 			);
 		}
 
@@ -50,7 +46,7 @@ app.get('/stores', [checkUserToken, checkUserRole], async (req, res) => {
 	}
 });
 
-app.get('/store/:id', [checkUserToken], async (req, res) => {
+app.get('/store/:id', [ checkUserToken ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {
