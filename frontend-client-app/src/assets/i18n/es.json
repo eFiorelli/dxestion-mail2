@@ -46,6 +46,7 @@
 		"ERROR_TYPE_19": "Cliente no encontrado",
 		"ERROR_TYPE_20": "Error actualizando cliente",
 		"ERROR_TYPE_21": "Faltan el usuario y/o la contraseña",
-		"ERROR_TYPE_22": "Usuario y/o contraseña incorrectos"
+		"ERROR_TYPE_22": "Usuario y/o contraseña incorrectos",
+		"GPDR_ACCEPT": "Debe aceptar los términos y condiciones de uso antes de enviar la información"
 	}
 }

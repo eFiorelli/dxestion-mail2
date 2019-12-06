@@ -46,6 +46,7 @@
 		"ERROR_TYPE_19": "Client not found",
 		"ERROR_TYPE_20": "Error updating client",
 		"ERROR_TYPE_21": "No user/password were provided",
-		"ERROR_TYPE_22": "Wrong username/password"
+		"ERROR_TYPE_22": "Wrong username/password",
+		"GPDR_ACCEPT": "You must accept the terms of user before sending your information"
 	}
 }

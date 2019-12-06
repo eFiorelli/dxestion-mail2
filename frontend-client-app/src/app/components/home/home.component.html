@@ -1,4 +1,4 @@
-<div class="page-wrapper bg-gra-01 p-t-140 p-b-100 font-poppins" style="margin-top: -65px">
+<div class="page-wrapper bg-gra-01 p-t-90 p-b-100 font-poppins" style="margin-top: -65px">
     <div class="wrapper wrapper--w780">
         <div class="card card-3">
             <div class="card-heading" [ngStyle]="{'background': 'url(' + backgroundImg + ') top left/cover no-repeat'}"></div>
@@ -33,6 +33,18 @@
                         <label class="input--style-3">{{ 'HOME_PAGE.SIGNATURE' | translate }}</label>
                     </div>
                     <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+                    <div class="input-group">
+                        <div class="page">
+                            <div class="page__toggle">
+                                <label class="toggle">
+								<input [(ngModel)]="client.gpdr" name="gpdr" class="toggle__input" type="checkbox">
+								<span class="toggle__label">
+									<span class="toggle__text">Acepto los términos de uso</span>
+								</span>
+							</label>
+                            </div>
+                        </div>
+                    </div>
                     <div class="p-t-10 text-center">
                         <button class="btn btn--pill btn--green" (click)="registerClient()" [disabled]="!(client.email && client.phone && client.name && this.signaturePad.toData().length > 0)">{{ 'HOME_PAGE.SEND' | translate }}</button>
                         <!-- <button class="btn btn--pill btn--green" (click)="randomClient()">Random</button> -->

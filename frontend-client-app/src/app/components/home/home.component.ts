@@ -25,7 +25,8 @@ export class HomeComponent implements OnInit {
 		email: '',
 		name: '',
 		phone: '',
-		signature: new Blob()
+		signature: new Blob(),
+		gpdr: false
 	};
 
 	public signaturePadOptions: Object = {
@@ -56,17 +57,32 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 		if (localStorage.getItem('bg_image')) {
 			this.backgroundImg = this.imagePath + localStorage.getItem('bg_image');
-			console.log(this.backgroundImg);
+		} else {
+			this.backgroundImg = '../../../assets/bg-heading-03.jpg';
 		}
 	}
 
 	registerClient() {
+		if (!this.client.gpdr) {
+			const gpdr_text = this.translate.instant('ERRORS.GPDR_ACCEPT');
+			Swal.fire('Error', gpdr_text, 'error');
+			return;
+		}
 		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
 			.then((response) => {
 				const success_text = 'Cliente creado con exito';
-				Swal.fire('Exito', success_text, 'success');
+				Swal.fire('Exito', success_text, 'success').then(() => {
+					this.client = {
+						email: '',
+						name: '',
+						phone: '',
+						signature: new Blob(),
+						gpdr: false
+					};
+					this.signaturePad.clear();
+				});
 			})
 			.catch((error) => {
 				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
