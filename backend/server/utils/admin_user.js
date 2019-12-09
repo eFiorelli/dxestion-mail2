@@ -7,7 +7,10 @@ createAdminUser = async () => {
 			username: 'dxestion'
 		});
 		if (userDB) {
-			console.log('Admin user already exists');
+			logger().log({
+				level: 'warn',
+				message: 'Admin user already exists'
+			});
 		} else {
 			let user = new User({
 				name: 'dxestion',
@@ -19,14 +22,22 @@ createAdminUser = async () => {
 
 			const savedUser = await user.save();
 			if (savedUser) {
-				/* All OK */
-				console.log('Admin user created sucessfully');
+				logger().log({
+					level: 'info',
+					message: 'Admin user created sucessfully'
+				});
 			} else {
-				console.log('Error saving admin user');
+				logger().log({
+					level: 'error',
+					message: 'Error saving admin user'
+				});
 			}
 		}
 	} catch (err) {
-		console.log('Error creating admin user');
+		logger().log({
+			level: 'error',
+			message: 'Error creating admin user'
+		});
 	}
 };
 

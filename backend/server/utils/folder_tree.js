@@ -1,4 +1,7 @@
-var fs = require('fs');
+const fs = require('fs');
+
+const log_dir = './logs';
+
 
 /* Create uploads folder tree */
 const uploads_dir = './uploads/';
@@ -8,6 +11,10 @@ const client_dir = './uploads/client/';
 const background_dir = './uploads/store/background/';
 const background_logo = './uploads/store/logo/';
 const signature = './uploads/client/signature/';
+
+if (!fs.existsSync(log_dir)) {
+	fs.mkdirSync(log_dir);
+}
 
 if (!fs.existsSync(uploads_dir)) {
 	fs.mkdirSync(uploads_dir);
