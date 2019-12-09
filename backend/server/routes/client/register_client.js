@@ -1,10 +1,11 @@
-const express = require('express');
-let { checkUserToken } = require('../../middlewares/authentication');
-const Client = require('../../models/client');
-const sql = require('mssql');
+const express = require("express");
+let { checkUserToken } = require("../../middlewares/authentication");
+const Client = require("../../models/client");
+const mailer = require("../../utils/mail");
+const sql = require("mssql");
 const app = express();
 
-app.post('/register/client', checkUserToken, async (req, res) => {
+app.post("/register/client", checkUserToken, async (req, res) => {
 	let body = req.body;
 	try {
 		// const client_insert = await sendClientToManager(req.store, body);
@@ -17,48 +18,56 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 					phone: body.phone,
 					store: req.store
 				});
-				const existingClient = await Client.find({ email: body.email, phone: body.phone });
+				const existingClient = await Client.find({
+					email: body.email,
+					phone: body.phone
+				});
 				if (existingClient.length === 0) {
 					const newClient = await client.save();
 					if (newClient._id) {
 						if (req.files) {
 							let signature = req.files.signature;
 							await addSignature(newClient._id, res, signature);
+							/* const mail = await sendMail(req.store, newClient);
+							if (mail) {
+								// Ok response. Problem: Allow users account sending mails
+							} */
 							return res.status(200).json({
 								ok: true,
-								message: 'Client inserted'
+								message: "Client inserted"
 							});
 						}
 					}
 				} else {
 					return res.status(400).json({
 						ok: false,
-						message: 'Client already exists',
+						message: "Client already exists",
 						type: 16
 					});
 				}
+				break;
 			case 1:
 				return res.status(400).json({
 					ok: false,
-					message: 'Client already exists',
+					message: "Client already exists",
 					type: 16
 				});
 			case 2:
 				return res.status(400).json({
 					ok: false,
-					message: 'Bad SQL statement',
+					message: "Bad SQL statement",
 					type: 17
 				});
 			case 3:
 				return res.status(400).json({
 					ok: false,
-					message: 'Unable to connect with database server',
+					message: "Unable to connect with database server",
 					type: 18
 				});
 			default:
 				return res.status(500).json({
 					ok: false,
-					message: 'Server error',
+					message: "Server error",
 					type: 1
 				});
 		}
@@ -85,12 +94,15 @@ sendClientToManager = async (connection_params, client) => {
 		);
 		if (connection) {
 			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`)
-				.recordset[0].ID;
-			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
+			const max_id = (
+				await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)`
+			).recordset[0].ID;
+			const client_account = (
+				parseFloat(4300000000) + parseFloat(max_id)
+			).toString();
 			if (result.recordset.length === 0) {
 				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
-				if (query.code === 'EREQUEST') {
+				if (query.code === "EREQUEST") {
 					/* Bad SQL statement */
 					return 2;
 				}
@@ -107,7 +119,7 @@ sendClientToManager = async (connection_params, client) => {
 			return 3;
 		}
 	} catch (err) {
-		if (err.code === 'ESOCKET') {
+		if (err.code === "ESOCKET") {
 			return 3;
 		} else {
 			/* Server error */
@@ -121,16 +133,17 @@ addSignature = async (clientDB, res, signature) => {
 		if (!clientDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'Client not found',
+				message: "Client not found",
 				type: 19
 			});
 		} else {
 			let file = signature;
-			extension = 'png';
+			extension = "png";
 
-			let filename = `${clientDB._id}-${new Date().getMilliseconds()}.${extension}`;
-
-			file.mv(`uploads/signature/${filename}`, (err) => {
+			let filename = `${
+				clientDB._id
+			}-${new Date().getMilliseconds()}.${extension}`;
+			file.mv(`uploads/client/signature/${filename}`, err => {
 				if (err) {
 					return res.status(500).json({
 						ok: false,
@@ -149,7 +162,7 @@ addSignature = async (clientDB, res, signature) => {
 			} else {
 				return res.status(400).json({
 					ok: true,
-					message: 'Error updating client',
+					message: "Error updating client",
 					type: 20
 				});
 			}
@@ -160,6 +173,23 @@ addSignature = async (clientDB, res, signature) => {
 			err: err,
 			type: 1
 		});
+	}
+};
+
+sendMail = async (store, client) => {
+	const mailOptions = {
+		from: ` ${store.email}`,
+		to: `${client.email}`,
+		subject: `Gracias por registrarse en ${store.name}`,
+		text: `Hemos recibido su solicitud. Muchas gracias`
+	};
+	try {
+		const mail = await mailer.transporter.sendMail(mailOptions);
+		if (mail) {
+			return true;
+		}
+	} catch (err) {
+		return false;
 	}
 };
 
