@@ -1,18 +1,20 @@
 <div class="page-wrapper bg-gra-01 p-t-90 p-b-100 font-poppins" style="margin-top: -65px">
-    <div class="wrapper wrapper--w780">
-        <div class="card card-3">
-            <div class="card-heading" [ngStyle]="{'background': 'url(' + backgroundImg + ') top left/cover no-repeat'}"></div>
-            <div class="card-body">
-                <h2 class="title">{{ 'HOME_PAGE.TITLE' | translate }}</h2>
-                <form method="POST">
-                    <div class="input-group">
-                        <input class="input--style-3" type="text" [(ngModel)]="client.name" placeholder="{{ 'HOME_PAGE.NAME' | translate }}" name="name">
-                    </div>
-                    <!-- <div class="input-group">
+	<div class="wrapper wrapper--w780">
+		<div class="card card-3">
+			<div class="card-heading" [ngStyle]="{'background': 'url(' + backgroundImg + ') top left/cover no-repeat'}">
+			</div>
+			<div class="card-body">
+				<h2 class="title">{{ 'HOME_PAGE.TITLE' | translate }}</h2>
+				<form method="POST">
+					<div class="input-group">
+						<input class="input--style-3" type="text" [(ngModel)]="client.name"
+							placeholder="{{ 'HOME_PAGE.NAME' | translate }}" name="name">
+					</div>
+					<!-- <div class="input-group">
                         <input class="input--style-3 js-datepicker" type="text" placeholder="Phone" name="phone">
                         <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
                     </div> -->
-                    <!-- <div class="input-group">
+					<!-- <div class="input-group">
                         <div class="rs-select2 js-select-simple select--no-search">
                             <select name="gender">
                                     <option disabled="disabled" selected="selected">Gender</option>
@@ -23,34 +25,38 @@
                             <div class="select-dropdown"></div>
                         </div>
                     </div> -->
-                    <div class="input-group">
-                        <input class="input--style-3" type="email" [(ngModel)]="client.email" placeholder="{{ 'HOME_PAGE.EMAIL' | translate }}" name="email">
-                    </div>
-                    <div class="input-group">
-                        <input class="input--style-3" type="text" [(ngModel)]="client.phone" placeholder="{{ 'HOME_PAGE.PHONE' | translate }}" name="phone">
-                    </div>
-                    <div class="input-group">
-                        <label class="input--style-3">{{ 'HOME_PAGE.SIGNATURE' | translate }}</label>
-                    </div>
-                    <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
-                    <div class="input-group">
-                        <div class="page">
-                            <div class="page__toggle">
-                                <label class="toggle">
-								<input [(ngModel)]="client.gpdr" name="gpdr" class="toggle__input" type="checkbox">
-								<span class="toggle__label">
-									<span class="toggle__text">Acepto los términos de uso</span>
-								</span>
-							</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-t-10 text-center">
-                        <button class="btn btn--pill btn--green" (click)="registerClient()" [disabled]="!(client.email && client.phone && client.name && this.signaturePad.toData().length > 0)">{{ 'HOME_PAGE.SEND' | translate }}</button>
-                        <!-- <button class="btn btn--pill btn--green" (click)="randomClient()">Random</button> -->
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+					<div class="input-group">
+						<input class="input--style-3" type="email" [(ngModel)]="client.email"
+							placeholder="{{ 'HOME_PAGE.EMAIL' | translate }}" name="email">
+					</div>
+					<div class="input-group">
+						<input class="input--style-3" type="text" [(ngModel)]="client.phone"
+							placeholder="{{ 'HOME_PAGE.PHONE' | translate }}" name="phone">
+					</div>
+					<div class="input-group" style="margin-bottom: 5px; border-bottom: none;">
+						<label class="input--style-3">{{ 'HOME_PAGE.SIGNATURE' | translate }}</label>
+					</div>
+					<signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()"
+						(onEndEvent)="drawComplete()"></signature-pad>
+					<div class="input-group" style="border-bottom: none; margin: 10px 0 -10px 0">
+						<div class="page">
+							<div class="page__toggle">
+								<label class="toggle">
+									<input [(ngModel)]="client.gpdr" name="gpdr" class="toggle__input" type="checkbox">
+									<span class="toggle__label">
+										<span class="toggle__text">Acepto los términos de uso</span>
+									</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="p-t-10 text-center">
+						<button class="btn btn--pill btn--green" (click)="registerClient()"
+							[disabled]="!(client.email && client.phone && client.name && this.signaturePad.toData().length > 0)">{{ 'HOME_PAGE.SEND' | translate }}</button>
+						<!-- <button class="btn btn--pill btn--green" (click)="randomClient()">Random</button> -->
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </div>

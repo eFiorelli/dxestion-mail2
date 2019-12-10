@@ -100,8 +100,8 @@ legend {
 /**
    * Remove trailing margins from nested lists.
    */
-li > ol,
-li > ul {
+li>ol,
+li>ul {
 	margin-bottom: 0;
 }
 
@@ -295,7 +295,7 @@ td.active {
 	background-color: #2c6ed5;
 }
 
-input[type="date" i] {
+input[type="date"i] {
 	padding: 14px;
 }
 
@@ -542,12 +542,14 @@ input {
 	.card-3 {
 		display: block;
 	}
+
 	.card-3 .card-heading {
 		display: block;
 		width: 100%;
 		padding-top: 400px;
 		background-position: center center;
 	}
+
 	.card-3 .card-body {
 		display: block;
 		width: 100%;
@@ -606,24 +608,24 @@ LEVEL 1. CORE STYLES
 	z-index: 2;
 }
 
-.toggle__input:disabled ~ .toggle__label:before {
+.toggle__input:disabled~.toggle__label:before {
 	border-color: var(--uiToggleDisabledColor);
 }
 
-.toggle__input:focus ~ .toggle__label:before {
+.toggle__input:focus~.toggle__label:before {
 	box-shadow: 0 0 0 2px var(--uiToggleBgColor), 0 0 0px 4px var(--uiToggleColor);
 }
 
-.toggle__input:not(:disabled):checked:focus ~ .toggle__label:after {
+.toggle__input:not(:disabled):checked:focus~.toggle__label:after {
 	box-shadow: 0 0 0 2px var(--uiToggleBgColor), 0 0 0px 4px var(--uiToggleColor);
 }
 
-.toggle__input:not(:disabled) ~ .toggle__label:after {
+.toggle__input:not(:disabled)~.toggle__label:after {
 	background-color: var(--uiToggleColor);
 	opacity: 0;
 }
 
-.toggle__input:not(:disabled):checked ~ .toggle__label:after {
+.toggle__input:not(:disabled):checked~.toggle__label:after {
 	opacity: 1;
 }
 
@@ -658,7 +660,7 @@ LEVEL 1. CORE STYLES
 	transform: rotate(-40deg) skew(10deg);
 }
 
-.toggle__input:not(:disabled):checked ~ .toggle__label .toggle__text:before {
+.toggle__input:not(:disabled):checked~.toggle__label .toggle__text:before {
 	width: .5em;
 	height: .25em;
 	border-left-width: var(--uiToggleArrowWidth);
@@ -686,39 +688,40 @@ LEVEL 1. CORE STYLES
   The animation of switching states
   */
 
-.toggle__input:not(:disabled) ~ .toggle__label:before,
-.toggle__input:not(:disabled) ~ .toggle__label:after {
+.toggle__input:not(:disabled)~.toggle__label:before,
+.toggle__input:not(:disabled)~.toggle__label:after {
 	opacity: 1;
 	transform-origin: center center;
 	will-change: transform;
 	transition: transform .2s ease-out;
 }
 
-.toggle__input:not(:disabled) ~ .toggle__label:before {
+.toggle__input:not(:disabled)~.toggle__label:before {
 	transform: rotateY(0deg);
 	transition-delay: .2s;
 	border: 1px solid white;
 }
 
-.toggle__input:not(:disabled) ~ .toggle__label:after {
+.toggle__input:not(:disabled)~.toggle__label:after {
 	transform: rotateY(90deg);
 }
 
-.toggle__input:not(:disabled):checked ~ .toggle__label:before {
+.toggle__input:not(:disabled):checked~.toggle__label:before {
 	transform: rotateY(-90deg);
 	transition-delay: 0s;
 }
 
-.toggle__input:not(:disabled):checked ~ .toggle__label:after {
+.toggle__input:not(:disabled):checked~.toggle__label:after {
 	transform: rotateY(0deg);
 	transition-delay: .2s;
+	border: 1px solid white;
 }
 
 .toggle__text:before {
 	opacity: 0;
 }
 
-.toggle__input:not(:disabled):checked ~ .toggle__label .toggle__text:before {
+.toggle__input:not(:disabled):checked~.toggle__label .toggle__text:before {
 	opacity: 1;
 	transition: opacity .1s ease-out .3s, width .1s ease-out .5s, height .2s ease-out .3s;
 }
