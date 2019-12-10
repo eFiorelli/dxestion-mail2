@@ -6,6 +6,7 @@ app.use(require('./login/login'));
 
 /* Client routes */
 app.use(require('./client/register_client'));
+app.use(require('./client/list_clients'));
 
 /* Store routes */
 app.use(require('./store/register_store'));
