@@ -81,7 +81,6 @@ export class StoresComponent implements OnInit {
 		this.storeService
 			.getStores(localStorage.getItem("userID"))
 			.subscribe((response: any) => {
-				console.log(response);
 				this.storeList = response.stores;
 			});
 	}

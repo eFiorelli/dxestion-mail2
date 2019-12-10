@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { StoreService } from "../../services/store.service";
+import { ClientService } from "../../services/client.service";
 
 @Component({
 	selector: "app-store",
@@ -11,7 +12,8 @@ export class StoreComponent implements OnInit {
 	store = {};
 	constructor(
 		private activatedRoute: ActivatedRoute,
-		private storeService: StoreService
+		private storeService: StoreService,
+		private clientService: ClientService
 	) {}
 
 	ngOnInit() {
@@ -22,5 +24,13 @@ export class StoreComponent implements OnInit {
 				this.store = response.store;
 			});
 		});
+	}
+
+	test() {
+		this.clientService
+			.getClients(this.store._id)
+			.subscribe((response: any) => {
+				console.log(response);
+			});
 	}
 }
