@@ -7,10 +7,14 @@ import { ActivatedRoute } from '@angular/router';
 @Component({
 	selector: 'app-user',
 	templateUrl: './user.component.html',
-	styleUrls: ['./user.component.css']
+	styleUrls: [ './user.component.css' ]
 })
 export class UserComponent implements OnInit {
-	constructor(private userService: UserService, private storeService: StoreService, private activatedRoute: ActivatedRoute) { }
+	constructor(
+		private userService: UserService,
+		private storeService: StoreService,
+		private activatedRoute: ActivatedRoute
+	) {}
 
 	user: any;
 	public imagePath;
@@ -19,6 +23,7 @@ export class UserComponent implements OnInit {
 	logo_imgURL: any;
 	public message: string;
 	showSpinner = false;
+	noImage = 'assets/no-image.png';
 
 	preview(files: any) {
 		if (files.length === 0) {
@@ -71,5 +76,5 @@ export class UserComponent implements OnInit {
 		}
 	}
 
-	cancel() { }
+	cancel() {}
 }

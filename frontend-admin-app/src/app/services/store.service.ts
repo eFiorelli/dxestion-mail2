@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class StoreService {
-	constructor(private http: HttpClient, private router: Router) { }
+	constructor(private http: HttpClient, private router: Router) {}
 
 	userID = localStorage.getItem('userID');
 
@@ -26,7 +26,7 @@ export class StoreService {
 			if (signature_file) {
 				formData.append('signature', signature_file, signature_file.name);
 			}
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -60,7 +60,7 @@ export class StoreService {
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -90,7 +90,7 @@ export class StoreService {
 			}
 			formData.append('background_image', bg_file, bg_file.name);
 			formData.append('logo_image', logo_file, logo_file.name);
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -109,7 +109,11 @@ export class StoreService {
 		return this.http.get(`${AppComponent.BACKEND_URL}/store/${id}`);
 	}
 
-	getStores(userID: string) {
+	getUserStores(userID: string) {
 		return this.http.get(`${AppComponent.BACKEND_URL}/stores?user_id=${userID}`);
+	}
+
+	getStores() {
+		return this.http.get(`${AppComponent.BACKEND_URL}/stores`);
 	}
 }

@@ -5,21 +5,30 @@
 /* Styles for login toaster */
 
 .mat-snack-bar-container {
-    background: #3f50b5;
+	background: #3f50b5;
 }
 
 .mat-simple-snackbar-action {
-    color: #3f50b5;
+	color: #3f50b5;
 }
 
 .mat-simple-snackbar-action button {
-    background: white;
+	background: white;
 }
 
 .main-container {
-    margin-top: 30px;
+	margin-top: 30px;
 }
 
-.mat-tab-body-wrapper{
-    height: 100vh !important;
+.mat-tab-body-wrapper {
+	height: 100vh !important;
+}
+
+.custom-swal2-image {
+	border: 1px solid lightgray !important;
+	border-radius: 10px !important;
+}
+
+.register-full-width {
+	width: 90%;
 }

@@ -15,6 +15,7 @@ const APP_ROUTES: Routes = [
 	{ path: 'users', component: UsersComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'user/:id', component: UserComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'stores', component: StoresComponent, canActivate: [ AuthGuardService ] },
+	{ path: 'stores/:id', component: StoresComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'store/:id', component: StoreComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent, canActivate: [ AuthGuardService ] },

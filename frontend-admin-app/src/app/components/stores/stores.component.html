@@ -1,35 +1,134 @@
 <mat-tab-group style="height: 100vh;" [selectedIndex]="selectedTab">
-	<mat-tab label="Stores list" style="height: 100vh; padding:30px">
-		<div *ngIf="storeList">
-			<br>
-			<div class="col-md-12 col-sm-6">
-				<input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)"
-					[ngModel]="searchText" name="search" placeholder="Buscar...">
-			</div>
-			<div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
-				<div *ngFor="let store of storeList" class="col-3" (click)="goToStore(store)"
-					style="margin-top: 40px; cursor: pointer;">
-					<div class="card custom-store-card">
-						<img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage"
-							class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
-						<div class="card-body">
-							<h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
-							<p class="card-text custom-store-card-text"><b>Username: </b>{{ store.username }}</p>
-							<p class="card-text custom-store-card-text"><b>Email: </b>{{ store.email }}</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</mat-tab>
-	<mat-tab *ngIf="auth.isAdmin()" label="Register store" style="height: 100vh;">
-		<div class="container container-fluid">
-			<select [(ngModel)]="newStore.user">
-				<option *ngFor="let user of userList" [ngValue]="user._id">{{ user.username }}</option>
-			</select>
-			<button (click)="registerStore()" class="btn btn-primary">Register store</button>
-			{{ newStore | json }}
-		</div>
-	</mat-tab>
-	<mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+    <mat-tab label="Stores list" style="height: 100vh; padding:30px">
+        <div *ngIf="storeList">
+            <br>
+            <div class="col-md-12 col-sm-6">
+                <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
+            </div>
+            <div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
+                <div *ngFor="let store of storeList" class="col-3" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
+                    <div class="card custom-store-card">
+                        <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
+                        <div class="card-body">
+                            <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
+                            <p class="card-text custom-store-card-text"><b>Username: </b>{{ store.username }}</p>
+                            <p class="card-text custom-store-card-text"><b>Email: </b>{{ store.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-tab>
+    <mat-tab *ngIf="auth.isAdmin()" label="Register store" style="height: 100vh;">
+        <mat-card class="register-card text-center">
+            <mat-card-content>
+                <form class="register-form">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>Shop data</h4>
+                            <table class="table-register" width="100%" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Name" [(ngModel)]="newStore.name" name="name" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Username" [(ngModel)]="newStore.username" name="username" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Password" [(ngModel)]="newStore.password" type="password" name="password" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Email" [(ngModel)]="newStore.email" type="email" name="email" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <h4>Connection data</h4>
+                            <table class="table-register" width="100%" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Database URL" [(ngModel)]="newStore.database_url" name="database_url" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Database PORT" [(ngModel)]="newStore.database_port" name="database_port" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Database NAME" [(ngModel)]="newStore.database_name" name="database_name" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Database USERNAME" [(ngModel)]="newStore.database_username" name="database_username" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Database PASSWORD" [(ngModel)]="newStore.database_password" type="password" name="database_password" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="text-center">Logo</h4>
+                            <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="newStore.logo_img">X</button>
+                            <div style="height: 150px; border: 1px solid lightgray">
+                                <img *ngIf="newStore.logo_img" [src]="logo_imgURL" style="height: 150px">
+                                <input *ngIf="!newStore.logo_img" (change)="selectLogoImage($event); preview(0, $event.target.files)" type="file" id="logo_file" style="margin-top: 70px">
+                            </div>
+                            <br>
+                            <h4 class="text-center">Background</h4>
+                            <button (click)="removeImage(1)" class="btn btn-danger" *ngIf="newStore.background_img">X</button>
+                            <div style="height: 250px; border: 1px solid lightgray">
+                                <img *ngIf="newStore.background_img" [src]="background_imgURL" style="height: 250px">
+                                <input *ngIf="!newStore.background_img" (change)="selectBGImage($event); preview(1, $event.target.files)" type="file" id="bg_file" style="margin-top: 110px">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-center">User</h4>
+                            <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="newStore.user" required>
+								<option disabled hidden [ngValue]="0">--- Choose one ---</option>
+								<option style="height: 30px" *ngFor="let user of userList" [ngValue]="user._id">{{ user.username }}</option>
+							</select>
+                            <mat-card-actions style="margin-top: 50px">
+                                <button mat-raised-button style="height: 70px; font-size:30px" (click)="registerStore()" color="primary">Register store</button>
+                            </mat-card-actions>
+                        </div>
+                    </div>
+                </form>
+                <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
 </mat-tab-group>
