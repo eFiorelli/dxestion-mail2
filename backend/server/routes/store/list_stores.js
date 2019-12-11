@@ -7,12 +7,12 @@ const app = express();
 app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 	try {
 		let query = '';
-		if (req.user.role === 'ADMIN_ROLE') {
+		if (!req.query.user_id && req.user.role === 'ADMIN_ROLE') {
 			query = Store.find({});
 		} else {
 			query = Store.find({
 				active: true,
-				user: req.query.user_id
+				user: req.query.user_id || req.user._id
 			});
 			query.select(
 				'_id name email username database_url database_name database_port database_username database_password background_img logo_img'
