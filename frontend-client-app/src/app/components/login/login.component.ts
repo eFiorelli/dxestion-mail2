@@ -1,23 +1,34 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
-import { AuthService } from "../../services/auth.service";
-import Swal from "sweetalert2";
+import { Component, OnInit, Inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import Swal from 'sweetalert2';
+import { DOCUMENT } from '@angular/common';
 
+// tslint:disable: indent
 @Component({
-	selector: "app-login",
-	templateUrl: "./login.component.html",
-	styleUrls: ["./login.component.css"]
+	selector: 'app-login',
+	templateUrl: './login.component.html',
+	styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-	constructor(private auth: AuthService, private router: Router) {}
+	constructor(
+		private auth: AuthService,
+		private router: Router,
+		@Inject(DOCUMENT) private document: any
+	) {}
 
-	username: string = "igavd24chk";
-	password: string = "1234";
+	username = 'igavd24chk';
+	password = '1234';
 	credentials: Object;
 	showSpinner: boolean;
+	elem;
 
 	ngOnInit() {
 		localStorage.clear();
+		this.elem = document.documentElement;
+		setTimeout(() => {
+			this.fullScreen();
+		}, 150);
 	}
 
 	login(): void {
@@ -27,13 +38,29 @@ export class LoginComponent implements OnInit {
 			res => {
 				if (res) {
 					this.showSpinner = false;
-					this.router.navigate(["/home"]);
+					this.fullScreen();
+					this.router.navigate(['/home']);
 				}
 			},
 			error => {
-				Swal.fire("Login incorrecto", error, "error");
+				Swal.fire('Login incorrecto', error, 'error');
 				this.showSpinner = false;
 			}
 		);
+	}
+
+	fullScreen() {
+		if (this.elem.requestFullscreen) {
+			this.elem.requestFullscreen();
+		} else if (this.elem.mozRequestFullScreen) {
+			/* Firefox */
+			this.elem.mozRequestFullScreen();
+		} else if (this.elem.webkitRequestFullscreen) {
+			/* Chrome, Safari and Opera */
+			this.elem.webkitRequestFullscreen();
+		} else if (this.elem.msRequestFullscreen) {
+			/* IE/Edge */
+			this.elem.msRequestFullscreen();
+		}
 	}
 }
