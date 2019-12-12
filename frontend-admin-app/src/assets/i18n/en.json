@@ -8,6 +8,7 @@
 		"HOME": "Home",
 		"ADD_NEW_USER": "Add user",
 		"LIST_USERS": "List user",
+		"LIST_STORES": "Store list",
 		"LOGOUT": "Logout"
 	},
 	"SUCCESS": {

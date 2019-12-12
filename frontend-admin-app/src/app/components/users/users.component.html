@@ -1,26 +1,160 @@
-<div class="container container-fluid">
-    <div class="row">
-        <div class="col-md-11 col-sm-6">
-            <input #search class="form-control" id="searchTextId" (keyup)="searchUsers(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
-        </div>
-    </div>
-    <br>
-    <div class="row" *ngIf="userList">
-        <div *ngFor="let user of userList" class="card" style="width: 15rem; margin: 0px 15px 35px 15px;">
-            <img bind-src="user.logo_img ? (imagePath + user.logo_img): noImage" class="card-img-top" alt="{{ user.name }}" style="height: 140px;">
-            <div class="card-body">
-                <h5 class="card-title text-center text-capitalize"><u>{{user.name}}</u></h5>
-                <br>
-                <p class="card-text"><b>Username: </b>{{ user.username }}</p>
-                <p class="card-text"><b>Email: </b>{{ user.email }}</p>
-                <p class="card-text"><b>Database URL: </b>{{ user.database_url }}</p>
-                <p class="card-text"><b>Database NAME: </b>{{ user.database_name }}</p>
-                <br>
-                <div class="row text-center">
-                    <button (click)="userDetail(user._id)" class="btn btn-primary">Edit user</button>
-                    <button (click)="userStores(user)" class="btn btn-primary">View stores</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+<mat-tab-group style="height: 100vh;" [selectedIndex]="selectedTab">
+	<mat-tab label="User list" style="height: 100vh; padding:30px">
+		<div *ngIf="userList">
+			<br />
+			<div class="col-md-12 col-sm-6">
+				<input
+					#search
+					class="form-control"
+					id="searchTextId"
+					(keyup)="searchUsers(search.value)"
+					[ngModel]="searchText"
+					name="search"
+					placeholder="Buscar..."
+				/>
+			</div>
+			<div class="row" style="margin: 0px 20px 30px 20px">
+				<div
+					*ngFor="let user of userList"
+					class="col-3"
+					(click)="goToUser(user)"
+					style="margin-top: 40px; cursor: pointer;"
+				>
+					<div class="card custom-user-card">
+						<img
+							bind-src="
+								user.logo_img
+									? imagePath + user.logo_img
+									: noImage
+							"
+							class="card-img-top custom-user-img"
+							alt="{{ user.name }}"
+							style="height: 120px;"
+						/>
+						<div class="card-body">
+							<h5 class="card-title text-center text-capitalize">
+								<u>{{ user.name }}</u>
+							</h5>
+							<p class="card-text">
+								<b>Username: </b>{{ user.username }}
+							</p>
+							<p class="card-text">
+								<b>Email: </b>{{ user.email }}
+							</p>
+							<p class="card-text">
+								<b>Database URL: </b>{{ user.database_url }}
+							</p>
+							<p class="card-text">
+								<b>Database NAME: </b>{{ user.database_name }}
+							</p>
+							<br />
+							<div class="row text-center">
+								<button
+									(click)="userDetail(user._id)"
+									class="btn btn-primary"
+								>
+									Edit user
+								</button>
+								<button
+									(click)="userStores(user)"
+									class="btn btn-primary"
+								>
+									View stores
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</mat-tab>
+	<mat-tab
+		*ngIf="auth.isAdmin()"
+		label="Register new user"
+		style="height: 100vh;"
+	>
+		<mat-card class="register-card text-center">
+			<mat-card-content>
+				<form class="register-form">
+					<table class="table-register" cellspacing="0">
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input
+										matInput
+										placeholder="Username"
+										[(ngModel)]="user.username"
+										name="username"
+										required
+									/>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input
+										matInput
+										placeholder="Password"
+										[(ngModel)]="user.password"
+										type="password"
+										name="password"
+										required
+									/>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input
+										matInput
+										placeholder="Name"
+										[(ngModel)]="user.name"
+										name="name"
+										required
+									/>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<mat-form-field class="register-full-width">
+									<input
+										matInput
+										placeholder="Email"
+										[(ngModel)]="user.email"
+										type="email"
+										name="email"
+										required
+									/>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<input
+									(change)="selectLogoImage($event)"
+									type="file"
+									id="logo_file"
+								/>
+							</td>
+						</tr>
+					</table>
+				</form>
+				<mat-spinner
+					[style.display]="showSpinner ? 'block' : 'none'"
+				></mat-spinner>
+			</mat-card-content>
+			<mat-card-actions>
+				<button
+					mat-raised-button
+					(click)="registerUser()"
+					color="primary"
+				>
+					Register user
+				</button>
+			</mat-card-actions>
+		</mat-card>
+	</mat-tab>
+</mat-tab-group>

@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Router } from "@angular/router";
-import { AppComponent } from "../app.component";
-import { HttpClient } from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
-	providedIn: "root"
+	providedIn: 'root'
 })
 export class ClientService {
 	constructor(private http: HttpClient, private router: Router) {}

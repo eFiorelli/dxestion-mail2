@@ -13,13 +13,14 @@
                             <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
                             <p class="card-text custom-store-card-text"><b>Username: </b>{{ store.username }}</p>
                             <p class="card-text custom-store-card-text"><b>Email: </b>{{ store.email }}</p>
+                            <p *ngIf="store.store_type" class="card-text custom-store-card-text"><b>Type: </b>{{ store.store_type }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </mat-tab>
-    <mat-tab *ngIf="auth.isAdmin()" label="Register store" style="height: 100vh;">
+    <mat-tab *ngIf="auth.isAdmin()" label="Register new store" style="height: 100vh;">
         <mat-card class="register-card text-center">
             <mat-card-content>
                 <form class="register-form">
@@ -95,6 +96,16 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <div class="register-full-width">
+                                            <mat-checkbox name="commerce_password" [(ngModel)]="commerce_password">¿Commerce password?</mat-checkbox>
+                                        </div>
+                                        <mat-form-field *ngIf="commerce_password" class="register-full-width">
+                                            <input matInput placeholder="Commerce PASSWORD" [(ngModel)]="newStore.commerce_password" type="password" name="commerce_password">
+                                        </mat-form-field>
+                                    </td>
+                                    </tr>
                             </table>
                         </div>
                     </div>
