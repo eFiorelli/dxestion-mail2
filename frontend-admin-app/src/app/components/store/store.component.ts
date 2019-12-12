@@ -27,7 +27,6 @@ export class StoreComponent implements OnInit {
 		this.activatedRoute.params.subscribe((params) => {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
-				console.log(response);
 				this.store = response.store;
 			});
 		});

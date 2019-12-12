@@ -6,7 +6,7 @@
                 <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
             </div>
             <div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
-                <div *ngFor="let store of storeList" class="col-3" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
+                <div *ngFor="let store of storeList" class="col-lg-3 col-md-4 col-sm-6" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
                     <div class="card custom-store-card">
                         <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
                         <div class="card-body">
@@ -105,7 +105,7 @@
                                             <input matInput placeholder="Commerce PASSWORD" [(ngModel)]="newStore.commerce_password" type="password" name="commerce_password">
                                         </mat-form-field>
                                     </td>
-                                    </tr>
+                                </tr>
                             </table>
                         </div>
                     </div>
@@ -126,6 +126,11 @@
                             </div>
                         </div>
                         <div class="col-6">
+                            <h4 class="text-center">Store type</h4>
+                            <select style="width: 90%; height: 40px;" name="store_type" [(ngModel)]="newStore.store_type" required>
+								<option disabled hidden [ngValue]="0">--- Choose one ---</option>
+								<option style="height: 30px" *ngFor="let type of storeTypes" [ngValue]="type">{{ type }}</option>
+							</select>
                             <h4 class="text-center">User</h4>
                             <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="newStore.user" required>
 								<option disabled hidden [ngValue]="0">--- Choose one ---</option>

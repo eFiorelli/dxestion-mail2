@@ -10,8 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
 	selector: 'app-users',
 	templateUrl: './users.component.html',
-	styleUrls: ['./users.component.css'],
-	providers: [FilterUsersPipe]
+	styleUrls: [ './users.component.css' ],
+	providers: [ FilterUsersPipe ]
 })
 export class UsersComponent implements OnInit {
 	constructor(
@@ -19,7 +19,7 @@ export class UsersComponent implements OnInit {
 		public filterUsersPipe: FilterUsersPipe,
 		private router: Router,
 		private translate: TranslateService,
-		private auth: AuthService
+		public auth: AuthService
 	) {}
 
 	users: any[];
@@ -31,17 +31,28 @@ export class UsersComponent implements OnInit {
 	selectedTab;
 
 	user: any = {
-		username: 'ddd',
-		password: 'ddd',
-		name: 'ddd',
-		email: 'ddd@ddd.com',
+		username: '',
+		password: '',
+		name: '',
+		email: '',
 		logo_img: ''
 	};
 
 	showSpinner = false;
 
 	ngOnInit() {
+		this.clearUser();
 		this.getUsers();
+	}
+
+	clearUser() {
+		this.user = {
+			username: '',
+			password: '',
+			name: '',
+			email: '',
+			logo_img: ''
+		};
 	}
 
 	getUsers() {
@@ -56,10 +67,7 @@ export class UsersComponent implements OnInit {
 		if (text !== '' && text !== undefined && text !== null) {
 			this.userList = this.users;
 			this.searchText = text;
-			this.usersListFiltered = this.filterUsersPipe.transform(
-				this.userList,
-				this.searchText
-			);
+			this.usersListFiltered = this.filterUsersPipe.transform(this.userList, this.searchText);
 			this.userList = this.usersListFiltered;
 		} else {
 			this.searchText = '';
@@ -71,12 +79,12 @@ export class UsersComponent implements OnInit {
 	}
 
 	userDetail(id: string) {
-		this.router.navigate(['/user/', id]);
+		this.router.navigate([ '/user/', id ]);
 	}
 
 	userStores(user: any) {
 		// localStorage.setItem('selectedUserID', user._id);
-		this.router.navigate(['/stores/', user._id]);
+		this.router.navigate([ '/stores/', user._id ]);
 	}
 
 	registerUser() {
@@ -85,20 +93,16 @@ export class UsersComponent implements OnInit {
 			.registerUser(this.user)
 			.then((response: any) => {
 				this.showSpinner = false;
-				const success_text = this.translate.instant(
-					'SUCCESS.REGISTER_USER'
-				);
-				Swal.fire('Error', success_text, 'success').then(() => {
+				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
+				Swal.fire('Exito', success_text, 'success').then(() => {
 					this.ngOnInit();
 					this.selectedTab = 0;
 				});
 			})
-			.catch(error => {
+			.catch((error) => {
 				this.showSpinner = false;
-				const success_text = this.translate.instant(
-					`ERRORS.ERROR_TYPE_${error.type}`
-				);
-				Swal.fire('Exito', success_text, 'error');
+				const success_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				Swal.fire('Error', success_text, 'error');
 			});
 	}
 

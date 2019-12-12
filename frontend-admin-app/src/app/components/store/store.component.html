@@ -1,24 +1,16 @@
 <p>
-	store works!
+    store works!
 </p>
 <p>{{ store | json }}</p>
 <button (click)="test()">Get clients</button>
 
 <ul class="list-group" *ngIf="clients.length > 0">
-	<li
-		(click)="clientDetail(client)"
-		class="list-group-item"
-		*ngFor="let client of clients"
-	>
-		<div style="float: left">
-			{{ client.name }} | {{ client.phone }} | {{ client.email }}
-		</div>
-		<div style="float: right">
-			<img
-				style="border: 1px solid lightgray; border-radius: 10px;"
-				height="35px"
-				[src]="signaturePath + client.signature"
-			/>
-		</div>
-	</li>
+    <li (click)="clientDetail(client)" class="list-group-item" *ngFor="let client of clients">
+        <div style="float: left">
+            {{ client.name }} | {{ client.phone }} | {{ client.email }}
+        </div>
+        <div style="float: right">
+            <img style="border: 1px solid lightgray; border-radius: 10px;" height="35px" [src]="signaturePath + client.signature" />
+        </div>
+    </li>
 </ul>

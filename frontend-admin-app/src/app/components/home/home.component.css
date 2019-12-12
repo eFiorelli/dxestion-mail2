@@ -1,6 +1,6 @@
 .custom-card {
 	/* border: 2px solid lightgray; */
-	width: 15rem;
+	width: 13rem;
 	border-radius: 15px;
 	transition: all .3s ease-in-out;
 	-webkit-box-shadow: 0px 0px 30px 10px rgba(199, 189, 199, 0.8);

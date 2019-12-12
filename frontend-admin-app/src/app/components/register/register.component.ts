@@ -7,7 +7,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
 	selector: 'app-register',
 	templateUrl: './register.component.html',
-	styleUrls: ['./register.component.css']
+	styleUrls: [ './register.component.css' ]
 })
 export class RegisterComponent implements OnInit {
 	user: any = {
@@ -20,23 +20,26 @@ export class RegisterComponent implements OnInit {
 
 	showSpinner = false;
 
-	constructor(private userService: UserService, private router: Router, private translate: TranslateService) { }
+	constructor(private userService: UserService, private router: Router, private translate: TranslateService) {}
 
-	ngOnInit() { }
+	ngOnInit() {}
 
 	registerUser() {
 		this.showSpinner = true;
-		this.userService.registerUser(this.user).then((response: any) => {
-			this.showSpinner = false;
-			const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
-			Swal.fire('Error', success_text, 'success').then(() => {
-				this.router.navigate(['/home']);
+		this.userService
+			.registerUser(this.user)
+			.then((response: any) => {
+				this.showSpinner = false;
+				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
+				Swal.fire('Exito', success_text, 'success').then(() => {
+					this.router.navigate([ '/home' ]);
+				});
+			})
+			.catch((error) => {
+				this.showSpinner = false;
+				const success_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				Swal.fire('Error', success_text, 'error');
 			});
-		}).catch((error) => {
-			this.showSpinner = false;
-			const success_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
-			Swal.fire('Exito', success_text, 'error');
-		});
 	}
 
 	selectBGImage(event) {

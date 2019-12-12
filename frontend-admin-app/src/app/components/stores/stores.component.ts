@@ -11,12 +11,10 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
 	selector: 'app-stores',
 	templateUrl: './stores.component.html',
-	styleUrls: ['./stores.component.css']
+	styleUrls: [ './stores.component.css' ]
 })
 export class StoresComponent implements OnInit {
-	username = Math.random()
-		.toString(36)
-		.substring(2, 15);
+	username = Math.random().toString(36).substring(2, 15);
 
 	newStore: any = {
 		username: this.username,
@@ -38,23 +36,6 @@ export class StoresComponent implements OnInit {
 	userList: any[];
 	storeList: any[];
 	stores: any[];
-	/*
-	newStore: any = {
-		name: '',
-		username: '',
-		email: '',
-		password: '',
-		database_url: '',
-		database_name: '',
-		database_port: '',
-		database_username: '',
-		database_password: '',
-		background_img: '',
-		logo_img: '',
-		store_type: '',
-		user: 0
-	};
-	*/
 
 	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
 	noImage = './assets/no-image.jpg';
@@ -66,7 +47,8 @@ export class StoresComponent implements OnInit {
 	background_imgURL: any;
 	logo_imgURL: any;
 	message: any;
-	storeTypes = ['FrontRetail/Manager', 'FrontRest', 'Agora'];
+	commerce_password: boolean = false;
+	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
 
 	constructor(
 		public auth: AuthService,
@@ -79,7 +61,7 @@ export class StoresComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.activatedRoute.params.subscribe(params => {
+		this.activatedRoute.params.subscribe((params) => {
 			this.currentUser = params.id;
 			this.getStores();
 		});
@@ -108,11 +90,9 @@ export class StoresComponent implements OnInit {
 
 	getStores() {
 		if (this.currentUser) {
-			this.storeService
-				.getUserStores(this.currentUser)
-				.subscribe((response: any) => {
-					this.storeList = response.stores;
-				});
+			this.storeService.getUserStores(this.currentUser).subscribe((response: any) => {
+				this.storeList = response.stores;
+			});
 		} else {
 			this.storeService.getStores().subscribe((response: any) => {
 				this.storeList = response.stores;
@@ -122,7 +102,6 @@ export class StoresComponent implements OnInit {
 
 	registerStore() {
 		this.showSpinner = true;
-		this.newStore.store_type = this.storeTypes[0];
 		/*
 		const username = Math.random().toString(36).substring(2, 15);
 		const randomStore = {
@@ -152,15 +131,13 @@ export class StoresComponent implements OnInit {
 			})
 			.catch((error: any) => {
 				this.showSpinner = false;
-				const error_text = this.translate.instant(
-					`ERRORS.ERROR_TYPE_${error.type}`
-				);
+				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
 				Swal.fire('Error', error_text, 'error');
 			});
 	}
 
 	goToStore(store: any) {
-		this.router.navigate(['/store', store._id]);
+		this.router.navigate([ '/store', store._id ]);
 	}
 
 	selectBGImage(event) {
@@ -197,7 +174,7 @@ export class StoresComponent implements OnInit {
 		const reader = new FileReader();
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
-		reader.onload = _event => {
+		reader.onload = (_event) => {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
