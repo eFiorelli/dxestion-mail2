@@ -2,8 +2,22 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let themeColors = {
-	values: ['Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Yellow', 'Orange'],
+	values: [
+		'Red',
+		'Green',
+		'Blue',
+		'Purple',
+		'White',
+		'Black',
+		'Yellow',
+		'Orange'
+	],
 	message: '{VALUE} is not a valid theme color'
+};
+
+let store_types = {
+	values: ['FrontRetail/Manager', 'FrontRest', 'Agora'],
+	message: '{VALUE} is not a valid shop type'
 };
 
 let Schema = mongoose.Schema;
@@ -46,6 +60,11 @@ let storeSchema = new Schema({
 		type: String,
 		required: [true, 'Database password is required']
 	},
+	commerce_password: {
+		type: String,
+		required: false,
+		default: ''
+	},
 	free_fields: {
 		type: Object,
 		required: false
@@ -63,6 +82,12 @@ let storeSchema = new Schema({
 		default: 'Black',
 		enum: themeColors
 	},
+	store_type: {
+		type: String,
+		default: 'FrontRetail/Manager',
+		enum: store_types,
+		required: true
+	},
 	user: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
@@ -71,10 +96,14 @@ let storeSchema = new Schema({
 	active: {
 		type: Boolean,
 		default: true
+	},
+	created_date: {
+		type: Date,
+		default: Date.now
 	}
 });
 
-storeSchema.methods.toJSON = function () {
+storeSchema.methods.toJSON = function() {
 	let store = this;
 	let storeObject = store.toObject();
 	delete storeObject.password;

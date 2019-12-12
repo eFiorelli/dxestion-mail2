@@ -1,15 +1,15 @@
-const express = require("express");
-let { checkUserToken } = require("../../middlewares/authentication");
-const Client = require("../../models/client");
-const mailer = require("../../utils/mail");
-const sql = require("mssql");
+const express = require('express');
+let { checkUserToken } = require('../../middlewares/authentication');
+const Client = require('../../models/client');
+const mailer = require('../../utils/mail');
+const sql = require('mssql');
 const app = express();
 
-app.post("/register/client", checkUserToken, async (req, res) => {
+app.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	try {
-		// const client_insert = await sendClientToManager(req.store, body);
-		const client_insert = 0;
+		const client_insert = await sendClientToManager(req.store, body);
+		//const client_insert = 0;
 		switch (client_insert) {
 			case 0:
 				let client = new Client({
@@ -34,14 +34,14 @@ app.post("/register/client", checkUserToken, async (req, res) => {
 							} */
 							return res.status(200).json({
 								ok: true,
-								message: "Client inserted"
+								message: 'Client inserted'
 							});
 						}
 					}
 				} else {
 					return res.status(400).json({
 						ok: false,
-						message: "Client already exists",
+						message: 'Client already exists',
 						type: 16
 					});
 				}
@@ -49,25 +49,25 @@ app.post("/register/client", checkUserToken, async (req, res) => {
 			case 1:
 				return res.status(400).json({
 					ok: false,
-					message: "Client already exists",
+					message: 'Client already exists',
 					type: 16
 				});
 			case 2:
 				return res.status(400).json({
 					ok: false,
-					message: "Bad SQL statement",
+					message: 'Bad SQL statement',
 					type: 17
 				});
 			case 3:
 				return res.status(400).json({
 					ok: false,
-					message: "Unable to connect with database server",
+					message: 'Unable to connect with database server',
 					type: 18
 				});
 			default:
 				return res.status(500).json({
 					ok: false,
-					message: "Server error",
+					message: 'Server error',
 					type: 1
 				});
 		}
@@ -85,7 +85,8 @@ sendClientToManager = async (connection_params, client) => {
 		user: connection_params.database_username,
 		password: connection_params.database_password,
 		server: connection_params.database_url,
-		database: connection_params.database_name
+		database: connection_params.database_name,
+		commerce_password: connection_params.commerce_password
 	};
 
 	try {
@@ -101,8 +102,8 @@ sendClientToManager = async (connection_params, client) => {
 				parseFloat(4300000000) + parseFloat(max_id)
 			).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1')`;
-				if (query.code === "EREQUEST") {
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
 				}
@@ -119,7 +120,7 @@ sendClientToManager = async (connection_params, client) => {
 			return 3;
 		}
 	} catch (err) {
-		if (err.code === "ESOCKET") {
+		if (err.code === 'ESOCKET') {
 			return 3;
 		} else {
 			/* Server error */
@@ -133,12 +134,12 @@ addSignature = async (clientDB, res, signature) => {
 		if (!clientDB) {
 			return res.status(400).json({
 				ok: false,
-				message: "Client not found",
+				message: 'Client not found',
 				type: 19
 			});
 		} else {
 			let file = signature;
-			extension = "png";
+			extension = 'png';
 
 			let filename = `${
 				clientDB._id
@@ -162,7 +163,7 @@ addSignature = async (clientDB, res, signature) => {
 			} else {
 				return res.status(400).json({
 					ok: true,
-					message: "Error updating client",
+					message: 'Error updating client',
 					type: 20
 				});
 			}
