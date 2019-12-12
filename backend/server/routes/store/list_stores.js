@@ -15,7 +15,7 @@ app.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 				user: req.query.user_id || req.user._id
 			});
 			query.select(
-				'_id name email username database_url database_name database_port database_username database_password background_img logo_img'
+				'_id name email username created_date database_url database_name database_port database_username database_password background_img logo_img'
 			);
 		}
 

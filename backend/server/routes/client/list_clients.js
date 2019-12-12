@@ -1,17 +1,18 @@
 const express = require('express');
 const Client = require('../../models/client');
-const {
-	checkUserToken
-} = require('../../middlewares/authentication');
+const { checkUserToken } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/clients', [checkUserToken], async (req, res) => {
+app.get('/clients', [ checkUserToken ], async (req, res) => {
 	const store = req.query.store_id;
 	try {
-		const clients = await Client.find({
-			active: true,
-			store: store
-		}, '_id name email phone signature').exec();
+		const clients = await Client.find(
+			{
+				active: true,
+				store: store
+			},
+			'_id name email phone created_date signature'
+		).exec();
 		if (!clients) {
 			return res.status(400).json({
 				ok: false,
@@ -34,7 +35,7 @@ app.get('/clients', [checkUserToken], async (req, res) => {
 	}
 });
 
-app.get('/client/:id', [checkUserToken], async (req, res) => {
+app.get('/client/:id', [ checkUserToken ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {

@@ -8,7 +8,7 @@ process.env.SSL_PORT = process.env.SSL_PORT || 8080;
 // ======================
 // Environment
 // ======================
-process.env.NODE_ENV = process.env.NODE_ENV || "dev";
+process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 // ======================
 // Token expiracy
@@ -19,15 +19,15 @@ process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30 * 365;
 // ======================
 // Token SEED
 // ======================
-process.env.SEED = process.env.SEED || "develop-seed";
+process.env.SEED = process.env.SEED || 'develop-seed';
 
 // ======================
 // Database
 // ======================
 let urlDB;
 
-if (process.env.NODE_ENV === "dev") {
-	urlDB = "mongodb://localhost:27017/dxestionMail";
+if (process.env.NODE_ENV === 'dev') {
+	urlDB = 'mongodb://localhost:27017/dxestionMail';
 } else {
 	urlDB = process.env.MONGO_URI;
 }
@@ -35,10 +35,10 @@ if (process.env.NODE_ENV === "dev") {
 process.env.URLDB = urlDB;
 
 const EMAIL = {
-	service: "Gmail",
+	service: 'Gmail',
 	auth: {
-		user: "miguel@dxestion.com",
-		pass: "migueldx"
+		user: 'miguel@dxestion.com',
+		pass: 'migueldx'
 	}
 };
 
@@ -94,6 +94,10 @@ module.exports = { EMAIL };
 **** Login ****
 21.- No user/password were provided
 22.- Wrong username/password
+
+**** Other errors ****
+23.- Error saving client in MongoDB
+24.- Wrong store type
 
 */
 /**************************      ERROR CODES      **************************/

@@ -1,17 +1,17 @@
 const express = require('express');
 const User = require('../../models/user');
-const {
-	checkUserToken,
-	checkAdminRole
-} = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const app = express();
 
-app.get('/users', [checkUserToken, checkAdminRole], async (req, res) => {
+app.get('/users', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	try {
-		const users = await User.find({
-			active: true,
-			role: 'USER_ROLE'
-		}, '_id name email username logo_img').exec();
+		const users = await User.find(
+			{
+				active: true,
+				role: 'USER_ROLE'
+			},
+			'_id name email username created_date logo_img'
+		).exec();
 		if (!users) {
 			return res.status(400).json({
 				ok: false,
@@ -38,7 +38,7 @@ app.get('/users', [checkUserToken, checkAdminRole], async (req, res) => {
 	}
 });
 
-app.get('/user/:id', [checkUserToken], async (req, res) => {
+app.get('/user/:id', [ checkUserToken ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {
