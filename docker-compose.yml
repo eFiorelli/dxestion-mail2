@@ -63,6 +63,9 @@ services:
       - "traefik.port=3000"
     depends_on:
       - mongo
+    volumes:
+      - $PWD/uploads/:/data/uploads
+      - $PWD/logs/:/data/logs
     networks:
       - web
     container_name: backend
@@ -83,7 +86,6 @@ services:
     networks:
       - web
     volumes:
-      # - $PWD/ssl_certs/frontend-app:/etc/nginx/ssl
       - $PWD/nginx_conf:/etc/nginx/conf.d
     container_name: web-admin
   frontend-client:
