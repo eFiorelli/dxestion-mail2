@@ -22,6 +22,9 @@ services:
 
   mongo:
     image: mongo
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=dxestion
+      - MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
     volumes:
       - $PWD/data/:/data/db
     ports:
@@ -29,6 +32,24 @@ services:
     networks:
       - web
     container_name: mongo
+  mongo-express:
+    image: mongo-express
+    restart: always
+    labels:
+      - "traefik.backend=mongo-express"
+      - "traefik.frontend.rule=Host:admindb.nuclient.es"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=8081"
+    links:
+      - mongo
+    environment:
+      - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=dxestion
+      - ME_CONFIG_BASICAUTH_PASSWORD=Dxestion0180
+    networks:
+      - web
+    container_name: mongo-express
 
   backend:
     build:
@@ -42,8 +63,6 @@ services:
       - "traefik.port=3000"
     depends_on:
       - mongo
-    ports:
-      - "3000:3000"
     networks:
       - web
     container_name: backend
@@ -61,8 +80,6 @@ services:
     depends_on:
       - mongo
       - backend
-    ports:
-      - "80:80"
     networks:
       - web
     volumes:
@@ -82,8 +99,6 @@ services:
     depends_on:
       - mongo
       - backend
-    ports:
-      - "90:80"
     networks:
       - web
     volumes:

@@ -1,22 +1,19 @@
-require("./config/config");
-require("./utils/folder_tree");
-require("./utils/admin_user");
+require('./config/config');
+require('./utils/folder_tree');
+require('./utils/admin_user');
 
-const express = require("express");
-const mongoose = require("mongoose");
-const path = require("path");
-const {
-	logger,
-	createLogger
-} = require('./utils/logger');
+const express = require('express');
+const mongoose = require('mongoose');
+const path = require('path');
+const { logger, createLogger } = require('./utils/logger');
 
-const https = require("https");
+const https = require('https');
 const options = {};
 
-const fileUpload = require("express-fileupload");
+const fileUpload = require('express-fileupload');
 
 const app = express();
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 
 createLogger().then(() => {
 	logger().log({
@@ -27,19 +24,19 @@ createLogger().then(() => {
 
 // Add headers
 app.use((req, res, next) => {
-	const origin = req.get("origin");
+	const origin = req.get('origin');
 
 	// TODO Add origin validation
-	res.header("Access-Control-Allow-Origin", origin);
-	res.header("Access-Control-Allow-Credentials", true);
-	res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+	res.header('Access-Control-Allow-Origin', origin);
+	res.header('Access-Control-Allow-Credentials', true);
+	res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
 	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma"
+		'Access-Control-Allow-Headers',
+		'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, Pragma'
 	);
 
 	// intercept OPTIONS method
-	if (req.method === "OPTIONS") {
+	if (req.method === 'OPTIONS') {
 		res.sendStatus(204);
 	} else {
 		next();
@@ -56,24 +53,24 @@ app.use(
 	})
 );
 
-
 app.use(bodyParser.raw());
 
 // parse application/json
 app.use(bodyParser.json());
 
 /* Global route config */
-app.use(require("./routes/index"));
+app.use(require('./routes/index'));
 
 /* Enable public directory */
-app.use(express.static(path.resolve(__dirname, "../public/")));
+app.use(express.static(path.resolve(__dirname, '../public/')));
 
-app.use("/files", express.static(path.resolve(__dirname, "../uploads")));
+app.use('/files', express.static(path.resolve(__dirname, '../uploads')));
 
-if (process.env.NODE_ENV === "prod") {
-	setTimeout(function () {
+if (process.env.NODE_ENV === 'prod') {
+	setTimeout(() => {
 		mongoose.connect(
-			process.env.URLDB, {
+			process.env.MONGO_URI,
+			{
 				useNewUrlParser: true
 			},
 			(err, res) => {
@@ -92,7 +89,8 @@ if (process.env.NODE_ENV === "prod") {
 	}, 10000);
 } else {
 	mongoose.connect(
-		process.env.URLDB, {
+		process.env.MONGO_URI,
+		{
 			useNewUrlParser: true
 		},
 		(err, res) => {

@@ -16,10 +16,13 @@ RUN npm install
 COPY . .
 
 RUN mkdir server/config/ssl_certs
+RUN npm install pm2 -g
 
 ENV NODE_ENV prod
-ENV MONGO_URI mongodb://mongo:27017/dxestionMail
+ENV MONGO_URI mongodb://dxestion:Dxestion0180@mongo:27017/nuClient
+ENV SEED dxestion0180-nuclient
 
 EXPOSE 3000 8081
 
-CMD [ "npm", "start" ]
+# CMD [ "npm", "start" ]
+CMD [ "pm2-runtime", "server/server.js" ]
