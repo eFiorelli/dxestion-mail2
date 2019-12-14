@@ -20,7 +20,7 @@ RUN ng build --prod
 
 # STEP 2 build a small nginx image with static website
 
-FROM nginx
+FROM nginx:alpine
 
 # From 'builder' copy website to default apache public folder
 
