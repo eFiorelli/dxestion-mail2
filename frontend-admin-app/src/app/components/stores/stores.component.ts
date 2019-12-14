@@ -30,7 +30,7 @@ export class StoresComponent implements OnInit {
 		logo_img: '',
 		store_type: '',
 		commerce_password: '',
-		user: {}
+		user: ''
 	};
 
 	userList: any[];
@@ -118,7 +118,18 @@ export class StoresComponent implements OnInit {
 			logo_img: '',
 			user: {}
 		};
-*/
+		*/
+		console.log(this.newStore.user);
+		console.log(!this.newStore.user);
+		if (!this.newStore.user) {
+			Swal.fire('Error', 'Debe seleccionar un usuario', 'error');
+			return;
+		}
+		if (!this.newStore.store_type) {
+			Swal.fire('Error', 'Debe seleccionar un tipo de tienda', 'error');
+			return;
+		}
+
 		this.storeService
 			.registerStore(this.newStore)
 			.then((response: any) => {
