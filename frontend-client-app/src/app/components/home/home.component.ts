@@ -13,7 +13,8 @@ declare var $: any;
 	styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
-	@ViewChild(SignaturePad) signaturePad: SignaturePad;
+	@ViewChild(SignaturePad, { static: true })
+	signaturePad: SignaturePad;
 
 	constructor(public userService: UserService, private translate: TranslateService) {}
 
