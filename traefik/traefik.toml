@@ -17,18 +17,18 @@ defaultEntryPoints = ["https","http"]
   address = ":443"
   [entryPoints.https.tls]
 #    [[entryPoints.https.tls.certificates]]
-#      certFile = "/etc/traefik/certs/serantes.crt"
-#      keyFile = "/etc/traefik/certs/serantes.key"
+#      certFile = "/etc/traefik/certs/nuclient.crt"
+#      keyFile = "/etc/traefik/certs/nuclient.key"
 
 [retry]
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-domain = "serantes.pro"
+domain = "nuclient.es"
 watch = true
 
 [acme]
-email = "rrvn10@gmail.com"
+email = "soporte@dxestion.com"
 storage = "/etc/traefik/acme/acme.json"
 entryPoint = "https"
 onHostRule = true

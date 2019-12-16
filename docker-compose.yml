@@ -3,7 +3,7 @@ version: "3"
 services:
   traefik:
     image: traefik:1.7
-    # command: --api --docker --docker.domain=nuclient.com
+    # command: --api --docker --docker.domain=nuclient.es
     restart: always
     ports:
       - 80:8080
@@ -12,7 +12,7 @@ services:
       - web
       - database
     labels:
-      - "traefik.frontend.rule=Host:traefik.nuclient.com"
+      - "traefik.frontend.rule=Host:traefik.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8080"
     volumes:
@@ -61,7 +61,7 @@ services:
       - database
     labels:
       - "traefik.backend=backend"
-      - "traefik.frontend.rule=Host:backend.nuclient.com"
+      - "traefik.frontend.rule=Host:backend.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=3000"
     depends_on:
@@ -80,7 +80,7 @@ services:
       - backend
     labels:
       - "traefik.backend=web-admin"
-      - "traefik.frontend.rule=Host:admin.nuclient.com"
+      - "traefik.frontend.rule=Host:admin.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
@@ -98,7 +98,7 @@ services:
       - backend
     labels:
       - "traefik.backend=web-client"
-      - "traefik.frontend.rule=Host:nuclient.com, www.nuclient.com, web.nuclient.com"
+      - "traefik.frontend.rule=Host:nuclient.es, www.nuclient.es, web.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
