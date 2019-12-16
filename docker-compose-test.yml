@@ -40,36 +40,36 @@ services:
     networks:
       - web
     container_name: backend
-  frontend-admin:
-    build:
-      context: ./frontend-admin-app
-    links:
-      - backend
-    depends_on:
-      - mongo
-      - backend
-    ports:
-      - '80:80'
-    networks:
-      - web
-    volumes:
-      - $PWD/nginx_conf:/etc/nginx/conf.d
-    container_name: web-admin
-  frontend-client:
-    build:
-      context: ./frontend-client-app
-    links:
-      - backend
-    depends_on:
-      - mongo
-      - backend
-    ports:
-      - '90:80'
-    networks:
-      - web
-    volumes:
-      - $PWD/nginx_conf:/etc/nginx/conf.d
-    container_name: web-client
+  # frontend-admin:
+  #   build:
+  #     context: ./frontend-admin-app
+  #   links:
+  #     - backend
+  #   depends_on:
+  #     - mongo
+  #     - backend
+  #   ports:
+  #     - '80:80'
+  #   networks:
+  #     - web
+  #   volumes:
+  #     - $PWD/nginx_conf:/etc/nginx/conf.d
+  #   container_name: web-admin
+  # frontend-client:
+  #   build:
+  #     context: ./frontend-client-app
+  #   links:
+  #     - backend
+  #   depends_on:
+  #     - mongo
+  #     - backend
+  #   ports:
+  #     - '90:80'
+  #   networks:
+  #     - web
+  #   volumes:
+  #     - $PWD/nginx_conf:/etc/nginx/conf.d
+  #   container_name: web-client
 networks:
   web:
     external: true
