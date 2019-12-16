@@ -102,25 +102,6 @@ export class StoresComponent implements OnInit {
 
 	registerStore() {
 		this.showSpinner = true;
-		/*
-		const username = Math.random().toString(36).substring(2, 15);
-		const randomStore = {
-			username: username,
-			password: '1234',
-			name: username,
-			email: `${username}@${username}.com`,
-			database_url: '192.168.0.2',
-			database_name: 'BD2',
-			database_port: '1443',
-			database_username: 'sa',
-			database_password: 'masterkey',
-			background_img: '',
-			logo_img: '',
-			user: {}
-		};
-		*/
-		console.log(this.newStore.user);
-		console.log(!this.newStore.user);
 		if (!this.newStore.user) {
 			Swal.fire('Error', 'Debe seleccionar un usuario', 'error');
 			return;
