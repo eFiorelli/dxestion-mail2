@@ -1,4 +1,5 @@
 require('../config/config');
+const bcrypt = require('bcrypt');
 const User = require('../models/user');
 
 createAdminUser = async () => {
@@ -15,7 +16,7 @@ createAdminUser = async () => {
 			let user = new User({
 				name: 'dxestion',
 				email: 'soporte@dxestion.com',
-				password: 'Dxestion0180',
+				password: bcrypt.hashSync(process.env.ROOT_PASSWORD, 10),
 				username: 'dxestion',
 				role: 'ADMIN_ROLE'
 			});

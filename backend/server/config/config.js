@@ -45,6 +45,11 @@ const EMAIL = {
 
 module.exports = { EMAIL };
 
+// ======================
+// Email config
+// ======================
+process.env.ROOT_PASSWORD = process.env.ROOT_PASSWORD || 'Dxestion0180';
+
 /**************************      ERROR CODES:      **************************/
 /*
 **** Register user ****
