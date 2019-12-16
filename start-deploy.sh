@@ -43,9 +43,13 @@ git pull origin master
 echo "Setting 600 to acme.json..."
 chmod 600 traefik/acme.json
 
-# Create docker network
-echo "Creating docker network..."
+# Create docker external network
+echo "Creating docker external network..."
 docker network create web
+
+# Create docker internal network
+echo "Creating docker internal network..."
+docker network create database
 
 # Start deploy
 echo "Starting deploy..."

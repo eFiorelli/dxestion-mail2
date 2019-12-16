@@ -6,10 +6,11 @@ services:
     # command: --api --docker --docker.domain=nuclient.com
     restart: always
     ports:
-      - 82:8080
+      - 80:8080
       - 443:443
     networks:
       - web
+      - database
     labels:
       - "traefik.frontend.rule=Host:traefik.nuclient.com"
       - "traefik.frontend.entryPoints=http,https"
@@ -30,7 +31,7 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - web
+      - database
     container_name: mongo
   mongo-express:
     image: mongo-express
@@ -49,6 +50,7 @@ services:
       - ME_CONFIG_BASICAUTH_PASSWORD=Dxestion0180
     networks:
       - web
+      - database
     container_name: mongo-express
 
   backend:
@@ -56,6 +58,7 @@ services:
       context: ./backend
     links:
       - mongo
+      - database
     labels:
       - "traefik.backend=backend"
       - "traefik.frontend.rule=Host:backend.nuclient.com"
@@ -109,3 +112,5 @@ services:
 networks:
   web:
     external: true
+  database:
+    internal: true
