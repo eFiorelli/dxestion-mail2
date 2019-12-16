@@ -1,11 +1,13 @@
 require('./config/config');
 require('./utils/folder_tree');
 require('./utils/admin_user');
-
+const mongoose = require('./utils/database');
 const express = require('express');
-const mongoose = require('mongoose');
 const path = require('path');
-const { logger, createLogger } = require('./utils/logger');
+const {
+	logger,
+	createLogger
+} = require('./utils/logger');
 
 const https = require('https');
 const options = {};
@@ -66,47 +68,7 @@ app.use(express.static(path.resolve(__dirname, '../public/')));
 
 app.use('/files', express.static(path.resolve(__dirname, '../uploads')));
 
-if (process.env.NODE_ENV === 'prod') {
-	setTimeout(() => {
-		mongoose.connect(
-			process.env.MONGO_URI,
-			{
-				useNewUrlParser: true
-			},
-			(err, res) => {
-				if (err) {
-					logger().log({
-						level: 'error',
-						message: err
-					});
-				}
-				logger().log({
-					level: 'info',
-					message: 'Database ONLINE'
-				});
-			}
-		);
-	}, 10000);
-} else {
-	mongoose.connect(
-		process.env.MONGO_URI,
-		{
-			useNewUrlParser: true
-		},
-		(err, res) => {
-			if (err) {
-				logger().log({
-					level: 'error',
-					message: err
-				});
-			}
-			logger().log({
-				level: 'info',
-				message: 'Database ONLINE'
-			});
-		}
-	);
-}
+mongoose.createConnection();
 
 app.listen(process.env.PORT);
 
