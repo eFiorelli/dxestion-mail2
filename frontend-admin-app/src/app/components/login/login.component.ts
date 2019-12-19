@@ -7,13 +7,13 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.css']
+	styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
-	constructor(private auth: AuthService, private router: Router, private translate: TranslateService) { }
+	constructor(private auth: AuthService, private router: Router, private translate: TranslateService) {}
 
-	username = 'dxestion';
-	password = 'Dxestion0180';
+	username = '';
+	password = '';
 	credentials: Object;
 	showSpinner: boolean;
 
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 			(res) => {
 				if (res) {
 					this.showSpinner = false;
-					this.router.navigate(['/home']);
+					this.router.navigate([ '/home' ]);
 				}
 			},
 			(error) => {
@@ -40,9 +40,7 @@ export class LoginComponent implements OnInit {
 		);
 	}
 
-	test() {
-
-	}
+	test() {}
 
 	/*
 		registerUser() {
@@ -53,7 +51,7 @@ export class LoginComponent implements OnInit {
 				signature: ''
 			};
 			this.showSpinner = true;
-	
+
 			this.storeService.registerClient(user).then((response: any) => {
 				this.showSpinner = false;
 				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');

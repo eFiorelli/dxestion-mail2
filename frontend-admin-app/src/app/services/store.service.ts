@@ -88,8 +88,12 @@ export class StoreService {
 					formData.append(key, storeData[key]);
 				}
 			}
-			formData.append('background_image', bg_file, bg_file.name);
-			formData.append('logo_image', logo_file, logo_file.name);
+			if (bg_file) {
+				formData.append('background_image', bg_file, bg_file.name);
+			}
+			if (logo_file) {
+				formData.append('logo_image', logo_file, logo_file.name);
+			}
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
@@ -101,6 +105,7 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/update/store/' + storeID;
 			xhr.open('PUT', url, true);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}

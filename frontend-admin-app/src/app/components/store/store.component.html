@@ -1,16 +1,144 @@
-<p>
-    store works!
-</p>
-<p>{{ store | json }}</p>
-<button (click)="test()">Get clients</button>
+<mat-tab-group>
+    <mat-tab label="Detalle de tienda" style="height: 100vh; padding:30px">
+        <mat-card class="register-card text-center">
+            <mat-card-content>
+                <form class="register-form">
+                    <div class="row">
+                        <div class="col-6">
+                            <h4>{{ 'STORES_PAGE.SHOP_DATA' | translate }}</h4>
+                            <table class="table-register" width="100%" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_NAME' | translate }}" [(ngModel)]="store.name" name="name" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_USERNAME' | translate }}" [(ngModel)]="store.username" name="username" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_PASSWORD' | translate }}" [(ngModel)]="store.password" type="password" name="password">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_EMAIL' | translate }}" [(ngModel)]="store.email" type="email" name="email" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <h4>{{ 'STORES_PAGE.CONNECTION_DATA' | translate }}</h4>
+                            <table class="table-register" width="100%" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_DBURL' | translate }}" [(ngModel)]="store.database_url" name="database_url" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_DBPORT' | translate }}" [(ngModel)]="store.database_port" name="database_port" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_DBNAME' | translate }}" [(ngModel)]="store.database_name" name="database_name" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_DBUSERNAME' | translate }}" [(ngModel)]="store.database_username" name="database_username" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.PLACEHOLDER_DBPASSWORD' | translate }}" [(ngModel)]="store.database_password" type="password" name="database_password" required>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="register-full-width">
+                                            <mat-checkbox name="commerce_password" [(ngModel)]="commerce_password">¿{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}?</mat-checkbox>
+                                        </div>
+                                        <mat-form-field *ngIf="commerce_password" class="register-full-width">
+                                            <input matInput placeholder="{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}" [(ngModel)]="store.commerce_password" type="password" name="commerce_password">
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <h4 class="text-center">{{ 'STORES_PAGE.LOGO' | translate }}</h4>
+                            <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="store.logo_img">X</button>
+                            <div style="height: 150px; border: 1px solid lightgray">
+                                <img *ngIf="store.logo_img" [src]="logo_imgURL" style="height: 150px">
+                                <input *ngIf="!store.logo_img" (change)="selectLogoImage($event); preview(0, $event.target.files)" type="file" id="logo_file" style="margin-top: 70px">
+                            </div>
+                            <br>
+                            <h4 class="text-center">{{ 'STORES_PAGE.BACKGROUND' | translate }}</h4>
+                            <button (click)="removeImage(1)" class="btn btn-danger" *ngIf="store.background_img">X</button>
+                            <div style="height: 250px; border: 1px solid lightgray">
+                                <img *ngIf="store.background_img" [src]="background_imgURL" style="height: 250px">
+                                <input *ngIf="!store.background_img" (change)="selectBGImage($event); preview(1, $event.target.files)" type="file" id="bg_file" style="margin-top: 110px">
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <h4 class="text-center">{{ 'STORES_PAGE.STORE_TYPE' | translate }}</h4>
+                            <select style="width: 90%; height: 40px;" name="store_type" [(ngModel)]="store.store_type" required>
+								<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
+								<option style="height: 30px" *ngFor="let type of storeTypes" [ngValue]="type">{{ type }}</option>
+							</select>
+                            <h4 class="text-center">{{ 'STORES_PAGE.USER' | translate }}</h4>
+                            <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="store.user" required>
+								<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
+								<option style="height: 30px" *ngFor="let user of userList" [ngValue]="user._id">{{ user.username }}</option>
+							</select>
+                            <mat-card-actions style="margin-top: 50px">
+                                <button mat-raised-button style="height: 70px; font-size:30px" (click)="updateStore()" color="primary">Actualizar tienda</button>
+                            </mat-card-actions>
+                        </div>
+                    </div>
+                </form>
+                <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
+            </mat-card-content>
+        </mat-card>
+    </mat-tab>
+    <mat-tab label="Lista de clientes" style="height: 100vh; padding:30px">
+        <mat-card class="register-card text-center">
+            <mat-card-header>
+                <h4>Lista de clientes</h4>
+            </mat-card-header>
+            <mat-card-content>
+                <ul class="list-group">
+                    <li (click)="clientDetail(client)" class="list-group-item" *ngFor="let client of clients" style="cursor: pointer;">
+                        {{ client.name }} - {{ client.email }} - {{ client.phone }}
+                        <img bind-src="client.signature ? (clientImagePath + client.signature): noImage" alt="{{ client.signature }}" style="float: right; width: 40px; height: 40px; border: 1px solid black; border-radius: 5px; padding: 5px">
+                    </li>
+                </ul>
+            </mat-card-content>
+        </mat-card>
 
-<ul class="list-group" *ngIf="clients.length > 0">
-    <li (click)="clientDetail(client)" class="list-group-item" *ngFor="let client of clients">
-        <div style="float: left">
-            {{ client.name }} | {{ client.phone }} | {{ client.email }}
-        </div>
-        <div style="float: right">
-            <img style="border: 1px solid lightgray; border-radius: 10px;" height="35px" [src]="signaturePath + client.signature" />
-        </div>
-    </li>
-</ul>
+    </mat-tab>
+</mat-tab-group>

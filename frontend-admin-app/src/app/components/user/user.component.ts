@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/user.service';
 import { StoreService } from 'src/app/services/store.service';
 import { AppComponent } from '../../app.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
 	selector: 'app-user',
@@ -13,7 +14,8 @@ export class UserComponent implements OnInit {
 	constructor(
 		private userService: UserService,
 		private storeService: StoreService,
-		private activatedRoute: ActivatedRoute
+		private activatedRoute: ActivatedRoute,
+		private router: Router
 	) {}
 
 	user: any;
@@ -24,6 +26,7 @@ export class UserComponent implements OnInit {
 	public message: string;
 	showSpinner = false;
 	noImage = 'assets/no-image.png';
+	oldPassword = '';
 
 	preview(files: any) {
 		if (files.length === 0) {
@@ -70,9 +73,15 @@ export class UserComponent implements OnInit {
 
 	updateUser() {
 		if (this.userService.updateUser(this.user)) {
-			alert('Success');
+			const success_text = 'Usuario modificado con éxito';
+			Swal.fire('Exito', success_text, 'success').then(() => {
+				this.router.navigate([ '/users' ]);
+			});
 		} else {
-			alert('Error');
+			const error_text = 'Ocurrió un problema al modificar el usuario';
+			Swal.fire('Error', error_text, 'error').then(() => {
+				this.router.navigate([ '/users' ]);
+			});
 		}
 	}
 

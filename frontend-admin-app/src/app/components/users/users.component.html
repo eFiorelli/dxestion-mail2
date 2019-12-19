@@ -1,5 +1,5 @@
 <mat-tab-group style="height: 100vh;" [selectedIndex]="selectedTab">
-    <mat-tab label="User list" style="height: 100vh; padding:30px">
+    <mat-tab label="Lista de usuarios" style="height: 100vh; padding:30px">
         <div *ngIf="userList">
             <br />
             <div class="col-md-12 col-sm-6">
@@ -14,18 +14,15 @@
                                 <u>{{ user.name }}</u>
                             </h5>
                             <p class="card-text">
-                                <b>Username: </b>{{ user.username }}
+                                <b>Nombre de usuario: </b>{{ user.username }}
                             </p>
                             <p class="card-text">
                                 <b>Email: </b>{{ user.email }}
                             </p>
                             <br />
                             <div class="row text-center">
-                                <!-- <button mat-raised-button (click)="userDetail(user._id)" style="font-size: 12px; background: #3f51b5;">
-									Edit user
-								</button> -->
                                 <button mat-raised-button color="primary" (click)="userStores(user)" style="margin: 0px auto;">
-									View stores
+									Ver tiendas
 								</button>
                             </div>
                         </div>
@@ -34,51 +31,63 @@
             </div>
         </div>
     </mat-tab>
-    <mat-tab *ngIf="auth.isAdmin()" label="Register new user" style="height: 100vh;">
+    <mat-tab *ngIf="auth.isAdmin()" label="Registrar nuevo usuario" style="height: 100vh;">
         <mat-card class="register-card text-center">
             <mat-card-content>
-                <form class="register-form">
-                    <table class="table-register" cellspacing="0">
-                        <tr>
-                            <td>
-                                <mat-form-field class="register-full-width">
-                                    <input matInput placeholder="Username" [(ngModel)]="user.username" name="username" required />
-                                </mat-form-field>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <mat-form-field class="register-full-width">
-                                    <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password" required />
-                                </mat-form-field>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <mat-form-field class="register-full-width">
-                                    <input matInput placeholder="Name" [(ngModel)]="user.name" name="name" required />
-                                </mat-form-field>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <mat-form-field class="register-full-width">
-                                    <input matInput placeholder="Email" [(ngModel)]="user.email" type="email" name="email" required />
-                                </mat-form-field>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <input (change)="selectLogoImage($event)" type="file" id="logo_file" />
-                            </td>
-                        </tr>
-                    </table>
-                </form>
+                <div class="row">
+                    <div class="col-6">
+                        <form class="register-form">
+                            <table class="table-register" style="width: 90%" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Nombre de usuario" [(ngModel)]="user.username" name="username" required />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password" required />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Nombre" [(ngModel)]="user.name" name="name" required />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Email" [(ngModel)]="user.email" type="email" name="email" required />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <!-- <tr>
+											<td>
+												<input (change)="selectLogoImage($event)" type="file" id="logo_file" />
+											</td>
+										</tr> -->
+                            </table>
+                        </form>
+                    </div>
+                    <div class="col-6">
+                        <h4 class="text-center">{{ 'STORES_PAGE.LOGO' | translate }}</h4>
+                        <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="user.logo_img">X</button>
+                        <div style="height: 150px; border: 1px solid lightgray">
+                            <img *ngIf="user.logo_img" [src]="logo_imgURL" style="height: 150px">
+                            <input *ngIf="!user.logo_img" (change)="selectLogoImage($event); preview(0, $event.target.files)" type="file" id="logo_file" style="margin-top: 70px">
+                        </div>
+                    </div>
+                </div>
                 <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button (click)="registerUser()" color="primary">
-					Register user
+					Registrar usuario
 				</button>
             </mat-card-actions>
         </mat-card>
