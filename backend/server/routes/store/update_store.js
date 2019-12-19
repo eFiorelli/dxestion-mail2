@@ -6,23 +6,41 @@ let { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewar
 const Store = require('../../models/store');
 const app = express();
 
-app.put('/update/store/:id', [checkUserToken, checkAdminRole, checkUserRole], async (req, res) => {
+app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
 
 	try {
-		const storeDB = await Store.findByIdAndUpdate(id, {
-			name: body.name,
-			email: body.email,
-			password: bcrypt.hashSync(body.password, 10),
-			username: body.username,
-			database_url: body.database_url,
-			database_name: body.database_name,
-			database_port: body.database_port,
-			database_username: body.database_username,
-			database_password: body.database_password
-		});
-		storeDB.save();
+		const storeDB = await Store.findById(id);
+		if (!body.password) {
+			await Store.update({
+				id: body._id,
+				name: body.name,
+				email: body.email,
+				username: body.username,
+				database_url: body.database_url,
+				database_name: body.database_name,
+				database_port: body.database_port,
+				database_username: body.database_username,
+				database_password: body.database_password,
+				user: body.user
+			});
+		} else {
+			await Store.update({
+				id: body._id,
+				name: body.name,
+				email: body.email,
+				password: bcrypt.hashSync(body.password, 10),
+				username: body.username,
+				database_url: body.database_url,
+				database_name: body.database_name,
+				database_port: body.database_port,
+				database_username: body.database_username,
+				database_password: body.database_password,
+				user: body.user
+			});
+		}
+
 		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
@@ -52,6 +70,7 @@ app.put('/update/store/:id', [checkUserToken, checkAdminRole, checkUserRole], as
 			}
 		}
 	} catch (err) {
+		console.log(err);
 		return res.status(500).json({
 			ok: false,
 			err: err,
@@ -73,7 +92,7 @@ updateStoreImages = async (storeDB, res, images) => {
 				let file = images[i].image;
 
 				// Valid extensions
-				let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
 				let shortedName = file.name.split('.');
 				let extension = shortedName[shortedName.length - 1];
 
@@ -88,7 +107,7 @@ updateStoreImages = async (storeDB, res, images) => {
 				let filename = `${storeDB._id}-${new Date().getMilliseconds()}.${extension}`;
 
 				// Use the mv() method to place the file somewhere on your server
-				const oldFilenames = [storeDB.background_img, storeDB.logo_img];
+				const oldFilenames = [ storeDB.background_img, storeDB.logo_img ];
 				if (images[i].type === 'background') {
 					storeDB.background_img = `${filename}`;
 					deleteStoreFiles('background', oldFilenames[0]);

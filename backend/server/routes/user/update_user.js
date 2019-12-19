@@ -6,7 +6,7 @@ let { checkUserToken, checkAdminRole } = require('../../middlewares/authenticati
 const User = require('../../models/user');
 const app = express();
 
-app.put('/update/user', [checkUserToken, checkAdminRole], async (req, res) => {
+app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let body = req.body;
 	const id = body._id;
 
@@ -14,7 +14,12 @@ app.put('/update/user', [checkUserToken, checkAdminRole], async (req, res) => {
 		const userDB = await User.findById(id);
 
 		if (body.password) {
-			await userDB.update({ username: body.username, name: body.name, email: body.email, password: bcrypt.hashSync(body.password, 10), });
+			await userDB.update({
+				username: body.username,
+				name: body.name,
+				email: body.email,
+				password: bcrypt.hashSync(body.password, 10)
+			});
 		} else {
 			await userDB.update({ username: body.username, name: body.name, email: body.email });
 		}
@@ -65,7 +70,7 @@ updateUserImages = async (userDB, res, images) => {
 			let file = images[0].image;
 
 			// Valid extensions
-			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
 			let shortedName = file.name.split('.');
 			let extension = shortedName[shortedName.length - 1];
 
