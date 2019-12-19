@@ -8,17 +8,13 @@ import { DOCUMENT } from '@angular/common';
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
-	styleUrls: ['./login.component.css']
+	styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
-	constructor(
-		private auth: AuthService,
-		private router: Router,
-		@Inject(DOCUMENT) private document: any
-	) {}
+	constructor(private auth: AuthService, private router: Router, @Inject(DOCUMENT) private document: any) {}
 
-	username = 'igavd24chk';
-	password = '1234';
+	username = '';
+	password = '';
 	credentials: Object;
 	showSpinner: boolean;
 	elem;
@@ -35,14 +31,14 @@ export class LoginComponent implements OnInit {
 		this.showSpinner = true;
 		this.credentials = { username: this.username, password: this.password };
 		this.auth.login(this.credentials).subscribe(
-			res => {
+			(res) => {
 				if (res) {
 					this.showSpinner = false;
 					this.fullScreen();
-					this.router.navigate(['/home']);
+					this.router.navigate([ '/home' ]);
 				}
 			},
-			error => {
+			(error) => {
 				Swal.fire('Login incorrecto', error, 'error');
 				this.showSpinner = false;
 			}

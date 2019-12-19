@@ -2,7 +2,8 @@
 	"LOGIN_PAGE": {
 		"TITLE": "Iniciar sesión",
 		"USER_PLACEHOLDER": "Nombre de usuario",
-		"PASSWORD_PLACEHOLDER": "Contraseña"
+		"PASSWORD_PLACEHOLDER": "Contraseña",
+		"LOGIN": "Iniciar sesión"
 	},
 	"HOME_PAGE": {
 		"TITLE": "Alta de cliente",
@@ -10,7 +11,8 @@
 		"EMAIL": "Email",
 		"PHONE": "Teléfono",
 		"SIGNATURE": "Firma",
-		"SEND": "Enviar"
+		"SEND": "Enviar",
+		"GPDR": "Acepto las condiciones y los términos de uso"
 	},
 	"EXIT_POPUP": {
 		"TITLE": "Introduce la clave para salir",

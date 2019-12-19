@@ -2,7 +2,8 @@
 	"LOGIN_PAGE": {
 		"TITLE": "Login",
 		"USER_PLACEHOLDER": "Username",
-		"PASSWORD_PLACEHOLDER": "Password"
+		"PASSWORD_PLACEHOLDER": "Password",
+		"LOGIN": "Login"
 	},
 	"HOME_PAGE": {
 		"TITLE": "Client register",
@@ -10,7 +11,8 @@
 		"EMAIL": "Email",
 		"PHONE": "Phone",
 		"SIGNATURE": "Signature",
-		"SEND": "Send"
+		"SEND": "Send",
+		"GPDR": "I'm agree with the conditions and terms of use"
 	},
 	"EXIT_POPUP": {
 		"TITLE": "Enter code to exit",

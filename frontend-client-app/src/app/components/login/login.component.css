@@ -16,18 +16,9 @@
 	font-size: 42px;
 }
 
-mat-card-header .mat-card-header-text {
-	margin: 0px auto !important;
-	margin-bottom: 20px !important;
-}
-
 .bg-gradient {
 	background: #2bc0e4; /* fallback for old browsers */
-	background: -webkit-linear-gradient(
-		to bottom,
-		#eaecc6,
-		#2bc0e4
-	); /* Chrome 10-25, Safari 5.1-6 */
+	background: -webkit-linear-gradient(to bottom, #eaecc6, #2bc0e4); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(
 		to bottom,
 		#eaecc6,
