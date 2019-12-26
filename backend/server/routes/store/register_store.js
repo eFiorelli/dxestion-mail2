@@ -1,15 +1,15 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
+const express = require("express");
+const bcrypt = require("bcrypt");
 let {
 	checkUserToken,
 	checkUserRole,
 	checkAdminRole
-} = require('../../middlewares/authentication');
-const Store = require('../../models/store');
+} = require("../../middlewares/authentication");
+const Store = require("../../models/store");
 const app = express();
 
 app.post(
-	'/register/store',
+	"/register/store",
 	[checkUserToken, checkAdminRole, checkUserRole],
 	async (req, res) => {
 		let body = req.body;
@@ -21,7 +21,7 @@ app.post(
 			if (storeDB) {
 				return res.status(400).json({
 					ok: false,
-					message: 'There already exists an store with this name',
+					message: "There already exists an store with this name",
 					type: 9
 				});
 			} else {
@@ -45,11 +45,27 @@ app.post(
 					if (req.files) {
 						const images = [
 							{
-								type: 'background',
-								image: req.files.background_image
+								type: "background_1",
+								image: req.files.background_img_1
 							},
 							{
-								type: 'logo',
+								type: "background_2",
+								image: req.files.background_img_2
+							},
+							{
+								type: "background_3",
+								image: req.files.background_img_3
+							},
+							{
+								type: "background_4",
+								image: req.files.background_img_4
+							},
+							{
+								type: "background_5",
+								image: req.files.background_img_5
+							},
+							{
+								type: "logo",
 								image: req.files.logo_image
 							}
 						];
@@ -57,7 +73,7 @@ app.post(
 					} else {
 						return res.status(200).json({
 							ok: true,
-							message: 'Store successfully created',
+							message: "Store successfully created",
 							store: savedStore,
 							type: 1
 						});
@@ -65,7 +81,7 @@ app.post(
 				} else {
 					return res.status(400).json({
 						ok: false,
-						message: 'Failed on creating store',
+						message: "Failed on creating store",
 						type: 10
 					});
 				}
@@ -86,7 +102,7 @@ saveStoreImages = async (id, res, images) => {
 		if (!storeDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'Store not found',
+				message: "Store not found",
 				type: 11
 			});
 		} else {
@@ -94,16 +110,16 @@ saveStoreImages = async (id, res, images) => {
 				let file = images[i].image;
 				if (file) {
 					// Valid extensions
-					let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
-					let shortedName = file.name.split('.');
+					let validExtensions = ["png", "jpg", "gif", "jpeg"];
+					let shortedName = file.name.split(".");
 					let extension = shortedName[shortedName.length - 1];
 
 					if (validExtensions.indexOf(extension) < 0) {
 						return res.status(400).json({
 							ok: false,
 							meesage:
-								'Allowed extensions: ' +
-								validExtensions.join(', ')
+								"Allowed extensions: " +
+								validExtensions.join(", ")
 						});
 					}
 
@@ -111,10 +127,10 @@ saveStoreImages = async (id, res, images) => {
 					let filename = `${id}-${new Date().getMilliseconds()}.${extension}`;
 
 					// Use the mv() method to place the file somewhere on your server
-					if (images[i].type === 'background') {
-						storeDB.background_img = `${filename}`;
+					if (images[i].type === `background_${i}`) {
+						storeDB[`background_img_${i}`] = `${filename}`;
 					}
-					if (images[i].type === 'logo') {
+					if (images[i].type === "logo") {
 						storeDB.logo_img = `${filename}`;
 					}
 
@@ -133,7 +149,7 @@ saveStoreImages = async (id, res, images) => {
 			if (updatedStore) {
 				return res.status(200).json({
 					ok: true,
-					message: 'Store successfully created',
+					message: "Store successfully created",
 					store: updatedStore,
 					type: 2
 				});
