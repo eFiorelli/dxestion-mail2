@@ -24,7 +24,11 @@ export class StoreService {
 				}
 			}
 			if (signature_file) {
-				formData.append('signature', signature_file, signature_file.name);
+				formData.append(
+					'signature',
+					signature_file,
+					signature_file.name
+				);
 			}
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
@@ -37,14 +41,21 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/client/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+			xhr.setRequestHeader(
+				'Authorization',
+				localStorage.getItem('token')
+			);
 			xhr.send(formData);
 		});
 	}
 
 	/* Register new store */
 	registerStore(storeData: any) {
-		const bg_file = storeData.background_img;
+		const bg_file_1 = storeData.background_img_1;
+		const bg_file_2 = storeData.background_img_2;
+		const bg_file_3 = storeData.background_img_3;
+		const bg_file_4 = storeData.background_img_4;
+		const bg_file_5 = storeData.background_img_5;
 		const logo_file = storeData.logo_img;
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
@@ -54,8 +65,40 @@ export class StoreService {
 					formData.append(key, storeData[key]);
 				}
 			}
-			if (bg_file) {
-				formData.append('background_image', bg_file, bg_file.name);
+			if (bg_file_1) {
+				formData.append(
+					'background_image_1',
+					bg_file_1,
+					bg_file_1.name
+				);
+			}
+			if (bg_file_2) {
+				formData.append(
+					'background_image_2',
+					bg_file_2,
+					bg_file_2.name
+				);
+			}
+			if (bg_file_3) {
+				formData.append(
+					'background_image_3',
+					bg_file_3,
+					bg_file_3.name
+				);
+			}
+			if (bg_file_4) {
+				formData.append(
+					'background_image_4',
+					bg_file_4,
+					bg_file_4.name
+				);
+			}
+			if (bg_file_5) {
+				formData.append(
+					'background_image_5',
+					bg_file_5,
+					bg_file_5.name
+				);
 			}
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
@@ -71,14 +114,21 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/store/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+			xhr.setRequestHeader(
+				'Authorization',
+				localStorage.getItem('token')
+			);
 			xhr.send(formData);
 		});
 	}
 
 	/* Update store */
 	updateStore(storeData: any, storeID: string) {
-		const bg_file = storeData.background_img;
+		const bg_file_1 = storeData.background_img_1;
+		const bg_file_2 = storeData.background_img_2;
+		const bg_file_3 = storeData.background_img_3;
+		const bg_file_4 = storeData.background_img_4;
+		const bg_file_5 = storeData.background_img_5;
 		const logo_file = storeData.logo_img;
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
@@ -88,8 +138,40 @@ export class StoreService {
 					formData.append(key, storeData[key]);
 				}
 			}
-			if (bg_file) {
-				formData.append('background_image', bg_file, bg_file.name);
+			if (bg_file_1) {
+				formData.append(
+					'background_image_1',
+					bg_file_1,
+					bg_file_1.name
+				);
+			}
+			if (bg_file_2) {
+				formData.append(
+					'background_image_2',
+					bg_file_2,
+					bg_file_2.name
+				);
+			}
+			if (bg_file_3) {
+				formData.append(
+					'background_image_3',
+					bg_file_3,
+					bg_file_3.name
+				);
+			}
+			if (bg_file_4) {
+				formData.append(
+					'background_image_4',
+					bg_file_4,
+					bg_file_4.name
+				);
+			}
+			if (bg_file_5) {
+				formData.append(
+					'background_image_5',
+					bg_file_5,
+					bg_file_5.name
+				);
 			}
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
@@ -105,7 +187,10 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/update/store/' + storeID;
 			xhr.open('PUT', url, true);
-			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+			xhr.setRequestHeader(
+				'Authorization',
+				localStorage.getItem('token')
+			);
 			xhr.send(formData);
 		});
 	}
@@ -115,7 +200,9 @@ export class StoreService {
 	}
 
 	getUserStores(userID: string) {
-		return this.http.get(`${AppComponent.BACKEND_URL}/stores?user_id=${userID}`);
+		return this.http.get(
+			`${AppComponent.BACKEND_URL}/stores?user_id=${userID}`
+		);
 	}
 
 	getStores() {

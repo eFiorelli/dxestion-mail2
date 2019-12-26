@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',
-	styleUrls: [ './store.component.css' ]
+	styleUrls: ['./store.component.css']
 })
 export class StoreComponent implements OnInit {
 	store = {
@@ -28,20 +28,21 @@ export class StoreComponent implements OnInit {
 		store_type: '',
 		commerce_password: '',
 		logo_img: '',
-		background_img: ''
+		background_img: []
 	};
 	userList: any;
 	logo_imgURL: any;
-	background_imgURL: any;
+	background_imgURL: any[];
 	showSpinner: boolean;
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
-	clientImagePath = AppComponent.BACKEND_URL + '/files/client/signature/';
+	imagePath = AppComponent.BACKEND_URL + '/files/store/logo/';
+	BGimagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	noImage = './assets/no-image.jpg';
 	message = '';
 	clients = [];
-	commerce_password: boolean = false;
-	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
+	commerce_password = false;
+	storeTypes = ['FrontRetail/Manager', 'FrontRest', 'Agora'];
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
+	user_role = localStorage.getItem('role');
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -56,13 +57,17 @@ export class StoreComponent implements OnInit {
 		this.userService.getUsers().subscribe((users: any) => {
 			this.userList = users.users;
 		});
-		this.activatedRoute.params.subscribe((params) => {
+		this.activatedRoute.params.subscribe(params => {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
+				console.log(response);
 				this.store = response.store;
-				this.clientService.getClients(this.store._id).subscribe((response: any) => {
-					this.clients = response.clients;
-				});
+				this.background_imgURL = [...this.store.background_img];
+				this.clientService
+					.getClients(this.store._id)
+					.subscribe((response_clients: any) => {
+						this.clients = response_clients.clients;
+					});
 			});
 		});
 	}
@@ -98,39 +103,43 @@ export class StoreComponent implements OnInit {
 				this.showSpinner = false;
 				const success_text = 'Store created successfully';
 				Swal.fire('Exito', success_text, 'success').then(() => {
-					this.router.navigate([ '/stores' ]);
+					this.router.navigate(['/stores']);
 				});
 			})
 			.catch((error: any) => {
 				this.showSpinner = false;
-				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				console.log(error);
+				const error_text = this.translate.instant(
+					`ERRORS.ERROR_TYPE_${error.type}`
+				);
 				Swal.fire('Error', error_text, 'error').then(() => {
-					this.router.navigate([ '/stores' ]);
+					//this.router.navigate(['/stores']);
 				});
 			});
 	}
 
-	selectBGImage(event) {
-		this.store.background_img = event.target.files[0];
+	selectBGImage(event, index) {
+		console.log('aaa');
+		this.background_imgURL[index] = event.target.files[0];
 	}
 
 	selectLogoImage(event) {
 		this.store.logo_img = event.target.files[0];
 	}
 
-	removeImage(type: number) {
+	removeImage(type: number, index: number) {
 		if (type === 0) {
 			this.logo_imgURL = null;
 			this.store.logo_img = null;
 		}
 
 		if (type === 1) {
-			this.background_imgURL = null;
-			this.store.background_img = null;
+			this.background_imgURL[index] = null;
+			this.store.background_img[index] = null;
 		}
 	}
 
-	preview(type: number, files: any) {
+	preview(type: number, files: any, index: number) {
 		if (files.length === 0) {
 			return;
 		}
@@ -144,12 +153,12 @@ export class StoreComponent implements OnInit {
 		const reader = new FileReader();
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
-		reader.onload = (_event) => {
+		reader.onload = _event => {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
 			if (type === 1) {
-				this.background_imgURL = reader.result;
+				this.background_imgURL[index] = reader.result;
 			}
 		};
 	}

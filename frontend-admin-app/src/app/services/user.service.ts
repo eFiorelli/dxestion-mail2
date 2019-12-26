@@ -7,9 +7,10 @@ import { HttpClient } from '@angular/common/http';
 	providedIn: 'root'
 })
 export class UserService {
-	constructor(private http: HttpClient, private router: Router) { }
+	constructor(private http: HttpClient, private router: Router) {}
 
 	userID = localStorage.getItem('userID');
+	userRole = localStorage.getItem('role');
 
 	selectedUser = {};
 
@@ -27,7 +28,7 @@ export class UserService {
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -38,7 +39,10 @@ export class UserService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/user/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+			xhr.setRequestHeader(
+				'Authorization',
+				localStorage.getItem('token')
+			);
 			xhr.send(formData);
 		});
 	}
@@ -57,7 +61,7 @@ export class UserService {
 			if (typeof logo_file !== 'string') {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
 						resolve(JSON.parse(xhr.response));
@@ -68,7 +72,10 @@ export class UserService {
 			};
 			const url = AppComponent.BACKEND_URL + '/update/user';
 			xhr.open('PUT', url, true);
-			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
+			xhr.setRequestHeader(
+				'Authorization',
+				localStorage.getItem('token')
+			);
 			xhr.send(formData);
 		});
 	}
