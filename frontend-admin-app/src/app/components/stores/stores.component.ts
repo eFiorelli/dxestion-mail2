@@ -8,14 +8,19 @@ import { StoreService } from '../../services/store.service';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 
+class ImageSnippet {
+	pending: boolean = false;
+	status: string = 'init';
+
+	constructor(public src: string, public file: File) {}
+}
+
 @Component({
 	selector: 'app-stores',
 	templateUrl: './stores.component.html',
 	styleUrls: [ './stores.component.css' ]
 })
 export class StoresComponent implements OnInit {
-	username = Math.random().toString(36).substring(2, 15);
-
 	newStore: any = {
 		username: '',
 		password: '',
@@ -26,7 +31,7 @@ export class StoresComponent implements OnInit {
 		database_port: '',
 		database_username: '',
 		database_password: '',
-		background_img: '',
+		background_img: [],
 		logo_img: '',
 		store_type: '',
 		commerce_password: '',
@@ -38,6 +43,7 @@ export class StoresComponent implements OnInit {
 	stores: any[];
 
 	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
+	BGimagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	noImage = './assets/no-image.jpg';
 	searchText = '';
 	storesListFiltered: any[];
@@ -49,6 +55,7 @@ export class StoresComponent implements OnInit {
 	message: any;
 	commerce_password: boolean = false;
 	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
+	selectedFiles: ImageSnippet[] = [];
 
 	constructor(
 		public auth: AuthService,
@@ -61,6 +68,7 @@ export class StoresComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
+		for (var key in this.newStore) this.newStore[key] = '';
 		this.activatedRoute.params.subscribe((params) => {
 			this.currentUser = params.id;
 			this.getStores();
@@ -111,6 +119,12 @@ export class StoresComponent implements OnInit {
 			return;
 		}
 
+		for (let i = 0; i < this.selectedFiles.length; i++) {
+			if (!this.newStore.background_img[i]) {
+				this.newStore.background_img.push(this.selectedFiles[i].file);
+			}
+		}
+
 		this.storeService
 			.registerStore(this.newStore)
 			.then((response: any) => {
@@ -140,19 +154,16 @@ export class StoresComponent implements OnInit {
 		this.newStore.logo_img = event.target.files[0];
 	}
 
-	removeImage(type: number) {
+	removeImage(type: number, index: number) {
 		if (type === 0) {
 			this.logo_imgURL = null;
 			this.newStore.logo_img = null;
-		}
-
-		if (type === 1) {
-			this.background_imgURL = null;
-			this.newStore.background_img = null;
+		} else {
+			this.onError(index);
 		}
 	}
 
-	preview(type: number, files: any) {
+	preview(type: number, files: any, index: number) {
 		if (files.length === 0) {
 			return;
 		}
@@ -170,9 +181,35 @@ export class StoresComponent implements OnInit {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
-			if (type === 1) {
-				this.background_imgURL = reader.result;
-			}
 		};
+	}
+
+	private onSuccess(index: number) {
+		this.selectedFiles[index].pending = false;
+		this.selectedFiles[index].status = 'ok';
+	}
+
+	private onError(index: number) {
+		if (this.selectedFiles[index]) {
+			this.selectedFiles[index].pending = false;
+			this.selectedFiles[index].status = 'fail';
+			this.selectedFiles[index].src = '';
+		} else {
+			this.newStore.background_img[index] = '';
+			this.selectedFiles[index].src = '';
+		}
+	}
+
+	processFile(imageInput: any, index: number) {
+		const file: File = imageInput.files[0];
+		const reader = new FileReader();
+
+		reader.addEventListener('load', (event: any) => {
+			this.selectedFiles[index] = new ImageSnippet(event.target.result, file);
+			this.selectedFiles[index].pending = true;
+		});
+
+		reader.readAsDataURL(file);
+		// this.newStore.background_img[index] = null;
 	}
 }

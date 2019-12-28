@@ -1,22 +1,28 @@
 <mat-tab-group style="height: 100vh;" [selectedIndex]="selectedTab">
     <mat-tab label="Lista de tiendas" style="height: 100vh; padding:30px">
         <div *ngIf="storeList">
-            <br>
-            <div class="col-md-12 col-sm-6">
-                <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
-            </div>
-            <div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
-                <div *ngFor="let store of storeList" class="col-lg-3 col-md-4 col-sm-6" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
-                    <div class="card custom-store-card">
-                        <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
-                        <div class="card-body">
-                            <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
-                            <p class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.USERNAME' | translate }}: </b>{{ store.username }}</p>
-                            <p class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.EMAIL' | translate }}: </b>{{ store.email }}</p>
-                            <p *ngIf="store.store_type" class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.TYPE' | translate }}: </b>{{ store.store_type }}</p>
+            <div *ngIf="storeList.length > 0">
+                <br>
+                <div class="col-md-12 col-sm-6">
+                    <input #search class="form-control" id="searchTextId" (keyup)="searchStores(search.value)" [ngModel]="searchText" name="search" placeholder="Buscar...">
+                </div>
+                <div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
+                    <div *ngFor="let store of storeList" class="col-lg-3 col-md-4 col-sm-6" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
+                        <div class="card custom-store-card">
+                            <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
+                            <div class="card-body">
+                                <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
+                                <p class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.USERNAME' | translate }}: </b>{{ store.username }}</p>
+                                <p class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.EMAIL' | translate }}: </b>{{ store.email }}</p>
+                                <p *ngIf="store.store_type" class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.TYPE' | translate }}: </b>{{ store.store_type }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div *ngIf="storeList.length === 0">
+                <br>
+                <div class="alert alert-info">No hay ningún establecimiento creado</div>
             </div>
         </div>
     </mat-tab>
@@ -119,10 +125,13 @@
                             </div>
                             <br>
                             <h4 class="text-center">{{ 'STORES_PAGE.BACKGROUND' | translate }}</h4>
-                            <button (click)="removeImage(1)" class="btn btn-danger" *ngIf="newStore.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="newStore.background_img" [src]="background_imgURL" style="height: 250px">
-                                <input *ngIf="!newStore.background_img" (change)="selectBGImage($event); preview(1, $event.target.files)" type="file" id="bg_file" style="margin-top: 110px">
+                            <div *ngFor="let i of [0,1,2,3,4]" style="height: 250px; border: 1px solid lightgray; margin-bottom: 20px;">
+                                <input #imageInput *ngIf="!selectedFiles[i] && !newStore.background_img[i]" type="file" accept="image/*" (change)="processFile(imageInput, i)" style="margin-top: 100px;">
+                                <button *ngIf="selectedFiles[i] || newStore.background_img[i]" (click)="removeImage(1, i)" class="btn btn-danger">X</button>
+                                <div *ngIf="selectedFiles.length > 0" class="img-preview-container">
+                                    <div *ngIf="selectedFiles[i]" class="img-preview{{selectedFiles[i].status === 'fail' ? '-error' : ''}}" [ngStyle]="{'background-image': 'url('+ selectedFiles[i].src + ')'}"></div>
+                                </div>
+                                <br>
                             </div>
                         </div>
                         <div class="col-6">

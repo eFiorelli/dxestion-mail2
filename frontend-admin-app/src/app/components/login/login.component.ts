@@ -12,8 +12,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class LoginComponent implements OnInit {
 	constructor(private auth: AuthService, private router: Router, private translate: TranslateService) {}
 
-	username = '';
-	password = '';
+	username = 'dxestion';
+	password = 'Dxestion0180';
 	credentials: Object;
 	showSpinner: boolean;
 
@@ -41,28 +41,4 @@ export class LoginComponent implements OnInit {
 	}
 
 	test() {}
-
-	/*
-		registerUser() {
-			let user: any = {
-				phone: 'ddd',
-				name: 'ddd',
-				email: 'ddd@ddd.com',
-				signature: ''
-			};
-			this.showSpinner = true;
-
-			this.storeService.registerClient(user).then((response: any) => {
-				this.showSpinner = false;
-				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
-				Swal.fire('Error', success_text, 'success').then(() => {
-					//this.router.navigate(['/home']);
-				});
-			}).catch((error) => {
-				this.showSpinner = false;
-				const success_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
-				Swal.fire('Exito', success_text, 'error');
-			});
-		}
-	*/
 }

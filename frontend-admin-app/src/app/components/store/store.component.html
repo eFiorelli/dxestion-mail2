@@ -98,46 +98,17 @@
                             </div>
                             <br>
                             <h4 class="text-center">{{ 'STORES_PAGE.BACKGROUND' | translate }}</h4>
-                            <div *ngFor="let i of [0,1,2,3,4]">
-                                <button (click)="removeImage(1, i)" class="btn btn-danger" *ngIf="store.background_img[i] !== null">X</button>
-                                <div style="height: 250px; border: 1px solid lightgray">
-                                    <img *ngIf="store.background_img[i] !== null" bind-src="BGimagePath + store.background_img[i]" style="height: 250px">
-                                    <img *ngIf="store.background_img[i] === null" bind-src="background_imgURL[i]"style="height: 250px">
-                                    <input *ngIf="store.background_img[i] === null && !background_imgURL[i]" (change)="selectBGImage($event, 0); preview(1, $event.target.files, 0)" type="file" id="bg_file_{{i}}" style="margin-top: 110px">
+                            <div *ngFor="let i of [0,1,2,3,4]" style="height: 250px; border: 1px solid lightgray; margin-bottom: 20px;">
+                                <input #imageInput *ngIf="!selectedFiles[i] && !store.background_img[i]" type="file" accept="image/*" (change)="processFile(imageInput, i)" style="margin-top: 100px;">
+                                <button *ngIf="selectedFiles[i] || store.background_img[i]" (click)="removeImage(1, i)" class="btn btn-danger">X</button>
+                                <div *ngIf="selectedFiles.length > 0" class="img-preview-container">
+                                    <div *ngIf="selectedFiles[i]" class="img-preview{{selectedFiles[i].status === 'fail' ? '-error' : ''}}" [ngStyle]="{'background-image': 'url('+ selectedFiles[i].src + ')'}"></div>
+                                </div>
+                                <div *ngIf="store.background_img[i]" class="img-preview-container">
+                                    <img class="img-preview" [src]="BGimagePath + store.background_img[i]">
                                 </div>
                                 <br>
                             </div>
-                            <!--
-                            <button (click)="removeImage(1, 1)" class="btn btn-danger" *ngIf="store.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="store.background_img_1" [src]="background_imgURL_1" style="height: 250px">
-                                <input *ngIf="!store.background_img_1" (change)="selectBGImage($event, 1); preview(1, $event.target.files, 1)" type="file" id="bg_file_1" style="margin-top: 110px">
-                            </div>
-                            <br>
-                            <button (click)="removeImage(1, 2)" class="btn btn-danger" *ngIf="store.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="store.background_img_2" [src]="background_imgURL_2" style="height: 250px">
-                                <input *ngIf="!store.background_img_2" (change)="selectBGImage($event, 2); preview(1, $event.target.files, 2)" type="file" id="bg_file_2" style="margin-top: 110px">
-                            </div>
-                            <br>
-                            <button (click)="removeImage(1, 3)" class="btn btn-danger" *ngIf="store.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="store.background_img_3" [src]="background_imgURL_3" style="height: 250px">
-                                <input *ngIf="!store.background_img_3" (change)="selectBGImage($event, 3); preview(1, $event.target.files, 3)" type="file" id="bg_file_3" style="margin-top: 110px">
-                            </div>
-                            <br>
-                            <button (click)="removeImage(1, 4)" class="btn btn-danger" *ngIf="store.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="store.background_img_4" [src]="background_imgURL_4" style="height: 250px">
-                                <input *ngIf="!store.background_img_4" (change)="selectBGImage($event, 4); preview(1, $event.target.files, 4)" type="file" id="bg_file_4" style="margin-top: 110px">
-                            </div>
-                            <br>
-                            <button (click)="removeImage(1, 5)" class="btn btn-danger" *ngIf="store.background_img">X</button>
-                            <div style="height: 250px; border: 1px solid lightgray">
-                                <img *ngIf="store.background_img_5" [src]="BGimagePath + background_imgURL_5" style="height: 250px">
-                                <input *ngIf="!store.background_img_5" (change)="selectBGImage($event, 5); preview(1, $event.target.files, 5)" type="file" id="bg_file_5" style="margin-top: 110px">
-                            </div>
-                            -->
                         </div>
                         <div class="col-6">
                             <div *ngIf="user_role === 'ADMIN_ROLE'">

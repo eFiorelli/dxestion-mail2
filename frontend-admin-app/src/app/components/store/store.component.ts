@@ -7,10 +7,17 @@ import { AppComponent } from '../../app.component';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 
+class ImageSnippet {
+	pending: boolean = false;
+	status: string = 'init';
+
+	constructor(public src: string, public file: File) {}
+}
+
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',
-	styleUrls: ['./store.component.css']
+	styleUrls: [ './store.component.css' ]
 })
 export class StoreComponent implements OnInit {
 	store = {
@@ -40,9 +47,11 @@ export class StoreComponent implements OnInit {
 	message = '';
 	clients = [];
 	commerce_password = false;
-	storeTypes = ['FrontRetail/Manager', 'FrontRest', 'Agora'];
+	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 	user_role = localStorage.getItem('role');
+
+	selectedFiles: ImageSnippet[] = [];
 
 	constructor(
 		private activatedRoute: ActivatedRoute,
@@ -57,17 +66,14 @@ export class StoreComponent implements OnInit {
 		this.userService.getUsers().subscribe((users: any) => {
 			this.userList = users.users;
 		});
-		this.activatedRoute.params.subscribe(params => {
+		this.activatedRoute.params.subscribe((params) => {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
-				console.log(response);
 				this.store = response.store;
-				this.background_imgURL = [...this.store.background_img];
-				this.clientService
-					.getClients(this.store._id)
-					.subscribe((response_clients: any) => {
-						this.clients = response_clients.clients;
-					});
+				this.background_imgURL = [ ...this.store.background_img ];
+				this.clientService.getClients(this.store._id).subscribe((response_clients: any) => {
+					this.clients = response_clients.clients;
+				});
 			});
 		});
 	}
@@ -87,6 +93,12 @@ export class StoreComponent implements OnInit {
 	}
 
 	updateStore() {
+		for (let i = 0; i < this.selectedFiles.length; i++) {
+			if (!this.store.background_img[i]) {
+				this.store.background_img[i] = this.selectedFiles[i].file;
+			}
+		}
+		// return;
 		this.showSpinner = true;
 		if (!this.store.user) {
 			Swal.fire('Error', 'Debe seleccionar un usuario', 'error');
@@ -103,24 +115,17 @@ export class StoreComponent implements OnInit {
 				this.showSpinner = false;
 				const success_text = 'Store created successfully';
 				Swal.fire('Exito', success_text, 'success').then(() => {
-					this.router.navigate(['/stores']);
+					this.router.navigate([ '/stores' ]);
 				});
 			})
 			.catch((error: any) => {
-				this.showSpinner = false;
 				console.log(error);
-				const error_text = this.translate.instant(
-					`ERRORS.ERROR_TYPE_${error.type}`
-				);
+				this.showSpinner = false;
+				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
 				Swal.fire('Error', error_text, 'error').then(() => {
-					//this.router.navigate(['/stores']);
+					this.router.navigate([ '/stores' ]);
 				});
 			});
-	}
-
-	selectBGImage(event, index) {
-		console.log('aaa');
-		this.background_imgURL[index] = event.target.files[0];
 	}
 
 	selectLogoImage(event) {
@@ -131,11 +136,8 @@ export class StoreComponent implements OnInit {
 		if (type === 0) {
 			this.logo_imgURL = null;
 			this.store.logo_img = null;
-		}
-
-		if (type === 1) {
-			this.background_imgURL[index] = null;
-			this.store.background_img[index] = null;
+		} else {
+			this.onError(index);
 		}
 	}
 
@@ -153,13 +155,39 @@ export class StoreComponent implements OnInit {
 		const reader = new FileReader();
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
-		reader.onload = _event => {
+		reader.onload = (_event) => {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
-			if (type === 1) {
-				this.background_imgURL[index] = reader.result;
-			}
 		};
+	}
+
+	private onSuccess(index: number) {
+		this.selectedFiles[index].pending = false;
+		this.selectedFiles[index].status = 'ok';
+	}
+
+	private onError(index: number) {
+		if (this.selectedFiles[index]) {
+			this.selectedFiles[index].pending = false;
+			this.selectedFiles[index].status = 'fail';
+			this.selectedFiles[index].src = '';
+		} else {
+			this.store.background_img[index] = '';
+			this.selectedFiles[index].src = '';
+		}
+	}
+
+	processFile(imageInput: any, index: number) {
+		const file: File = imageInput.files[0];
+		const reader = new FileReader();
+
+		reader.addEventListener('load', (event: any) => {
+			this.selectedFiles[index] = new ImageSnippet(event.target.result, file);
+			this.selectedFiles[index].pending = true;
+		});
+
+		reader.readAsDataURL(file);
+		this.store.background_img[index] = null;
 	}
 }
