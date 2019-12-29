@@ -20,7 +20,7 @@ addToLog = function(level, message) {
 		message
 	});
 	if (io) {
-		io.emit('log message', message);
+		io.emit('log message', `[${moment().format('DD-MM-YYYY HH:mm:ss')}] - ${level}: ${message}`);
 	}
 };
 
