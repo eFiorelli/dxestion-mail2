@@ -1,25 +1,21 @@
-const winston = require("winston");
+const winston = require('winston');
 const moment = require('moment');
 
 let loggerObject = null;
 
 /* Log format */
-const myFormat = winston.format.printf(({
-	level,
-	message
-}) => {
-	return `[${moment().format(
-		"DD-MM-YYYY HH:mm:ss"
-	)}] - ${level}: ${message}`;
+const myFormat = winston.format.printf(({ level, message }) => {
+	return `[${moment().format('DD-MM-YYYY HH:mm:ss')}] - ${level}: ${message}`;
 });
 
-logger = function () {
+logger = function() {
 	return loggerObject;
-}
+};
 
-createLogger = function () {
+createLogger = function() {
 	const date = new Date();
-	filename = date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
+	filename =
+		date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
 	return new Promise((resolve, reject) => {
 		loggerObject = winston.createLogger({
 			format: winston.format.combine(myFormat),
@@ -35,13 +31,12 @@ createLogger = function () {
 };
 
 /* Function to set date format */
-formatDate = function (n) {
+formatDate = function(n) {
 	return n < 10 ? '0' + n : n;
 };
 
-
-
 module.exports = {
 	logger,
-	createLogger
+	createLogger,
+	customLog
 };

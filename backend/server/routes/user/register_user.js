@@ -4,7 +4,7 @@ let { checkUserToken, checkAdminRole } = require('../../middlewares/authenticati
 const User = require('../../models/user');
 const app = express();
 
-app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) => {
+app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -35,8 +35,12 @@ app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) =>
 							image: req.files.logo_image
 						}
 					];
-					await saveUserImages(savedUser._id, res, images);
+					await saveUserImages(savedUser._id, req, res, images);
 				} else {
+					logger().log({
+						level: 'info',
+						message: `User ${savedUser.username} added by user ${req.user.username}`
+					});
 					return res.status(200).json({
 						ok: true,
 						message: 'User successfully created',
@@ -60,7 +64,7 @@ app.post('/register/user', [checkUserToken, checkAdminRole], async (req, res) =>
 	}
 });
 
-saveUserImages = async (id, res, images) => {
+saveUserImages = async (id, req, res, images) => {
 	try {
 		const userDB = await User.findById(id);
 		if (!userDB) {
@@ -70,10 +74,9 @@ saveUserImages = async (id, res, images) => {
 				type: 4
 			});
 		} else {
-
 			let file = images[0].image;
 			// Valid extensions
-			let validExtensions = ['png', 'jpg', 'gif', 'jpeg'];
+			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
 			let shortedName = file.name.split('.');
 			let extension = shortedName[shortedName.length - 1];
 
@@ -98,6 +101,10 @@ saveUserImages = async (id, res, images) => {
 
 			userDB.logo_img = filename;
 			await userDB.save();
+			logger().log({
+				level: 'info',
+				message: `User ${userDB.username} added by user ${req.user.username}`
+			});
 			return res.status(200).json({
 				ok: true,
 				message: 'User successfully created',

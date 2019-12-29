@@ -75,8 +75,12 @@ app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], 
 						image: req.files.logo_image || ''
 					}
 				];
-				await updateStoreImages(storeDB, res, images);
+				await updateStoreImages(storeDB, req, res, images);
 			} else {
+				logger().log({
+					level: 'info',
+					message: `Store ${storeDB.name} created by user ${req.user.username}`
+				});
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
@@ -94,7 +98,7 @@ app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], 
 	}
 });
 
-updateStoreImages = async (storeDB, res, images) => {
+updateStoreImages = async (storeDB, req, res, images) => {
 	try {
 		if (!storeDB) {
 			return res.status(400).json({
@@ -156,7 +160,11 @@ updateStoreImages = async (storeDB, res, images) => {
 				logo_image: storeDB.logo_image
 			});
 			if (updatedStore) {
-				updatedStore.save();
+				// updatedStore.save();
+				logger().log({
+					level: 'info',
+					message: `Store ${updatedStore.name} created by user ${req.user.username}`
+				});
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',

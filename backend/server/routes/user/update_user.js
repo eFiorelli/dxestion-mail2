@@ -39,8 +39,12 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 						image: req.files.logo_image || ''
 					}
 				];
-				await updateUserImages(userDB, res, images);
+				await updateUserImages(userDB, req, res, images);
 			} else {
+				logger().log({
+					level: 'info',
+					message: `User ${userDB.username} added by user ${req.user.username}`
+				});
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
@@ -58,7 +62,7 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 	}
 });
 
-updateUserImages = async (userDB, res, images) => {
+updateUserImages = async (userDB, req, res, images) => {
 	try {
 		if (!userDB) {
 			return res.status(400).json({
@@ -100,6 +104,10 @@ updateUserImages = async (userDB, res, images) => {
 
 			userDB.logo_img = filename;
 			await userDB.save();
+			logger().log({
+				level: 'info',
+				message: `User ${userDB.username} added by user ${req.user.username}`
+			});
 			return res.status(200).json({
 				ok: true,
 				message: 'User updated successfully',
