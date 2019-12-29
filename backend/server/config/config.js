@@ -3,6 +3,8 @@
 // ======================
 process.env.PORT = process.env.PORT || 3000;
 
+process.env.SOCKET_PORT = process.env.SOCKET_PORT || 3001;
+
 process.env.SSL_PORT = process.env.SSL_PORT || 8080;
 
 // ======================

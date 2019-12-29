@@ -62,6 +62,8 @@ userLogin = async (res, userDB, credentials) => {
 			role: userDB.role
 		};
 
+		addToLog('info', `User ${returnedUser.username} logged in admin app`);
+
 		return res.status(200).json({
 			ok: true,
 			user: returnedUser,
@@ -97,6 +99,8 @@ storeLogin = async (res, storeDB, credentials) => {
 			background_img: storeDB.background_img,
 			logo_img: storeDB.logo_img
 		};
+
+		addToLog('info', `Store ${returnedStore.name} logged in client app`);
 
 		return res.status(200).json({
 			ok: true,

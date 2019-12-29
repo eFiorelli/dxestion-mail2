@@ -64,10 +64,7 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 					];
 					await saveStoreImages(savedStore._id, res, images);
 				} else {
-					logger().log({
-						level: 'info',
-						message: `Store ${savedStore.name} created by user ${req.user.username}`
-					});
+					addToLog('info', `Store ${savedStore.name} created by user ${req.user.username}`);
 					return res.status(200).json({
 						ok: true,
 						message: 'Store successfully created',
@@ -147,10 +144,7 @@ saveStoreImages = async (id, res, images) => {
 				logo_image: storeDB.logo_image
 			});
 			if (updatedStore) {
-				logger().log({
-					level: 'info',
-					message: `Store ${updatedStore.name} created by user ${req.user.username}`
-				});
+				addToLog('info', `Store ${updatedStore.name} created by user ${req.user.username}`);
 				return res.status(200).json({
 					ok: true,
 					message: 'Store successfully created',

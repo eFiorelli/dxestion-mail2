@@ -67,10 +67,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 						if (mail) {
 							// Ok response. Problem: Allow users account sending mails
 						} */
-						logger().log({
-							level: 'info',
-							message: `Client ${newClient.name} created by store ${store.name}`
-						});
+						addToLog('info', `Client ${newClient.name} created by store ${store.name}`);
 						return res.status(200).json({
 							ok: true,
 							message: 'Client inserted',
@@ -235,9 +232,14 @@ sendMail = async (store, client) => {
 	try {
 		const mail = await mailer.transporter.sendMail(mailOptions);
 		if (mail) {
+			addToLog('info', `Successfully sent mail to client: ${client.name}`);
 			return true;
+		} else {
+			addToLog('error', `Error sending mail to client: ${client.name}`);
+			return false;
 		}
 	} catch (err) {
+		addToLog('error', `Error sending mail to client: ${client.name} - ${err}`);
 		return false;
 	}
 };

@@ -5,7 +5,8 @@ require('./utils/admin_user');
 const mongoose = require('./utils/database');
 const express = require('express');
 const path = require('path');
-const { logger, createLogger } = require('./utils/logger');
+const { createLogger, addToLog } = require('./utils/logger');
+const { createSocketServer } = require('./utils/socket');
 const https = require('https');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
@@ -15,10 +16,7 @@ const app = express();
 
 /* Create logger */
 createLogger().then(() => {
-	logger().log({
-		level: 'info',
-		message: 'App started'
-	});
+	addToLog('info', 'App started');
 });
 
 /* Add headers */
@@ -71,16 +69,8 @@ mongoose.createConnection();
 app.listen(process.env.PORT);
 
 https.createServer(options, app).listen(process.env.SSL_PORT, () => {
-	logger().log({
-		level: 'info',
-		message: `Environment: ${process.env.NODE_ENV}`
-	});
-	logger().log({
-		level: 'info',
-		message: `Listening on port ${process.env.PORT}`
-	});
-	logger().log({
-		level: 'info',
-		message: `Listening on port ${process.env.SSL_PORT}`
-	});
+	addToLog('info', `Environment: ${process.env.NODE_ENV}`);
+	addToLog('info', `Listening on port ${process.env.PORT}`);
+	addToLog('info', `Listening on port ${process.env.SSL_PORT}`);
+	createSocketServer(https);
 });

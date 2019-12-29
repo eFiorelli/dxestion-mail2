@@ -3,41 +3,26 @@ const mongoose = require('mongoose');
 mongoose.Promise = Promise;
 
 mongoose.connection.on('connected', () => {
-	logger().log({
-		level: 'info',
-		message: 'Connection established'
-	});
+	addToLog('info', 'Connection established');
 });
 
 mongoose.connection.on('reconnected', () => {
-	logger().log({
-		level: 'error',
-		message: 'Database reconnected'
-	});
+	addToLog('info', 'Database reconnected');
 });
 
 mongoose.connection.on('disconnected', () => {
-	logger().log({
-		level: 'error',
-		message: 'Database disconnected'
-	});
+	addToLog('info', 'Database disconnected');
 	setTimeout(() => {
 		createConnection();
 	}, 5000);
 });
 
 mongoose.connection.on('close', () => {
-	logger().log({
-		level: 'info',
-		message: 'Connection closed'
-	});
+	addToLog('info', 'Connection closed');
 });
 
 mongoose.connection.on('error', (error) => {
-	logger().log({
-		level: 'error',
-		message: 'Database ERROR'
-	});
+	addToLog('info', 'Database ERROR');
 });
 
 createConnection = async () => {
@@ -48,9 +33,7 @@ createConnection = async () => {
 					useNewUrlParser: true
 				});
 			} catch (error) {
-				logger().log({
-					level: 'error'
-				});
+				addToLog('error', error);
 			}
 		}, 10000);
 	} else {
@@ -59,9 +42,7 @@ createConnection = async () => {
 				useNewUrlParser: true
 			});
 		} catch (error) {
-			logger().log({
-				level: 'error'
-			});
+			addToLog('error', error);
 		}
 	}
 };

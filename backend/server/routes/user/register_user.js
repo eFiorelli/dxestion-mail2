@@ -37,10 +37,7 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 					];
 					await saveUserImages(savedUser._id, req, res, images);
 				} else {
-					logger().log({
-						level: 'info',
-						message: `User ${savedUser.username} added by user ${req.user.username}`
-					});
+					addToLog('info', `User ${savedUser.username} added by user ${req.user.username}`);
 					return res.status(200).json({
 						ok: true,
 						message: 'User successfully created',
@@ -101,10 +98,7 @@ saveUserImages = async (id, req, res, images) => {
 
 			userDB.logo_img = filename;
 			await userDB.save();
-			logger().log({
-				level: 'info',
-				message: `User ${userDB.username} added by user ${req.user.username}`
-			});
+			addToLog('info', `User ${userDB.username} added by user ${req.user.username}`);
 			return res.status(200).json({
 				ok: true,
 				message: 'User successfully created',

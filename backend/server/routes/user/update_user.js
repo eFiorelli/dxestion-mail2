@@ -41,10 +41,7 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 				];
 				await updateUserImages(userDB, req, res, images);
 			} else {
-				logger().log({
-					level: 'info',
-					message: `User ${userDB.username} added by user ${req.user.username}`
-				});
+				addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',
@@ -104,10 +101,7 @@ updateUserImages = async (userDB, req, res, images) => {
 
 			userDB.logo_img = filename;
 			await userDB.save();
-			logger().log({
-				level: 'info',
-				message: `User ${userDB.username} added by user ${req.user.username}`
-			});
+			addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
 			return res.status(200).json({
 				ok: true,
 				message: 'User updated successfully',

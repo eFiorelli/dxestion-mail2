@@ -1,6 +1,7 @@
 const winston = require('winston');
 const moment = require('moment');
 
+let io;
 let loggerObject = null;
 
 /* Log format */
@@ -10,6 +11,17 @@ const myFormat = winston.format.printf(({ level, message }) => {
 
 logger = function() {
 	return loggerObject;
+};
+
+addToLog = function(level, message) {
+	io = require('./socket').getIO();
+	logger().log({
+		level,
+		message
+	});
+	if (io) {
+		io.emit('log message', message);
+	}
 };
 
 createLogger = function() {
@@ -38,5 +50,5 @@ formatDate = function(n) {
 module.exports = {
 	logger,
 	createLogger,
-	customLog
+	addToLog
 };
