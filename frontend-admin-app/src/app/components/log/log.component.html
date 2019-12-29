@@ -1,0 +1,5 @@
+<ul class="list-group" *ngIf="logMessages">
+    <li *ngFor="let message of logMessages" class="list-group-item">
+        {{ message.date }} - {{ message.hour }} || {{ message.type }} => {{ message.text }}
+    </li>
+</ul>

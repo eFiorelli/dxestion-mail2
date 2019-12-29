@@ -20,6 +20,10 @@ export class HomeComponent implements OnInit {
 		this.router.navigate([ '/stores' ]);
 	}
 
+	goToLog() {
+		this.router.navigate([ '/log' ]);
+	}
+
 	goToProfile() {
 		this.router.navigate([ '/profile' ]);
 	}
