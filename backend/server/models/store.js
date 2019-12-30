@@ -1,23 +1,14 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+const mongoose = require('mongoose');
+const uniqueValidator = require('mongoose-unique-validator');
 
 let themeColors = {
-	values: [
-		"Red",
-		"Green",
-		"Blue",
-		"Purple",
-		"White",
-		"Black",
-		"Yellow",
-		"Orange"
-	],
-	message: "{VALUE} is not a valid theme color"
+	values: [ 'Red', 'Green', 'Blue', 'Purple', 'White', 'Black', 'Yellow', 'Orange' ],
+	message: '{VALUE} is not a valid theme color'
 };
 
 let store_types = {
-	values: ["FrontRetail/Manager", "FrontRest", "Agora"],
-	message: "{VALUE} is not a valid shop type"
+	values: [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ],
+	message: '{VALUE} is not a valid shop type'
 };
 
 let Schema = mongoose.Schema;
@@ -25,52 +16,52 @@ let Schema = mongoose.Schema;
 let storeSchema = new Schema({
 	name: {
 		type: String,
-		required: [true, "Name is required"]
+		required: [ true, 'Name is required' ]
 	},
 	username: {
 		type: String,
 		unique: true,
-		required: [true, "Name is required"]
+		required: [ true, 'Name is required' ]
 	},
 	email: {
 		type: String,
-		required: [true, "Mail is required"]
+		required: [ true, 'Mail is required' ]
 	},
 	password: {
 		type: String,
-		required: [true, "Password is required"]
+		required: [ true, 'Password is required' ]
 	},
 	database_url: {
 		type: String,
-		required: [true, "Database URL is required"]
+		required: [ true, 'Database URL is required' ]
 	},
 	database_name: {
 		type: String,
-		required: [true, "Database NAME is required"]
+		required: [ true, 'Database NAME is required' ]
 	},
 	database_port: {
 		type: String,
-		required: [true, "Database PORT is required"]
+		required: [ true, 'Database PORT is required' ]
 	},
 	database_username: {
 		type: String,
-		required: [true, "Database username is required"]
+		required: [ true, 'Database username is required' ]
 	},
 	database_password: {
 		type: String,
-		required: [true, "Database password is required"]
+		required: [ true, 'Database password is required' ]
 	},
 	commerce_password: {
 		type: String,
 		required: false,
-		default: ""
+		default: ''
 	},
 	free_fields: {
 		type: Object,
 		required: false
 	},
 	background_img: {
-		type: [String],
+		type: [ String ],
 		required: false
 	},
 	logo_img: {
@@ -79,19 +70,19 @@ let storeSchema = new Schema({
 	},
 	theme_color: {
 		type: String,
-		default: "Black",
+		default: 'Black',
 		enum: themeColors
 	},
 	store_type: {
 		type: String,
-		default: "FrontRetail/Manager",
+		default: 'FrontRetail/Manager',
 		enum: store_types,
 		required: true
 	},
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: "User",
-		required: [true, "User is required"]
+		ref: 'User',
+		required: [ true, 'User is required' ]
 	},
 	active: {
 		type: Boolean,
@@ -112,7 +103,7 @@ storeSchema.methods.toJSON = function() {
 };
 
 storeSchema.plugin(uniqueValidator, {
-	message: "{PATH} must be unique"
+	message: '{PATH} must be unique'
 });
 
-module.exports = mongoose.model("Store", storeSchema);
+module.exports = mongoose.model('Store', storeSchema);

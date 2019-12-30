@@ -11,25 +11,12 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 	const id = body._id;
 
 	try {
-		const userDB = await User.findById(id);
-
-		if (body.password) {
-			await userDB.update({
-				username: body.username,
-				name: body.name,
-				email: body.email,
-				password: bcrypt.hashSync(body.password, 10)
-			});
-		} else {
-			await userDB.update({ username: body.username, name: body.name, email: body.email });
-		}
-
-		//userDB.save();
+		let userDB = await User.findById(id);
 		if (!userDB) {
 			return res.status(400).json({
 				ok: false,
-				message: 'There is no user with that ID',
-				type: 5
+				message: 'User not found',
+				type: 4
 			});
 		} else {
 			if (req.files) {
@@ -39,16 +26,40 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 						image: req.files.logo_image || ''
 					}
 				];
-				await updateUserImages(userDB, req, res, images);
+				const updatedUser = await updateUserImages(userDB, res, images);
+				if (!updatedUser.ok) {
+					return res.status(500).json({
+						ok: false,
+						message: 'Fail moving image files',
+						type: 1
+					});
+				} else {
+					userDB = updatedUser.userDB;
+				}
+			}
+			if (body.password) {
+				await userDB.update({
+					username: body.username,
+					name: body.name,
+					email: body.email,
+					password: bcrypt.hashSync(body.password, 10),
+					logo_img: userDB.logo_img
+				});
 			} else {
-				addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
-				return res.status(200).json({
-					ok: true,
-					message: 'User updated successfully',
-					user: userDB,
-					type: 1
+				await userDB.update({
+					username: body.username,
+					name: body.name,
+					email: body.email,
+					logo_img: userDB.logo_img
 				});
 			}
+			addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
+			return res.status(200).json({
+				ok: true,
+				message: 'User updated successfully',
+				user: userDB,
+				type: 1
+			});
 		}
 	} catch (err) {
 		return res.status(500).json({
@@ -59,62 +70,31 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 	}
 });
 
-updateUserImages = async (userDB, req, res, images) => {
+updateUserImages = async (userDB, res, images) => {
 	try {
-		if (!userDB) {
-			return res.status(400).json({
-				ok: false,
-				message: 'User not found',
-				type: 4
-			});
-		} else {
-			let file = images[0].image;
+		let file = images[0].image;
 
-			// Valid extensions
-			let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-			let shortedName = file.name.split('.');
-			let extension = shortedName[shortedName.length - 1];
+		// Valid extensions
+		let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+		let shortedName = file.name.split('.');
+		let extension = shortedName[shortedName.length - 1];
 
-			if (validExtensions.indexOf(extension) < 0) {
-				return res.status(400).json({
-					ok: false,
-					meesage: 'Allowed extensions: ' + validExtensions.join(', ')
-				});
-			}
-
-			// Change filename
-			let filename = `${userDB._id}-${new Date().getMilliseconds()}.${extension}`;
-
-			if (userDB.logo_img) {
-				deleteUserFiles(userDB.logo_img);
-			}
-
-			file.mv(`uploads/user/${filename}`, (err) => {
-				if (err) {
-					return res.status(500).json({
-						ok: false,
-						err: err,
-						type: 1
-					});
-				}
-			});
-
-			userDB.logo_img = filename;
-			await userDB.save();
-			addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
-			return res.status(200).json({
-				ok: true,
-				message: 'User updated successfully',
-				user: userDB,
-				type: 2
-			});
+		if (validExtensions.indexOf(extension) < 0) {
+			return { ok: false, error: 'Allowed extensions: ' + validExtensions.join(', ') };
 		}
+
+		// Change filename
+		let filename = `${userDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
+
+		if (userDB.logo_img) {
+			deleteUserFiles(userDB.logo_img);
+		}
+
+		await file.mv(`uploads/user/${filename}`);
+		userDB.logo_img = filename;
+		return { ok: true, userDB };
 	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err,
-			type: 1
-		});
+		return { ok: false, error: 'Failed on moving file' };
 	}
 };
 
