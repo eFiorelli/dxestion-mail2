@@ -72,17 +72,20 @@ export class UserComponent implements OnInit {
 	}
 
 	updateUser() {
-		if (this.userService.updateUser(this.user)) {
-			const success_text = 'Usuario modificado con éxito';
-			Swal.fire('Exito', success_text, 'success').then(() => {
-				this.router.navigate([ '/users' ]);
+		this.userService
+			.updateUser(this.user)
+			.then((response: any) => {
+				const success_text = 'Usuario modificado con éxito';
+				Swal.fire('Exito', success_text, 'success').then(() => {
+					this.router.navigate([ '/users' ]);
+				});
+			})
+			.catch((error: any) => {
+				const error_text = 'Ocurrió un problema al modificar el usuario';
+				Swal.fire('Error', error_text, 'error').then(() => {
+					this.router.navigate([ '/users' ]);
+				});
 			});
-		} else {
-			const error_text = 'Ocurrió un problema al modificar el usuario';
-			Swal.fire('Error', error_text, 'error').then(() => {
-				this.router.navigate([ '/users' ]);
-			});
-		}
 	}
 
 	cancel() {}

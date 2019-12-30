@@ -39,10 +39,7 @@ export class UserService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/user/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader(
-				'Authorization',
-				localStorage.getItem('token')
-			);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}
@@ -70,12 +67,10 @@ export class UserService {
 					}
 				}
 			};
+
 			const url = AppComponent.BACKEND_URL + '/update/user';
 			xhr.open('PUT', url, true);
-			xhr.setRequestHeader(
-				'Authorization',
-				localStorage.getItem('token')
-			);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}

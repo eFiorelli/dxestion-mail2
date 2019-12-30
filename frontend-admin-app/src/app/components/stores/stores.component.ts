@@ -68,7 +68,23 @@ export class StoresComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		for (var key in this.newStore) this.newStore[key] = '';
+		// for (var key in this.newStore) this.newStore[key] = '';
+		this.newStore = {
+			username: '',
+			password: '',
+			name: '',
+			email: '',
+			database_url: '',
+			database_name: '',
+			database_port: '',
+			database_username: '',
+			database_password: '',
+			background_img: [],
+			logo_img: '',
+			store_type: '',
+			commerce_password: '',
+			user: ''
+		};
 		this.activatedRoute.params.subscribe((params) => {
 			this.currentUser = params.id;
 			this.getStores();
@@ -80,21 +96,7 @@ export class StoresComponent implements OnInit {
 		}
 	}
 
-	searchStores(text?: string) {
-		/* Search filter */
-		// if (text !== '' && text !== undefined && text !== null) {
-		// 	this.storeList = this.stores;
-		// 	this.searchText = text;
-		// 	this.storesListFiltered = this.filterUsersPipe.transform(this.storeList, this.searchText);
-		// 	this.storeList = this.storesListFiltered;
-		// } else {
-		// 	this.searchText = '';
-		// 	this.storeList = this.stores;
-		// }
-		// if (!this.storesListFiltered) {
-		// 	return;
-		// }
-	}
+	searchStores(text?: string) {}
 
 	getStores() {
 		if (this.currentUser) {
@@ -109,6 +111,10 @@ export class StoresComponent implements OnInit {
 	}
 
 	registerStore() {
+		for (let i = 0; i < this.selectedFiles.length; i++) {
+			this.newStore.background_img.push(this.selectedFiles[i].file);
+		}
+
 		this.showSpinner = true;
 		if (!this.newStore.user) {
 			Swal.fire('Error', 'Debe seleccionar un usuario', 'error');
@@ -119,20 +125,14 @@ export class StoresComponent implements OnInit {
 			return;
 		}
 
-		for (let i = 0; i < this.selectedFiles.length; i++) {
-			if (!this.newStore.background_img[i]) {
-				this.newStore.background_img.push(this.selectedFiles[i].file);
-			}
-		}
-
 		this.storeService
 			.registerStore(this.newStore)
 			.then((response: any) => {
 				this.showSpinner = false;
 				const success_text = 'Store created successfully';
 				Swal.fire('Exito', success_text, 'success').then(() => {
-					this.ngOnInit();
-					this.selectedTab = 0;
+					// this.ngOnInit();
+					// this.selectedTab = 0;
 				});
 			})
 			.catch((error: any) => {
