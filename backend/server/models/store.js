@@ -84,6 +84,10 @@ let storeSchema = new Schema({
 		ref: 'User',
 		required: [ true, 'User is required' ]
 	},
+	gpdr_text: {
+		type: String,
+		required: [ true, 'GPDR text is required' ]
+	},
 	active: {
 		type: Boolean,
 		default: true

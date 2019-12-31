@@ -97,7 +97,8 @@ storeLogin = async (res, storeDB, credentials) => {
 			name: storeDB.name,
 			email: storeDB.email,
 			background_img: storeDB.background_img,
-			logo_img: storeDB.logo_img
+			logo_img: storeDB.logo_img,
+			gpdr_text: storeDB.gpdr_text
 		};
 
 		addToLog('info', `Store ${returnedStore.name} logged in client app`);

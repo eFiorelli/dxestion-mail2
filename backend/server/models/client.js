@@ -5,15 +5,35 @@ let Schema = mongoose.Schema;
 let clientSchema = new Schema({
 	name: {
 		type: String,
-		required: [true, 'Name is required']
+		required: [ true, 'Name is required' ]
 	},
 	email: {
 		type: String,
-		required: [true, 'Mail is required']
+		required: [ true, 'Mail is required' ]
 	},
 	phone: {
 		type: String,
-		required: [true, 'Phone is required']
+		required: [ true, 'Phone is required' ]
+	},
+	cif: {
+		type: String,
+		required: false
+	},
+	address: {
+		type: String,
+		required: false
+	},
+	city: {
+		type: String,
+		required: false
+	},
+	province: {
+		type: String,
+		required: false
+	},
+	zip_code: {
+		type: String,
+		required: false
 	},
 	signature: {
 		type: String,
@@ -22,7 +42,7 @@ let clientSchema = new Schema({
 	store: {
 		type: Schema.Types.ObjectId,
 		ref: 'Store',
-		required: [true, 'Store is required']
+		required: [ true, 'Store is required' ]
 	},
 	active: {
 		type: Boolean,

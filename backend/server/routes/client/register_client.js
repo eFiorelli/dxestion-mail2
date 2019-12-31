@@ -12,7 +12,7 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 		switch (req.store.store_type) {
 			case 'FrontRetail/Manager':
 				client_insert = await sendClientToFRTManager(req.store, body);
-				//client_insert = 0;
+				// client_insert = 0;
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRest':
@@ -56,18 +56,37 @@ saveClient = async (client_insert, store, body, files, res) => {
 					phone: body.phone,
 					store: store
 				});
+				// const newClient = await client.save();
+				/*
+
+										return res.status(400).json({
+							ok: false,
+							message: 'Error saving client',
+							type: 16
+						});
+				*/
 				if (existingClient.length === 0) {
-					const newClient = await client.save();
-					if (newClient._id) {
-						if (files) {
-							let signature = files.signature;
-							await addSignature(newClient._id, res, signature);
+					if (files) {
+						const response = await addSignature(client, res, files.signature);
+						if (!response.ok) {
+							return res.status(400).json({
+								ok: false,
+								message: response.error,
+								type: 16
+							});
+						} else {
+							client = response.clientDB;
 						}
-						/* const mail = await sendMail(req.store, newClient);
-						if (mail) {
-							// Ok response. Problem: Allow users account sending mails
-						} */
-						addToLog('info', `Client ${newClient.name} created by store ${store.name}`);
+					}
+					/*
+					const mail = await sendMail(req.store, newClient);
+					if (mail) {
+						Ok response. Problem: Allow users account sending mails
+					}
+					*/
+					const savedClient = await client.save();
+					if (savedClient) {
+						addToLog('info', `Client ${client.name} created by store ${store.name}`);
 						return res.status(200).json({
 							ok: true,
 							message: 'Client inserted',
@@ -142,7 +161,7 @@ sendClientToFRTManager = async (connection_params, client) => {
 				.ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -178,47 +197,16 @@ sendClientToAgora = async () => {};
 
 addSignature = async (clientDB, res, signature) => {
 	try {
-		if (!clientDB) {
-			return res.status(400).json({
-				ok: false,
-				message: 'Client not found',
-				type: 19
-			});
-		} else {
-			let file = signature;
-			extension = 'png';
+		let file = signature;
+		extension = 'png';
 
-			let filename = `${clientDB._id}-${new Date().getMilliseconds()}.${extension}`;
-			file.mv(`uploads/client/signature/${filename}`, (err) => {
-				if (err) {
-					return res.status(500).json({
-						ok: false,
-						err: err,
-						type: 1
-					});
-				}
-			});
+		let filename = `${clientDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
+		await file.mv(`uploads/client/signature/${filename}`);
 
-			const updatedClient = await Client.findByIdAndUpdate(clientDB._id, {
-				signature: filename
-			});
-			if (updatedClient) {
-				updatedClient.save();
-				return;
-			} else {
-				return res.status(400).json({
-					ok: true,
-					message: 'Error updating client',
-					type: 20
-				});
-			}
-		}
+		clientDB.signature = filename;
+		return { ok: true, clientDB };
 	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err,
-			type: 1
-		});
+		return { ok: false, error: 'Error moving signature file' };
 	}
 };
 
