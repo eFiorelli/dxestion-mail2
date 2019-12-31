@@ -4,6 +4,7 @@ import { AppComponent } from '../../app.component';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
+import { AuthService } from '../../services/auth.service';
 
 declare var $: any;
 
@@ -16,7 +17,7 @@ export class HomeComponent implements OnInit {
 	@ViewChild(SignaturePad, { static: true })
 	signaturePad: SignaturePad;
 
-	constructor(public userService: UserService, private translate: TranslateService) {}
+	constructor(public userService: UserService, private translate: TranslateService, private auth: AuthService) {}
 
 	selectedFile: any;
 	imagePath = AppComponent.BACKEND_URL + '/files/store/background/';
@@ -30,18 +31,21 @@ export class HomeComponent implements OnInit {
 		gpdr: false
 	};
 
+	drawStatus = false;
+
 	public signaturePadOptions: Object = {
 		// passed through to szimek/signature_pad constructor
 		minWidth: 5,
 		canvasWidth: 250,
 		canvasHeight: 200,
-		backgroundColor: 'white'
+		backgroundColor: 'white',
+		dotSize: 2
 	};
 
 	// tslint:disable-next-line: use-life-cycle-interface
 	ngAfterViewInit() {
 		// this.signaturePad is now available
-		this.signaturePad.set('minWidth', 5); // set szimek/signature_pad options at runtime
+		this.signaturePad.set('minWidth', 0.5); // set szimek/signature_pad options at runtime
 		this.signaturePad.clear(); // invoke functions from szimek/signature_pad API
 		$('canvas').css('border-radius', '15px');
 	}
@@ -51,6 +55,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	drawStart() {
+		this.drawStatus = true;
 		// will be notified of szimek/signature_pad's onBegin event
 	}
 
@@ -91,6 +96,12 @@ export class HomeComponent implements OnInit {
 			signature: new Blob(),
 			gpdr: false
 		};
+		this.drawStatus = false;
+		this.signaturePad.clear();
+	}
+
+	clearSignaturePad() {
+		this.drawStatus = false;
 		this.signaturePad.clear();
 	}
 
@@ -106,26 +117,11 @@ export class HomeComponent implements OnInit {
 		}, 2000);
 	}
 
-	randomClient() {
-		const random = Math.random().toString(36).substring(2, 15);
-		const randomPhone = Math.floor(Math.random() * (699999999 - 600000000 + 1)) + 600000000;
-		const client = {
-			email: `${random}@${random}.com`,
-			name: random,
-			phone: randomPhone,
-			signature: new Blob()
-		};
-		client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
-		this.userService
-			.registerClient(client)
-			.then((response) => {
-				const success_text = 'Cliente creado con exito';
-				Swal.fire('Exito', success_text, 'success');
-			})
-			.catch((error) => {
-				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
-				Swal.fire('Error', error_text, 'error');
-			});
+	showGPDR(active) {
+		if (active) {
+			const gpdr_text = JSON.stringify(localStorage.getItem('gpdr_text'));
+			Swal.fire(gpdr_text);
+		}
 	}
 
 	dataURItoBlob(dataURI) {

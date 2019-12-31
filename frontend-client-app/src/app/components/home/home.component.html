@@ -19,11 +19,14 @@
 							{{ 'HOME_PAGE.SIGNATURE' | translate }}</label>
                     </div>
                     <signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
+                    <button class="btn btn--pill btn--green" [disabled]="!drawStatus" (click)="clearSignaturePad()" style="height: 35px; width: 150px; margin-left: 20%;">
+						Limpiar
+					</button>
                     <div class="input-group" style="border-bottom: none; margin: 10px 0 -10px 0">
                         <div class="page">
                             <div class="page__toggle">
                                 <label class="toggle">
-									<input [(ngModel)]="client.gpdr" name="gpdr" class="toggle__input" type="checkbox"/>
+									<input [(ngModel)]="client.gpdr" (click)="showGPDR(!client.gpdr)" name="gpdr" class="toggle__input" type="checkbox"/>
 									<span class="toggle__label">
 										<span class="toggle__text">{{ 'HOME_PAGE.GPDR' | translate }}</span>
 									</span>

@@ -16,6 +16,7 @@ export class AuthService {
 				let data = res;
 				localStorage.setItem('token', data.token);
 				localStorage.setItem('bg_image', data.store.background_img);
+				localStorage.setItem('gpdr_text', data.store.gpdr_text);
 				return true;
 			})
 		);
