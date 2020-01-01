@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AuthService {
 	currentUser = {};
-	constructor(private http: HttpClient, private router: Router) { }
+	constructor(private http: HttpClient, private router: Router) {}
 
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login/user', { credentials }).pipe(
@@ -27,7 +27,7 @@ export class AuthService {
 
 	logout() {
 		localStorage.clear();
-		this.router.navigate(['/login']);
+		this.router.navigate([ '/login' ]);
 	}
 
 	getToken() {

@@ -10,10 +10,8 @@ export class AdminGuardService implements CanActivate {
 
 	canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 		let isAdmin = localStorage.getItem('role');
-		if (this.auth.isAuthenticated()) {
-			if (isAdmin === 'ADMIN_ROLE') {
-				return true;
-			}
+		if (isAdmin === 'ADMIN_ROLE') {
+			return true;
 		} else {
 			localStorage.clear();
 			this.router.navigate([ '/login' ]);

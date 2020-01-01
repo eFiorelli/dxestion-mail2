@@ -6,6 +6,7 @@ import { ClientService } from '../../services/client.service';
 import { AppComponent } from '../../app.component';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../../services/auth.service';
 
 class ImageSnippet {
 	pending: boolean = false;
@@ -59,13 +60,18 @@ export class StoreComponent implements OnInit {
 		private clientService: ClientService,
 		private userService: UserService,
 		private router: Router,
-		private translate: TranslateService
+		private translate: TranslateService,
+		private auth: AuthService
 	) {}
 
 	ngOnInit() {
-		this.userService.getUsers().subscribe((users: any) => {
-			this.userList = users.users;
-		});
+		if (this.auth.isAdmin()) {
+			this.userService.getUsers().subscribe((users: any) => {
+				this.userList = users.users;
+			});
+		} else {
+			this.userList = [];
+		}
 		this.activatedRoute.params.subscribe((params) => {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {

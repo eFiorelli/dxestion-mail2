@@ -82,4 +82,8 @@ export class UserService {
 	getUsers() {
 		return this.http.get(`${AppComponent.BACKEND_URL}/users`);
 	}
+
+	getLogger(date) {
+		return this.http.post(`${AppComponent.BACKEND_URL}/logger`, { date: date });
+	}
 }

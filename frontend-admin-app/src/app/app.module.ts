@@ -45,7 +45,9 @@ import {
 	MatFormFieldModule,
 	MatCardModule,
 	MatDialogModule,
-	MatTabsModule
+	MatTabsModule,
+	MatDatepickerModule,
+	MatNativeDateModule
 } from '@angular/material';
 import { UserComponent } from './components/user/user.component';
 import { StoresComponent } from './components/stores/stores.component';
@@ -88,6 +90,8 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 		MatCardModule,
 		MatFormFieldModule,
 		MatTabsModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
 		MatProgressSpinnerModule,
 		TranslateModule.forRoot({
 			loader: {

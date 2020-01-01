@@ -10,6 +10,7 @@ import { StoresComponent } from './components/stores/stores.component';
 import { StoreComponent } from './components/store/store.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LogComponent } from './components/log/log.component';
+import { AdminGuardService } from './services/admin-guard.service';
 
 const APP_ROUTES: Routes = [
 	{ path: 'home', component: HomeComponent, canActivate: [ AuthGuardService ] },
@@ -21,7 +22,7 @@ const APP_ROUTES: Routes = [
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'profile', component: ProfileComponent, canActivate: [ AuthGuardService ] },
-	{ path: 'log', component: LogComponent, canActivate: [ AuthGuardService ] },
+	{ path: 'log', component: LogComponent, canActivate: [ AdminGuardService ] },
 	{ path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
 
