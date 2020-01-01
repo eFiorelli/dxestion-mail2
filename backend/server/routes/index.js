@@ -20,6 +20,8 @@ app.use(require('./user/update_user'));
 app.use(require('./user/delete_user'));
 app.use(require('./user/list_users'));
 
+app.use(require('./logger/logger'));
+
 /* Other stuff */
 app.use(require('./upload'));
 

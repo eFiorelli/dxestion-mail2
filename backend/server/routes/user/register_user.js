@@ -1,6 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const app = express();
 
