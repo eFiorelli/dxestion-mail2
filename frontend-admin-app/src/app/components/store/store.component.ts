@@ -18,7 +18,7 @@ class ImageSnippet {
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',
-	styleUrls: [ './store.component.css' ]
+	styleUrls: ['./store.component.css']
 })
 export class StoreComponent implements OnInit {
 	store = {
@@ -48,7 +48,7 @@ export class StoreComponent implements OnInit {
 	message = '';
 	clients = [];
 	commerce_password = false;
-	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
+	storeTypes = ['FrontRetail/Manager', 'FrontRest', 'Agora'];
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 	user_role = localStorage.getItem('role');
 
@@ -72,14 +72,16 @@ export class StoreComponent implements OnInit {
 		} else {
 			this.userList = [];
 		}
-		this.activatedRoute.params.subscribe((params) => {
+		this.activatedRoute.params.subscribe(params => {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
 				this.store = response.store;
-				this.background_imgURL = [ ...this.store.background_img ];
-				this.clientService.getClients(this.store._id).subscribe((response_clients: any) => {
-					this.clients = response_clients.clients;
-				});
+				this.background_imgURL = [...this.store.background_img];
+				this.clientService
+					.getClients(this.store._id)
+					.subscribe((response_clients: any) => {
+						this.clients = response_clients.clients;
+					});
 			});
 		});
 	}
@@ -121,15 +123,17 @@ export class StoreComponent implements OnInit {
 				this.showSpinner = false;
 				const success_text = 'Store created successfully';
 				Swal.fire('Exito', success_text, 'success').then(() => {
-					this.router.navigate([ '/stores' ]);
+					this.router.navigate(['/stores']);
 				});
 			})
 			.catch((error: any) => {
 				console.log(error);
 				this.showSpinner = false;
-				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				const error_text = this.translate.instant(
+					`ERRORS.ERROR_TYPE_${error.type}`
+				);
 				Swal.fire('Error', error_text, 'error').then(() => {
-					this.router.navigate([ '/stores' ]);
+					this.router.navigate(['/stores']);
 				});
 			});
 	}
@@ -161,7 +165,7 @@ export class StoreComponent implements OnInit {
 		const reader = new FileReader();
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
-		reader.onload = (_event) => {
+		reader.onload = _event => {
 			if (type === 0) {
 				this.logo_imgURL = reader.result;
 			}
@@ -189,11 +193,41 @@ export class StoreComponent implements OnInit {
 		const reader = new FileReader();
 
 		reader.addEventListener('load', (event: any) => {
-			this.selectedFiles[index] = new ImageSnippet(event.target.result, file);
+			this.selectedFiles[index] = new ImageSnippet(
+				event.target.result,
+				file
+			);
 			this.selectedFiles[index].pending = true;
 		});
 
 		reader.readAsDataURL(file);
 		this.store.background_img[index] = null;
+	}
+
+	testConnection() {
+		const data = {
+			database_url: this.store.database_url,
+			database_password: this.store.database_password,
+			database_name: this.store.database_name,
+			database_port: this.store.database_port,
+			database_username: this.store.database_username
+		};
+		this.storeService
+			.checkStoreConnection(data)
+			.subscribe((response: any) => {
+				if (response.ok) {
+					Swal.fire(
+						'Exito',
+						'Conexión realizada',
+						'success'
+					).then(() => {});
+				} else {
+					Swal.fire(
+						'Fallo',
+						'No es posible conectar con el servidor',
+						'error'
+					).then(() => {});
+				}
+			});
 	}
 }
