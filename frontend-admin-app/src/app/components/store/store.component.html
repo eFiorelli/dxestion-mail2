@@ -85,14 +85,37 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="margin: 20px 0px;">
                                     <td>
-                                        <button mat-raised-button style="height: 70px; font-size:30px" (click)="testConnection()" color="primary">Test connection</button>
+                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión</button>
                                     </td>
                                 </tr>
+                                <tr *ngIf="freeFields.length > 0">
+                                    <br>
+                                    <h4>Campos libres de clientes</h4>
+                                    <table class="table table-bordered table-responsive text-left" style="max-width: 470px; margin: 20px 0px">
+                                        <thead>
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Tipo</th>
+                                                <th>Valores</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ff of freeFields">
+                                                <td>{{ ff.name}}</td>
+                                                <td>{{ ff.type}}</td>
+                                                <td *ngIf="ff.values.length > 0">{{ ff.values }}</td>
+                                                <td *ngIf="ff.values.length === 0">SI/NO</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </tr>
                             </table>
+                            <br>
                         </div>
                     </div>
+                    <hr>
                     <div class="row">
                         <div class="col-6">
                             <h4 class="text-center">{{ 'STORES_PAGE.LOGO' | translate }}</h4>
