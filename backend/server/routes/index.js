@@ -13,6 +13,7 @@ app.use(require('./store/register_store'));
 app.use(require('./store/update_store'));
 app.use(require('./store/delete_store'));
 app.use(require('./store/list_stores'));
+app.use(require('./store/check_connection'));
 
 /* User routes */
 app.use(require('./user/register_user'));

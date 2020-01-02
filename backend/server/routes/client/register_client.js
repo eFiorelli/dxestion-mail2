@@ -1,5 +1,7 @@
 const express = require('express');
-let { checkUserToken } = require('../../middlewares/authentication');
+let {
+	checkUserToken
+} = require('../../middlewares/authentication');
 const Client = require('../../models/client');
 const mailer = require('../../utils/mail');
 const sql = require('mssql');
@@ -42,6 +44,7 @@ app.post('/register/client', checkUserToken, async (req, res) => {
 });
 
 saveClient = async (client_insert, store, body, files, res) => {
+	sql.close();
 	try {
 		switch (client_insert) {
 			case 0:
@@ -56,15 +59,6 @@ saveClient = async (client_insert, store, body, files, res) => {
 					phone: body.phone,
 					store: store
 				});
-				// const newClient = await client.save();
-				/*
-
-										return res.status(400).json({
-							ok: false,
-							message: 'Error saving client',
-							type: 16
-						});
-				*/
 				if (existingClient.length === 0) {
 					if (files) {
 						const response = await addSignature(client, res, files.signature);
@@ -106,30 +100,30 @@ saveClient = async (client_insert, store, body, files, res) => {
 						type: 16
 					});
 				}
-			case 1:
-				return res.status(400).json({
-					ok: false,
-					message: 'Client already exists',
-					type: 16
-				});
-			case 2:
-				return res.status(400).json({
-					ok: false,
-					message: 'Bad SQL statement',
-					type: 17
-				});
-			case 3:
-				return res.status(400).json({
-					ok: false,
-					message: 'Unable to connect with database server',
-					type: 18
-				});
-			default:
-				return res.status(500).json({
-					ok: false,
-					message: 'Server error',
-					type: 1
-				});
+				case 1:
+					return res.status(400).json({
+						ok: false,
+						message: 'Client already exists',
+						type: 16
+					});
+				case 2:
+					return res.status(400).json({
+						ok: false,
+						message: 'Bad SQL statement',
+						type: 17
+					});
+				case 3:
+					return res.status(400).json({
+						ok: false,
+						message: 'Unable to connect with database server',
+						type: 18
+					});
+				default:
+					return res.status(500).json({
+						ok: false,
+						message: 'Server error',
+						type: 1
+					});
 		}
 	} catch (err) {
 		return res.status(500).json({
@@ -154,14 +148,14 @@ sendClientToFRTManager = async (connection_params, client) => {
 			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
+			const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+			const max_id = (await sql.query `SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
 				where CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
 				CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0]
 				.ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
+				const query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -204,9 +198,15 @@ addSignature = async (clientDB, res, signature) => {
 		await file.mv(`uploads/client/signature/${filename}`);
 
 		clientDB.signature = filename;
-		return { ok: true, clientDB };
+		return {
+			ok: true,
+			clientDB
+		};
 	} catch (err) {
-		return { ok: false, error: 'Error moving signature file' };
+		return {
+			ok: false,
+			error: 'Error moving signature file'
+		};
 	}
 };
 
