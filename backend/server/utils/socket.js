@@ -30,11 +30,11 @@ getLogMessages = () => {
 };
 
 /* Function to set date format */
-formatDate = function(n) {
+formatDate = (n) => {
 	return n < 10 ? '0' + n : n;
 };
 
-getIO = function() {
+getIO = () => {
 	return io;
 };
 
