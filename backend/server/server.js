@@ -69,8 +69,8 @@ mongoose.createConnection();
 app.listen(process.env.PORT);
 
 https.createServer(options, app).listen(process.env.SSL_PORT, () => {
-	addToLog('info', `Environment: ${process.env.NODE_ENV}`);
-	addToLog('info', `Listening on port ${process.env.PORT}`);
-	addToLog('info', `Listening on port ${process.env.SSL_PORT}`);
+	addToLog('info', `Environment => ${process.env.NODE_ENV}`);
+	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);
+	addToLog('info', `HTTPS Listening on port ${process.env.SSL_PORT}`);
 	createSocketServer(https);
 });
