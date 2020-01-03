@@ -1,7 +1,5 @@
 const express = require('express');
-let {
-	checkUserToken
-} = require('../../middlewares/authentication');
+let { checkUserToken } = require('../../middlewares/authentication');
 const Client = require('../../models/client');
 const mailer = require('../../utils/mail');
 const sql = require('mssql');
@@ -80,7 +78,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 					*/
 					const savedClient = await client.save();
 					if (savedClient) {
-						addToLog('info', `Client ${client.name} created by store ${store.name}`);
+						addToLog('info', `Client "${client.name}" created by store "${store.name}"`);
 						return res.status(200).json({
 							ok: true,
 							message: 'Client inserted',
@@ -100,30 +98,30 @@ saveClient = async (client_insert, store, body, files, res) => {
 						type: 16
 					});
 				}
-				case 1:
-					return res.status(400).json({
-						ok: false,
-						message: 'Client already exists',
-						type: 16
-					});
-				case 2:
-					return res.status(400).json({
-						ok: false,
-						message: 'Bad SQL statement',
-						type: 17
-					});
-				case 3:
-					return res.status(400).json({
-						ok: false,
-						message: 'Unable to connect with database server',
-						type: 18
-					});
-				default:
-					return res.status(500).json({
-						ok: false,
-						message: 'Server error',
-						type: 1
-					});
+			case 1:
+				return res.status(400).json({
+					ok: false,
+					message: 'Client already exists',
+					type: 16
+				});
+			case 2:
+				return res.status(400).json({
+					ok: false,
+					message: 'Bad SQL statement',
+					type: 17
+				});
+			case 3:
+				return res.status(400).json({
+					ok: false,
+					message: 'Unable to connect with database server',
+					type: 18
+				});
+			default:
+				return res.status(500).json({
+					ok: false,
+					message: 'Server error',
+					type: 1
+				});
 		}
 	} catch (err) {
 		return res.status(500).json({
@@ -148,14 +146,14 @@ sendClientToFRTManager = async (connection_params, client) => {
 			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query `SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
+			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
 				where CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
 				CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0]
 				.ID;
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
+				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -220,14 +218,14 @@ sendMail = async (store, client) => {
 	try {
 		const mail = await mailer.transporter.sendMail(mailOptions);
 		if (mail) {
-			addToLog('info', `Successfully sent mail to client: ${client.name}`);
+			addToLog('info', `Successfully sent mail to client "${client.name}"`);
 			return true;
 		} else {
-			addToLog('error', `Error sending mail to client: ${client.name}`);
+			addToLog('error', `Error sending mail to client "${client.name}"`);
 			return false;
 		}
 	} catch (err) {
-		addToLog('error', `Error sending mail to client: ${client.name} - ${err}`);
+		addToLog('error', `Error sending mail to client "${client.name} - ${err}"`);
 		return false;
 	}
 };

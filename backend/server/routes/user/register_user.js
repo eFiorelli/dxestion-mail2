@@ -33,7 +33,7 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 
 			const savedUser = await user.save();
 			if (savedUser) {
-				addToLog('info', `User ${savedUser.username} added by user ${req.user.username}`);
+				addToLog('info', `User "${savedUser.username}" added by user "${req.user.username}"`);
 				return res.status(200).json({
 					ok: true,
 					message: 'User successfully created',

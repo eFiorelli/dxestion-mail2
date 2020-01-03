@@ -9,7 +9,6 @@ const app = express();
 app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
-
 	try {
 		let storeDB = await Store.findById(id);
 		if (!storeDB) {
@@ -57,6 +56,10 @@ app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], 
 					storeDB = response.storeDB;
 				}
 			}
+
+			if (body.selected_free_fields) {
+				body.selected_free_fields = JSON.parse(body.selected_free_fields);
+			}
 			let updatedStore;
 			if (!body.password) {
 				updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
@@ -71,7 +74,9 @@ app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], 
 					database_password: body.database_password,
 					user: body.user,
 					background_img: storeDB.background_img,
-					logo_img: storeDB.logo_img
+					logo_img: storeDB.logo_img,
+					free_fields: body.selected_free_fields,
+					gpdr_text: body.gpdr_text
 				});
 			} else {
 				updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
@@ -87,12 +92,13 @@ app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], 
 					database_password: body.database_password,
 					user: body.user,
 					background_img: storeDB.background_img,
-					logo_img: storeDB.logo_img
+					logo_img: storeDB.logo_img,
+					free_fields: body.selected_free_fields,
+					gpdr_text: body.gpdr_text
 				});
 			}
-			console.log(updatedStore);
 			if (updatedStore) {
-				addToLog('info', `Store ${updatedStore.name} updated by user ${req.user.username}`);
+				addToLog('info', `Store "${updatedStore.name}" updated by user "${req.user.username}"`);
 				return res.status(200).json({
 					ok: true,
 					message: 'User updated successfully',

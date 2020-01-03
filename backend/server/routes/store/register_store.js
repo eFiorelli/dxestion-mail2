@@ -19,6 +19,9 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 				type: 9
 			});
 		} else {
+			if (body.selected_free_fields) {
+				body.selected_free_fields = JSON.parse(body.selected_free_fields);
+			}
 			let store = new Store({
 				name: body.name,
 				email: body.email,
@@ -31,7 +34,9 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 				database_password: body.database_password,
 				store_type: body.store_type,
 				commerce_password: body.commerce_password,
-				user: body.user
+				user: body.user,
+				free_fields: body.selected_free_fields,
+				gpdr_text: body.gpdr_text
 			});
 
 			if (req.files) {
@@ -74,7 +79,7 @@ app.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ], a
 			}
 			const savedStore = await store.save();
 			if (savedStore) {
-				addToLog('info', `Store ${store.name} created by user ${req.user.username}`);
+				addToLog('info', `Store "${store.name}" created by user "${req.user.username}"`);
 				return res.status(200).json({
 					ok: true,
 					message: 'Store successfully created',

@@ -53,7 +53,7 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					logo_img: userDB.logo_img
 				});
 			}
-			addToLog('info', `User ${userDB.username} updated by user ${req.user.username}`);
+			addToLog('info', `User "${userDB.username}" updated by user "${req.user.username}"`);
 			return res.status(200).json({
 				ok: true,
 				message: 'User updated successfully',
