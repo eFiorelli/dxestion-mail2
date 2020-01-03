@@ -5,7 +5,7 @@ let io;
 createSocketServer = (server) => {
 	io = require('socket.io')(server);
 	io.listen(3001);
-	addToLog('info', `Created socket server on port ${process.env.SOCKET_PORT}`);
+	addToLog('info', `Socket server listening on port ${process.env.SOCKET_PORT}`);
 	io.on('connection', (socket) => {
 		socket.on('log message', (message) => {
 			getLogMessages();

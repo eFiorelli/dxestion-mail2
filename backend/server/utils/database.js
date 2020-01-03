@@ -7,11 +7,11 @@ mongoose.connection.on('connected', () => {
 });
 
 mongoose.connection.on('reconnected', () => {
-	addToLog('info', 'Database reconnected');
+	addToLog('warn', 'Database reconnected');
 });
 
 mongoose.connection.on('disconnected', () => {
-	addToLog('info', 'Database disconnected');
+	addToLog('warn', 'Database disconnected');
 	setTimeout(() => {
 		createConnection();
 	}, 5000);
@@ -22,7 +22,7 @@ mongoose.connection.on('close', () => {
 });
 
 mongoose.connection.on('error', (error) => {
-	addToLog('info', 'Database ERROR');
+	addToLog('error', 'Database ERROR');
 });
 
 createConnection = async () => {
