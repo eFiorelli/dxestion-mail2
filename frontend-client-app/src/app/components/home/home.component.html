@@ -1,7 +1,8 @@
 <div class="page-wrapper bg-gra-01 p-t-90 p-b-100 font-poppins" style="margin-top: -65px">
     <div class="wrapper wrapper--w780">
         <div class="card card-3">
-            <div class="card-heading" [ngStyle]="{ background: 'url(' + backgroundImg + ') top left/cover no-repeat'}"></div>
+            <div class="card-heading" *ngIf="backgroundImg.length > 0" [ngStyle]="{ background: 'url(' + backgroundImg + ') top left/cover no-repeat'}"></div>
+            <div class="card-heading" *ngIf="backgroundImg.length === 0"></div>
             <div class="card-body">
                 <h2 class="title">{{ 'HOME_PAGE.TITLE' | translate }}</h2>
                 <form method="POST">

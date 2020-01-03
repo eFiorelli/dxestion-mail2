@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		if (localStorage.getItem('bg_image') !== 'undefined') {
+		if (localStorage.getItem('bg_image')) {
 			this.backgroundImg = this.imagePath + localStorage.getItem('bg_image');
 		} else {
 			this.backgroundImg = '../../../assets/bg-heading-03.jpg';
@@ -120,7 +120,7 @@ export class HomeComponent implements OnInit {
 	showGPDR(active) {
 		if (active) {
 			const gpdr_text = JSON.stringify(localStorage.getItem('gpdr_text'));
-			Swal.fire(gpdr_text);
+			Swal.fire({ title: 'Acuerdo general de protección de datos', text: gpdr_text });
 		}
 	}
 
