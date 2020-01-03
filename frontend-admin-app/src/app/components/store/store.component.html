@@ -35,9 +35,16 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <textarea matInput rows="5" placeholder="Texto de protección de datos" [(ngModel)]="store.gpdr_text" name="gpdr" style="padding: 10px; border-radius: 10px; border: 1px solid lightgray;"></textarea>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
-                        <div class="col-6" *ngIf="user_role === 'ADMIN_ROLE'">
+                        <div class="col-6" *ngIf="user_role === 'ADMIN_ROLE'" [ngClass]="{'background-red': connectionError === true, 'background-green': connectionError === false}">
                             <h4>{{ 'STORES_PAGE.CONNECTION_DATA' | translate }}</h4>
                             <table class="table-register" width="100%" cellspacing="0">
                                 <tr>
@@ -78,24 +85,21 @@
                                 <tr>
                                     <td>
                                         <div class="register-full-width">
-                                            <mat-checkbox name="commerce_password" [(ngModel)]="commerce_password">¿{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}?</mat-checkbox>
+                                            <mat-checkbox name="commerce_password" [(ngModel)]="commerce_password">
+                                                ¿{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}?</mat-checkbox>
                                         </div>
                                         <mat-form-field *ngIf="commerce_password" class="register-full-width">
                                             <input matInput placeholder="{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}" [(ngModel)]="store.commerce_password" type="password" name="commerce_password">
                                         </mat-form-field>
                                     </td>
                                 </tr>
-                                <tr style="margin: 20px 0px;">
-                                    <td>
-                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión</button>
-                                    </td>
-                                </tr>
-                                <tr *ngIf="freeFields.length > 0">
+                                <tr *ngIf="freeFields && freeFields.length > 0">
                                     <br>
-                                    <h4>Campos libres de clientes</h4>
-                                    <table class="table table-bordered table-responsive text-left" style="max-width: 470px; margin: 20px 0px">
+                                    <h4>Campos libres activados</h4>
+                                    <table class="table table-bordered table-responsive text-left" style="max-width: 470px; margin: 20px 0px;">
                                         <thead>
                                             <tr>
+                                                <th>Pedir</th>
                                                 <th>Nombre</th>
                                                 <th>Tipo</th>
                                                 <th>Valores</th>
@@ -103,13 +107,21 @@
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let ff of freeFields">
-                                                <td>{{ ff.name}}</td>
-                                                <td>{{ ff.type}}</td>
-                                                <td *ngIf="ff.values.length > 0">{{ ff.values }}</td>
-                                                <td *ngIf="ff.values.length === 0">SI/NO</td>
+                                                <td *ngIf="ff">
+                                                    <mat-checkbox name="active" [(ngModel)]="ff.active"></mat-checkbox>
+                                                </td>
+                                                <td *ngIf="ff">{{ ff.name }}</td>
+                                                <td *ngIf="ff">{{ ff.type }}</td>
+                                                <td *ngIf="ff && ff.values.length > 0">{{ ff.values }}</td>
+                                                <td *ngIf="ff && ff.values.length === 0">SI/NO</td>
                                             </tr>
                                         </tbody>
                                     </table>
+                                </tr>
+                                <tr style="margin: 20px 0px;">
+                                    <td>
+                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión y obtener campos libres</button>
+                                    </td>
                                 </tr>
                             </table>
                             <br>
@@ -142,14 +154,18 @@
                             <div *ngIf="user_role === 'ADMIN_ROLE'">
                                 <h4 class="text-center">{{ 'STORES_PAGE.STORE_TYPE' | translate }}</h4>
                                 <select style="width: 90%; height: 40px;" name="store_type" [(ngModel)]="store.store_type" required>
-								    <option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
-								    <option style="height: 30px" *ngFor="let type of storeTypes" [ngValue]="type">{{ type }}</option>
-							    </select>
+									<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}
+									</option>
+									<option style="height: 30px" *ngFor="let type of storeTypes" [ngValue]="type">
+										{{ type }}</option>
+								</select>
                                 <h4 class="text-center">{{ 'STORES_PAGE.USER' | translate }}</h4>
                                 <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="store.user" required>
-								    <option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
-								    <option style="height: 30px" *ngFor="let user of userList" [ngValue]="user._id">{{ user.username }}</option>
-                                </select>
+									<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}
+									</option>
+									<option style="height: 30px" *ngFor="let user of userList" [ngValue]="user._id">
+										{{ user.username }}</option>
+								</select>
                             </div>
                             <mat-card-actions style="margin-top: 50px">
                                 <button mat-raised-button style="height: 70px; font-size:30px" (click)="updateStore()" color="primary">Actualizar tienda</button>

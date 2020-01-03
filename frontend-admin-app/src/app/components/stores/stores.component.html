@@ -62,9 +62,16 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <textarea matInput rows="5" placeholder="Texto de protección de datos" [(ngModel)]="newStore.gpdr_text" name="gpdr" style="padding: 10px; border-radius: 10px; border: 1px solid lightgray;"></textarea>
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
-                        <div class="col-6">
+                        <div class="col-6" [ngClass]="{'background-red': connectionError === true, 'background-green': connectionError === false}">
                             <h4>{{ 'STORES_PAGE.CONNECTION_DATA' | translate }}</h4>
                             <table class="table-register" width="100%" cellspacing="0">
                                 <tr>
@@ -112,9 +119,40 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
+                                <tr *ngIf="freeFields && freeFields.length > 0">
+                                    <br>
+                                    <h4>Campos libres activados</h4>
+                                    <table class="table table-bordered table-responsive text-left" style="max-width: 470px; margin: 20px 0px;">
+                                        <thead>
+                                            <tr>
+                                                <th>Pedir</th>
+                                                <th>Nombre</th>
+                                                <th>Tipo</th>
+                                                <th>Valores</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let ff of freeFields">
+                                                <td *ngIf="ff">
+                                                    <mat-checkbox name="active" [(ngModel)]="ff.active"></mat-checkbox>
+                                                </td>
+                                                <td *ngIf="ff">{{ ff.name }}</td>
+                                                <td *ngIf="ff">{{ ff.type }}</td>
+                                                <td *ngIf="ff && ff.values.length > 0">{{ ff.values }}</td>
+                                                <td *ngIf="ff && ff.values.length === 0">SI/NO</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </tr>
+                                <tr style="margin: 20px 0px;">
+                                    <td>
+                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión y obtener campos libres</button>
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     </div>
+                    <hr>
                     <div class="row">
                         <div class="col-6">
                             <h4 class="text-center">{{ 'STORES_PAGE.LOGO' | translate }}</h4>

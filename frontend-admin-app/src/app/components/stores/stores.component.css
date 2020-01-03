@@ -104,3 +104,15 @@
 	border-color: blue !important;
 	background-color: blue !important;
 }
+
+.background-red {
+	border-radius: 10px;
+	border: 2px solid red;
+	background: rgba(240, 128, 128, 0.377);
+}
+
+.background-green {
+	border-radius: 10px;
+	border: 2px solid lightgreen;
+	background: rgba(144, 238, 144, 0.100);
+}

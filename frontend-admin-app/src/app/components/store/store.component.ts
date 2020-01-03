@@ -36,7 +36,10 @@ export class StoreComponent implements OnInit {
 		store_type: '',
 		commerce_password: '',
 		logo_img: '',
-		background_img: []
+		background_img: [],
+		free_fields: [],
+		selected_free_fields: '',
+		gpdr_text: ''
 	};
 	userList: any;
 	logo_imgURL: any;
@@ -52,6 +55,7 @@ export class StoreComponent implements OnInit {
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 	user_role = localStorage.getItem('role');
 	freeFields = [];
+	connectionError = null;
 
 	selectedFiles: ImageSnippet[] = [];
 
@@ -77,6 +81,7 @@ export class StoreComponent implements OnInit {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
 				this.store = response.store;
+				this.freeFields = this.store.free_fields;
 				this.background_imgURL = [ ...this.store.background_img ];
 				this.clientService.getClients(this.store._id).subscribe((response_clients: any) => {
 					this.clients = response_clients.clients;
@@ -116,6 +121,14 @@ export class StoreComponent implements OnInit {
 			return;
 		}
 
+		this.store.free_fields = this.freeFields.map((value: any) => {
+			if (value && value.active) {
+				return value;
+			}
+		});
+
+		this.store.selected_free_fields = JSON.stringify(this.store.free_fields);
+
 		this.storeService
 			.updateStore(this.store, this.store._id)
 			.then((response: any) => {
@@ -126,7 +139,6 @@ export class StoreComponent implements OnInit {
 				});
 			})
 			.catch((error: any) => {
-				console.log(error);
 				this.showSpinner = false;
 				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
 				Swal.fire('Error', error_text, 'error').then(() => {
@@ -208,11 +220,14 @@ export class StoreComponent implements OnInit {
 		};
 		this.storeService.checkStoreConnection(data).subscribe((response: any) => {
 			if (response.ok) {
-				console.log(response);
 				this.freeFields = response.free_fields.free_fields;
-				Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {});
+				Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {
+					this.connectionError = false;
+				});
 			} else {
-				Swal.fire('Fallo', 'No es posible conectar con el servidor', 'error').then(() => {});
+				Swal.fire('Fallo', 'No es posible conectar con el servidor', 'error').then(() => {
+					this.connectionError = true;
+				});
 			}
 		});
 	}
