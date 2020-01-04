@@ -6,7 +6,7 @@
         <span (click)="changeLanguage('en')" class="navbar-flag">
             <img src="assets/en_flag.png">
         </span> -->
-        <a style="position: absolute; right: 20px; cursor: pointer" *ngIf="auth.isAuthenticated()" (click)="logout()">
+        <a style="position: absolute; right: 20px; cursor: pointer; z-index: 999" *ngIf="auth.isAuthenticated()" (click)="logout()">
             <i style="font-size: 50px" class="fa fa-power-off"></i>
         </a>
     </mat-toolbar-row>

@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
 
+declare var $;
+
 @Component({
 	selector: 'app-navbar',
 	templateUrl: './navbar.component.html',
@@ -30,6 +32,7 @@ export class NavbarComponent implements OnInit {
 			inputAttributes: {
 				autocapitalize: 'off'
 			},
+			heightAuto: false,
 			showCancelButton: true,
 			confirmButtonText: this.translate.instant('EXIT_POPUP.ACCEPT'),
 			cancelButtonText: this.translate.instant('EXIT_POPUP.CANCEL'),

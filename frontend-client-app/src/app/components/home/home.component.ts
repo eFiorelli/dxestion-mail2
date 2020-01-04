@@ -36,10 +36,11 @@ export class HomeComponent implements OnInit {
 	public signaturePadOptions: Object = {
 		// passed through to szimek/signature_pad constructor
 		minWidth: 5,
-		canvasWidth: 250,
-		canvasHeight: 200,
+		canvasWidth: 320,
+		canvasHeight: 80,
 		backgroundColor: 'white',
-		dotSize: 2
+		dotSize: 2,
+		border: '1px solid black'
 	};
 
 	// tslint:disable-next-line: use-life-cycle-interface
@@ -47,7 +48,8 @@ export class HomeComponent implements OnInit {
 		// this.signaturePad is now available
 		this.signaturePad.set('minWidth', 0.5); // set szimek/signature_pad options at runtime
 		this.signaturePad.clear(); // invoke functions from szimek/signature_pad API
-		$('canvas').css('border-radius', '15px');
+		$('canvas').css('border', '1px solid #d7d7d7');
+		$('canvas').css('border-radius', '.1rem');
 	}
 
 	drawComplete() {
@@ -70,21 +72,22 @@ export class HomeComponent implements OnInit {
 	registerClient() {
 		if (!this.client.gpdr) {
 			const gpdr_text = this.translate.instant('ERRORS.GPDR_ACCEPT');
-			Swal.fire('Error', gpdr_text, 'error');
+			Swal.fire({ title: 'Error', icon: 'error', text: gpdr_text, heightAuto: false });
 			return;
 		}
+		console.log(this.client);
 		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
 			.then((response) => {
 				const success_text = 'Cliente creado con exito';
-				Swal.fire('Exito', success_text, 'success').then(() => {
+				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false }).then(() => {
 					this.flip();
 				});
 			})
 			.catch((error) => {
 				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
-				Swal.fire('Error', error_text, 'error');
+				Swal.fire({ title: 'Error', text: error_text, icon: 'error', heightAuto: false });
 			});
 	}
 
@@ -120,7 +123,7 @@ export class HomeComponent implements OnInit {
 	showGPDR(active) {
 		if (active) {
 			const gpdr_text = JSON.stringify(localStorage.getItem('gpdr_text'));
-			Swal.fire({ title: 'Acuerdo general de protección de datos', text: gpdr_text });
+			Swal.fire({ title: 'Acuerdo general de protección de datos', text: gpdr_text, heightAuto: false });
 		}
 	}
 
