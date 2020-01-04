@@ -1,1 +1,20 @@
+.flip {
+	transition: ease 2s;
+	transform: rotateY(360deg);
+}
 
+.image-side,
+.form-side {
+	transition: opacity 1s;
+	--webkit-transition: opacity 1s;
+	opacity: 1;
+}
+
+.opacity {
+	filter: alpha(opacity=0);
+	opacity: 0;
+}
+
+.bg-transparent {
+	background: transparent;
+}

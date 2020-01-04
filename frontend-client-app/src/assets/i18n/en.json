@@ -49,6 +49,12 @@
 		"ERROR_TYPE_20": "Error updating client",
 		"ERROR_TYPE_21": "No user/password were provided",
 		"ERROR_TYPE_22": "Wrong username/password",
-		"GPDR_ACCEPT": "You must accept the terms of user before sending your information"
+		"GPDR_ACCEPT": "You must accept the terms of user before sending your information",
+		"NAME": "You must enter your name",
+		"EMAIL": "You must enter your email",
+		"VALID_EMAIL": "You must enter a valid email",
+		"PHONE": "You must enter your phone",
+		"VALID_PHONE": "You must enter a valid phone",
+		"SIGNATURE": "You must fill the signature field"
 	}
 }

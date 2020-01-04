@@ -49,6 +49,12 @@
 		"ERROR_TYPE_20": "Error actualizando cliente",
 		"ERROR_TYPE_21": "Faltan el usuario y/o la contraseña",
 		"ERROR_TYPE_22": "Usuario y/o contraseña incorrectos",
-		"GPDR_ACCEPT": "Debe aceptar los términos y condiciones de uso antes de enviar la información"
+		"GPDR_ACCEPT": "Debe aceptar los términos y condiciones de uso antes de enviar la información",
+		"NAME": "Debe introducir su nombre",
+		"EMAIL": "Debe introducir su correo electrónico",
+		"VALID_EMAIL": "Debe introducir un correo electrónico válido",
+		"PHONE": "Debe introducir su teléfono",
+		"VALID_PHONE": "Debe introducir un teléfono válido",
+		"SIGNATURE": "Debe firmar la solicitud antes de enviarla"
 	}
 }

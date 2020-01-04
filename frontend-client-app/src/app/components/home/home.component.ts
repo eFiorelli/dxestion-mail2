@@ -70,12 +70,48 @@ export class HomeComponent implements OnInit {
 	}
 
 	registerClient() {
+		if (!this.client.name) {
+			const name_text = this.translate.instant('ERRORS.NAME');
+			Swal.fire({ title: 'Error', icon: 'error', text: name_text, heightAuto: false });
+			return;
+		}
+
+		if (!this.client.email) {
+			const email_text = this.translate.instant('ERRORS.EMAIL');
+			Swal.fire({ title: 'Error', icon: 'error', text: email_text, heightAuto: false });
+			return;
+		}
+
+		if (!this.validateEmail(this.client.email)) {
+			const email_valid_text = this.translate.instant('ERRORS.VALID_EMAIL');
+			Swal.fire({ title: 'Error', icon: 'error', text: email_valid_text, heightAuto: false });
+			return;
+		}
+
+		if (!this.client.phone) {
+			const phone_text = this.translate.instant('ERRORS.PHONE');
+			Swal.fire({ title: 'Error', icon: 'error', text: phone_text, heightAuto: false });
+			return;
+		}
+
+		if (!this.validatePhone(this.client.phone)) {
+			const phone_valid_text = this.translate.instant('ERRORS.VALID_PHONE');
+			Swal.fire({ title: 'Error', icon: 'error', text: phone_valid_text, heightAuto: false });
+			return;
+		}
+
+		if (this.signaturePad.toData().length === 0) {
+			const signature_text = this.translate.instant('ERRORS.SIGNATURE');
+			Swal.fire({ title: 'Error', icon: 'error', text: signature_text, heightAuto: false });
+			return;
+		}
+
 		if (!this.client.gpdr) {
 			const gpdr_text = this.translate.instant('ERRORS.GPDR_ACCEPT');
 			Swal.fire({ title: 'Error', icon: 'error', text: gpdr_text, heightAuto: false });
 			return;
 		}
-		console.log(this.client);
+
 		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
@@ -110,11 +146,13 @@ export class HomeComponent implements OnInit {
 
 	flip() {
 		$('.card').addClass('flip');
-		$('.card-heading, .card-body').addClass('opacity');
+		$('.image-side, .form-side').addClass('opacity');
+		$('.card').addClass('bg-transparent');
 		setTimeout(() => {
-			$('.card-heading, .card-body').removeClass('opacity');
+			$('.image-side, .form-side').removeClass('opacity');
+			$('.card').removeClass('bg-transparent');
 			this.clearForm();
-		}, 1000);
+		}, 800);
 		setTimeout(() => {
 			$('.card').removeClass('flip');
 		}, 2000);
@@ -146,5 +184,19 @@ export class HomeComponent implements OnInit {
 		}
 
 		return new Blob([ ia ], { type: mimeString });
+	}
+
+	validateEmail(mail) {
+		if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+			return true;
+		}
+		return false;
+	}
+
+	validatePhone(phone) {
+		if (!/^\d{9}$/.test(phone)) {
+			return false;
+		}
+		return true;
 	}
 }
