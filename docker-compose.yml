@@ -1,6 +1,25 @@
 version: "3"
 
 services:
+  traefik:
+    image: traefik:latest
+    # command: --api --docker --docker.domain=nuclient.es:25501
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web
+    labels:
+      - "traefik.frontend.rule=Host:traefik.nuclient.es:25501"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - $PWD/traefik/config/traefik.toml:/etc/traefik/traefik.toml
+      - $PWD/traefik/config/acme.json:/etc/traefik/acme/acme.json
+      # - $PWD/ssl_certs/common:/etc/traefik/certs
+    container_name: traefik
   mongo:
     image: mongo
     environment: 
@@ -18,7 +37,7 @@ services:
     restart: always
     labels:
       - "traefik.backend=mongo-express"
-      - "traefik.frontend.rule=Host:admindb.nuclient.es"
+      - "traefik.frontend.rule=Host:admindb.nuclient.es:25501"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8081"
     links:
@@ -38,10 +57,9 @@ services:
       context: ./backend
     links:
       - mongo
-      - database
     labels:
       - "traefik.backend=backend"
-      - "traefik.frontend.rule=Host:backend.nuclient.es"
+      - "traefik.frontend.rule=Host:backend.nuclient.es:25501"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=3000"
     depends_on:
@@ -51,6 +69,7 @@ services:
       - $PWD/logs/:/data/logs
     networks:
       - web
+      - database
     container_name: backend
 
   frontend-admin:
@@ -60,7 +79,7 @@ services:
       - backend
     labels:
       - "traefik.backend=web-admin"
-      - "traefik.frontend.rule=Host:admin.nuclient.es"
+      - "traefik.frontend.rule=Host:admin.nuclient.es:25501"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
@@ -78,7 +97,7 @@ services:
       - backend
     labels:
       - "traefik.backend=web-client"
-      - "traefik.frontend.rule=Host:nuclient.es, www.nuclient.es, web.nuclient.es"
+      - "traefik.frontend.rule=Host:nuclient.es:25501, www.nuclient.es:25501, web.nuclient.es:25501"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
