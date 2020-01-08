@@ -21,7 +21,7 @@ services:
       # - $PWD/ssl_certs/common:/etc/traefik/certs
     container_name: traefik
   mongo:
-    image: mongo
+    image: mvertes/alpine-mongo
     #environment: 
       #- MONGO_INITDB_ROOT_USERNAME=dxestion
       #- MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
