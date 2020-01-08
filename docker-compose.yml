@@ -22,9 +22,9 @@ services:
     container_name: traefik
   mongo:
     image: mongo
-    environment: 
-      - MONGO_INITDB_ROOT_USERNAME=dxestion
-      - MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
+    #environment: 
+      #- MONGO_INITDB_ROOT_USERNAME=dxestion
+      #- MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
     volumes:
       - $PWD/data/:/data/db
     ports:
