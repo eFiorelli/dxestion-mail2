@@ -1,24 +1,26 @@
 <div class="wrapper bg-gradient">
-    <mat-card class="login-card">
-        <mat-card-header>
-            <mat-card-title>{{ 'LOGIN_PAGE.LOGIN' | translate }}</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-            <form class="login-form">
-                <mat-form-field class="login-full-width">
-                    <input matInput placeholder="{{ 'LOGIN_PAGE.USER_PLACEHOLDER' | translate }}" [(ngModel)]="username" name="username" required/>
-                </mat-form-field>
-                <br />
-                <mat-form-field class="login-full-width">
-                    <input matInput placeholder="{{ 'LOGIN_PAGE.PASSWORD_PLACEHOLDER' | translate }}" [(ngModel)]="password" type="password" name="password" required />
-                </mat-form-field>
-            </form>
-            <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>
-        </mat-card-content>
-        <mat-card-actions class="text-center">
-            <button class="login-button" mat-raised-button (click)="login()" color="primary">
-				{{ 'LOGIN_PAGE.LOGIN' | translate }}
-			</button>
-        </mat-card-actions>
-    </mat-card>
+    <div id="login" class="login-card signin-card">
+        <div class="logo-image">
+            <img src="assets/img/logo-nuclient-2x.png" alt="Logo" title="Logo" width="188">
+        </div>
+        <br><br>
+        <h1 class="display1">{{ 'LOGIN_PAGE.LOGIN' | translate }}</h1>
+        <form action="" method="" class="" role="form">
+            <div id="form-login-username" class="form-group">
+                <input id="username" class="form-control" [(ngModel)]="username" name="username" type="text" size="18" alt="{{ 'LOGIN_PAGE.USER_PLACEHOLDER' | translate }}" required/>
+                <span class="form-highlight"></span>
+                <span class="form-bar"></span>
+                <label for="username" class="float-label">{{ 'LOGIN_PAGE.USER_PLACEHOLDER' | translate }}</label>
+            </div>
+            <div id="form-login-password" class="form-group">
+                <input id="passwd" class="form-control" [(ngModel)]="password" name="password" type="password" size="18" alt="{{ 'LOGIN_PAGE.PASSWORD_PLACEHOLDER' | translate }}" required>
+                <span class="form-highlight"></span>
+                <span class="form-bar"></span>
+                <label for="password" class="float-label">{{ 'LOGIN_PAGE.PASSWORD_PLACEHOLDER' | translate }}</label>
+            </div>
+            <div>
+                <button class="btn btn-block btn-info ripple-effect" type="submit" (click)="login()" name="Submit" alt="sign in">{{ 'LOGIN_PAGE.LOGIN' | translate }}</button>
+            </div>
+        </form>
+    </div>
 </div>
