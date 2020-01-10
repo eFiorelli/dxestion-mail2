@@ -41,9 +41,10 @@ import {
 	MatCardModule,
 	MatDialogModule
 } from '@angular/material';
+import { SliderComponent } from './components/slider/slider.component';
 
 @NgModule({
-	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent ],
+	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent, SliderComponent ],
 	imports: [
 		RouterModule,
 		HttpClientModule,

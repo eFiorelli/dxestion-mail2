@@ -13,8 +13,8 @@ import { DOCUMENT } from '@angular/common';
 export class LoginComponent implements OnInit {
 	constructor(private auth: AuthService, private router: Router, @Inject(DOCUMENT) private document: any) {}
 
-	username = '';
-	password = '';
+	username = 'tienda1';
+	password = '1234';
 	credentials: Object;
 	showSpinner: boolean;
 	elem;
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
 		localStorage.clear();
 		this.elem = document.documentElement;
 		setTimeout(() => {
-			this.fullScreen();
+			// this.fullScreen();
 		}, 150);
 	}
 
@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit {
 			(res) => {
 				if (res) {
 					this.showSpinner = false;
-					this.fullScreen();
-					this.router.navigate([ '/home' ]);
+					//this.fullScreen();
+					this.router.navigate([ '/slider' ]);
 				}
 			},
 			(error) => {

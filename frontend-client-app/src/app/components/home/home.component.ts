@@ -22,14 +22,18 @@ export class HomeComponent implements OnInit {
 	selectedFile: any;
 	imagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	backgroundImg = '';
+	freeFields = JSON.parse(localStorage.getItem('ff'));
 
 	client = {
 		email: '',
 		name: '',
 		phone: '',
 		signature: new Blob(),
-		gpdr: false
+		gpdr: false,
+		freeFields: ''
 	};
+
+	store: any;
 
 	drawStatus = false;
 
@@ -62,6 +66,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.parseFreeFields();
 		if (localStorage.getItem('bg_image')) {
 			this.backgroundImg = this.imagePath + localStorage.getItem('bg_image');
 		} else {
@@ -69,7 +74,16 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
+	parseFreeFields() {
+		this.freeFields = this.freeFields.filter((f) => f !== undefined && f !== null);
+	}
+
+	test() {}
+
 	registerClient() {
+		const ff = this.freeFields.filter((f) => f.selectedValue !== undefined && f.selectedValue !== null);
+		this.client.freeFields = JSON.stringify(ff);
+		console.log(this.client);
 		if (!this.client.name) {
 			const name_text = this.translate.instant('ERRORS.NAME');
 			Swal.fire({ title: 'Error', icon: 'error', text: name_text, heightAuto: false });
@@ -133,10 +147,16 @@ export class HomeComponent implements OnInit {
 			name: '',
 			phone: '',
 			signature: new Blob(),
-			gpdr: false
+			gpdr: false,
+			freeFields: ''
 		};
 		this.drawStatus = false;
 		this.signaturePad.clear();
+		if ($('#collapseExample').hasClass('show')) {
+			$('.btn.btn-light.mb-1').click();
+		}
+		this.freeFields = JSON.parse(localStorage.getItem('ff'));
+		this.parseFreeFields();
 	}
 
 	clearSignaturePad() {

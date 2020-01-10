@@ -10,13 +10,17 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AuthService {
 	constructor(private http: HttpClient, private router: Router) {}
 
+	storeInfo;
+
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login/store', { credentials }).pipe(
 			map((res: any) => {
-				let data = res;
-				localStorage.setItem('token', data.token);
-				localStorage.setItem('bg_image', data.store.background_img);
-				localStorage.setItem('gpdr_text', data.store.gpdr_text);
+				this.storeInfo = res;
+				console.log(this.storeInfo);
+				localStorage.setItem('token', this.storeInfo.token);
+				localStorage.setItem('bg_image', this.storeInfo.store.background_img);
+				localStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
+				localStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
 				return true;
 			})
 		);

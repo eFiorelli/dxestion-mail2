@@ -31,6 +31,32 @@
 								<span>Firma</span>
 							</label>
                             <button type="button" class="btn btn-xs btn-outline-dark mb-4" (click)="clearSignaturePad()">Limpiar firma</button>
+                            <p class="mb-4" *ngIf="freeFields.length > 0">
+                                <a class="btn btn-light mb-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                                    Selecciona tus intereses (Opcional)
+                                </a>
+                            </p>
+                            <div class="collapse" id="collapseExample" *ngIf="freeFields">
+                                <div class="p-4 border mt-4">
+                                    <!-- <h6>Marcas</h6> -->
+                                    <div class="mb-2">
+                                        <div *ngFor="let ff of freeFields; let i = index">
+                                            <div class="custom-control custom-checkbox mb-1" *ngIf="ff.type === 'checkbox' && ff.active == true">
+                                                <input type="checkbox" name="ff.name" [(ngModel)]="ff.selectedValue" class="custom-control-input" id="customCheckThis{{i}}">
+                                                <label class="custom-control-label" for="customCheckThis{{i}}">{{ ff.name }}</label>
+                                            </div>
+                                        </div>
+                                        <!-- SELECTOR OPTIONS-->
+                                        <!--
+										<div class="custom-control custom-checkbox mb-1" *ngIf="ff !== null && ff.type === 'select'">
+                                            <input type="checkbox" name="ff.name" [(ngModel)]="ff.selectedValue" class="custom-control-input" id="customCheckThis{{i}}">
+                                            <label class="custom-control-label" for="customCheckThis{{i}}">{{ ff.name }}</label>
+										</div>
+										-->
+                                    </div>
+
+                                </div>
+                            </div>
                             <div class="custom-control custom-checkbox mb-4">
                                 <input type="checkbox" class="custom-control-input" id="category1" [(ngModel)]="client.gpdr" (click)="showGPDR(!client.gpdr)" name="gpdr" required>
                                 <label class="custom-control-label" for="category1">Acepto los términos y condiciones de uso</label>
