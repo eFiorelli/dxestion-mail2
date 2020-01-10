@@ -4,8 +4,9 @@ const Store = require('../../models/store');
 const User = require('../../models/user');
 const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
+const router = express.Router();
 
-app.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let data = req.body.data;
 	let free_fields;
 	try {
@@ -113,4 +114,4 @@ getFreeFields = async (connection_params) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;

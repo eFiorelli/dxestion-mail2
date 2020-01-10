@@ -5,8 +5,9 @@ const bcrypt = require('bcrypt');
 let { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const Store = require('../../models/store');
 const app = express();
+const router = express.Router();
 
-app.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], async (req, res) => {
+router.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole ], async (req, res) => {
 	let body = req.body;
 	let id = req.params.id;
 	try {
@@ -173,4 +174,4 @@ deleteStoreFiles = (type, filename) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;

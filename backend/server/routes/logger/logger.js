@@ -3,8 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
+const router = express.Router();
 
-app.post('/logger', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/logger', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	const date = req.body.date;
 	const year = date.split('-')[0];
 	const month = date.split('-')[1];
@@ -43,4 +44,4 @@ app.post('/logger', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	}
 });
 
-module.exports = app;
+module.exports = router;

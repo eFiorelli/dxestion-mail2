@@ -1,17 +1,14 @@
-const express = require("express");
-const Store = require("../../models/store");
-const User = require("../../models/user");
-const {
-	checkUserToken,
-	checkAdminRole,
-	checkUserRole
-} = require("../../middlewares/authentication");
+const express = require('express');
+const Store = require('../../models/store');
+const User = require('../../models/user');
+const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
 const app = express();
+const router = express.Router();
 
-app.get("/stores", [checkUserToken, checkUserRole], async (req, res) => {
+router.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 	try {
-		let query = "";
-		if (!req.query.user_id && req.user.role === "ADMIN_ROLE") {
+		let query = '';
+		if (!req.query.user_id && req.user.role === 'ADMIN_ROLE') {
 			query = Store.find({});
 		} else {
 			query = Store.find({
@@ -19,7 +16,7 @@ app.get("/stores", [checkUserToken, checkUserRole], async (req, res) => {
 				user: req.query.user_id || req.user._id
 			});
 			query.select(
-				"_id name email username created_date database_url database_name database_port database_username database_password background_img logo_img"
+				'_id name email username created_date database_url database_name database_port database_username database_password background_img logo_img'
 			);
 		}
 
@@ -27,7 +24,7 @@ app.get("/stores", [checkUserToken, checkUserRole], async (req, res) => {
 		if (!stores) {
 			return res.status(400).json({
 				ok: false,
-				err: "Error getting stores",
+				err: 'Error getting stores',
 				type: 13
 			});
 		}
@@ -50,16 +47,16 @@ app.get("/stores", [checkUserToken, checkUserRole], async (req, res) => {
 	}
 });
 
-app.get("/store/:id", [checkUserToken], async (req, res) => {
+router.get('/store/:id', [ checkUserToken ], async (req, res) => {
 	const id = req.params.id;
-	const is_admin = req.user.role === "ADMIN_ROLE";
+	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {
 		const storeDB = await Store.findById(id);
 		if (storeDB) {
 			if (storeDB.user.toString() !== req.user._id && !is_admin) {
 				return res.status(400).json({
 					ok: false,
-					err: "You are not allowed to view this store",
+					err: 'You are not allowed to view this store',
 					type: 14
 				});
 			} else {
@@ -71,7 +68,7 @@ app.get("/store/:id", [checkUserToken], async (req, res) => {
 		} else {
 			return res.status(400).json({
 				ok: false,
-				message: "Store not found"
+				message: 'Store not found'
 			});
 		}
 	} catch (err) {
@@ -82,4 +79,4 @@ app.get("/store/:id", [checkUserToken], async (req, res) => {
 	}
 });
 
-module.exports = app;
+module.exports = router;

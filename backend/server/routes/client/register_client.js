@@ -4,8 +4,9 @@ const Client = require('../../models/client');
 const mailer = require('../../utils/mail');
 const sql = require('mssql');
 const app = express();
+const router = express.Router();
 
-app.post('/register/client', checkUserToken, async (req, res) => {
+router.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	let client_insert;
 	try {
@@ -269,4 +270,4 @@ sendMail = async (store, client) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;

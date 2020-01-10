@@ -5,8 +5,9 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 const Store = require('../../models/store');
 const app = express();
+const router = express.Router();
 
-app.post('/login/:type', async (req, res) => {
+router.post('/login/:type', async (req, res) => {
 	const credentials = req.body.credentials;
 	const type = req.params.type;
 
@@ -118,4 +119,4 @@ storeLogin = async (res, storeDB, credentials) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;
