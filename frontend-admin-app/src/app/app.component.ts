@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	title = 'frontend-admin-app';
-	// static BACKEND_URL = 'https://backend.nuclient.es';
+	// static BACKEND_URL = 'https://backendnuclient.serantes.pro';
 	// static SOCKET_URL = 'https://backend.nuclient.es:3001';
 	static BACKEND_URL = 'http://localhost:3000';
 	static SOCKET_URL = 'http://localhost:3001';

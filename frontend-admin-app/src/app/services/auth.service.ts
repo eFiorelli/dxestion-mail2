@@ -25,6 +25,10 @@ export class AuthService {
 		);
 	}
 
+	test() {
+		return this.http.post(AppComponent.BACKEND_URL + '/test', {});
+	}
+
 	logout() {
 		localStorage.clear();
 		this.router.navigate([ '/login' ]);

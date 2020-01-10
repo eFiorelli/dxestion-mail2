@@ -21,6 +21,12 @@ export class LoginComponent implements OnInit {
 		localStorage.clear();
 	}
 
+	test() {
+		this.auth.test().subscribe((response: any) => {
+			console.log(response);
+		});
+	}
+
 	login(): void {
 		this.showSpinner = true;
 		this.credentials = { username: this.username, password: this.password };
@@ -39,6 +45,4 @@ export class LoginComponent implements OnInit {
 			}
 		);
 	}
-
-	test() {}
 }
