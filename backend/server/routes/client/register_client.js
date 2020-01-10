@@ -160,8 +160,12 @@ sendClientToFRTManager = async (connection_params, client) => {
 				}
 				if (query.rowsAffected[0] === 1) {
 					/* Client inserted */
-					/* `update contadores set valor = valor + 1 where codigo = 1 `*/
-					return 0;
+					if (client.freeFields.length > 0) {
+						const result = await saveFreeFields(max_id, client.freeFields);
+						if (result) {
+							return 0;
+						}
+					}
 				}
 			} else {
 				/* Client already exists */
@@ -186,6 +190,41 @@ sendClientToFRS = async () => {};
 
 /* Future versions */
 sendClientToAgora = async () => {};
+
+saveFreeFields = async (client_id, free_fields) => {
+	const ff = JSON.parse(free_fields);
+	let sql_string = '';
+	for (let i = 0; i < ff.length; i++) {
+		if (ff[i].selectedValue) {
+			if (ff[i].type === 'checkbox') {
+				if (ff[i].selectedValue === true) {
+					sql_string += `${ff[i].name}='T', `;
+				} else {
+					sql_string += `${ff[i].name}='F', `;
+				}
+			}
+			if (ff[i].type === 'select') {
+				if (ff[i].selectedValue !== null && ff[i].selectedValue !== undefined) {
+					sql_string += `${ff[i].name} = ${ff[i].selectedValue}, `;
+				}
+			}
+		}
+	}
+	sql_string = sql_string.slice(0, -2);
+	sql_string = `update CLIENTESCAMPOSLIBRES set ${sql_string} where CODCLIENTE = ${client_id}`;
+
+	try {
+		const query = await sql.query(sql_string);
+		if (query.rowsAffected[0] >= 0) {
+			return true;
+		}
+	} catch (err) {
+		return {
+			ok: false,
+			error: 'Error updating free fields'
+		};
+	}
+};
 
 addSignature = async (clientDB, res, signature) => {
 	try {

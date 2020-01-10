@@ -20,6 +20,7 @@ app.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async (r
 					free_fields: free_fields
 				});
 			} else {
+				console.log(connection);
 				return res.status(200).json({
 					ok: false,
 					err: 'Error connecting to database'
@@ -39,12 +40,14 @@ checkDatabaseConnection = async (connection_params) => {
 		user: connection_params.database_username,
 		password: connection_params.database_password,
 		server: connection_params.database_url,
+		port: connection_params.database_port,
 		database: connection_params.database_name,
 		commerce_password: connection_params.commerce_password
 	};
 	try {
+		console.log(`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`);
 		const connection = await sql.connect(
-			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
+			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
 		);
 		if (connection) {
 			if (connection.ConnectionError) {

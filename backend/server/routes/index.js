@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 
 /* Login routes */
+
+app.post('/test', (req, res) => {
+	res.status(200).json({ ok: true });
+});
 app.use(require('./login/login'));
 
 /* Client routes */
