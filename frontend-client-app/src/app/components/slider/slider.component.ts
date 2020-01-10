@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppComponent } from '../../../../../frontend-admin-app/src/app/app.component';
+import { AppComponent } from '../../app.component';
 
 declare var $: any;
 
