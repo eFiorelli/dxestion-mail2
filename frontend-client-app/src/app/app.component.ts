@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	title = 'frontend-app';
-	// static BACKEND_URL = 'https://backend.serantes.pro';
-	static BACKEND_URL = 'http://localhost:3000';
+	static BACKEND_URL = 'https://backendnuclient.serantes.pro';
+	// static BACKEND_URL = 'http://localhost:3000';
 }
