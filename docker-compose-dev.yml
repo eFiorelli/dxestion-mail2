@@ -1,79 +1,73 @@
-version: '3'
+version: "3"
 
 services:
   mongo:
     image: mvertes/alpine-mongo
-    restart: always
+    #environment: 
+      #- MONGO_INITDB_ROOT_USERNAME=dxestion
+      #- MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
     volumes:
       - $PWD/data/:/data/db
     ports:
-      - '27017:27017'
-    networks:
-      - database
-    container_name: mongo
-  mongo-express:
-    image: mongo-express
-    restart: always
-    links:
-      - mongo
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_BASICAUTH_USERNAME=dxestion
-      - ME_CONFIG_BASICAUTH_PASSWORD=Dxestion0180
-    ports:
-      - '8081:8081'
+      - "27017:27017"
     networks:
       - web
-      - database
-    container_name: mongo-express
+    container_name: nuclient_mongo
   backend:
     build:
       context: ./backend
     links:
       - mongo
+    labels:
+      - "traefik.backend=nuclientbackend"
+      - "traefik.frontend.rule=Host:backendnuclient.serantes.pro"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=3000"
     depends_on:
       - mongo
     volumes:
-      - $PWD/uploads/:/user/src/app/uploads
-      - $PWD/logs/:/user/src/app/logs
-    ports:
-      - '3000:3000'
+      - $PWD/uploads/:/data/uploads
+      - $PWD/logs/:/data/logs
     networks:
       - web
-      - database
-    container_name: backend
-  # frontend-admin:
-  #   build:
-  #     context: ./frontend-admin-app
-  #   links:
-  #     - backend
-  #   depends_on:
-  #     - mongo
-  #     - backend
-  #   ports:
-  #     - '80:80'
-  #   networks:
-  #     - web
-  #   volumes:
-  #     - $PWD/nginx_conf:/etc/nginx/conf.d
-  #   container_name: web-admin
-  # frontend-client:
-  #   build:
-  #     context: ./frontend-client-app
-  #   links:
-  #     - backend
-  #   depends_on:
-  #     - mongo
-  #     - backend
-  #   ports:
-  #     - '90:80'
-  #   networks:
-  #     - web
-  #   volumes:
-  #     - $PWD/nginx_conf:/etc/nginx/conf.d
-  #   container_name: web-client
+    container_name: nuclient_backend
+
+  frontend-admin:
+    build:
+      context: ./frontend-admin-app
+    links:
+      - backend
+    labels:
+      - "traefik.backend=web-admin"
+      - "traefik.frontend.rule=Host:adminnuclient.serantes.pro"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=80"
+    depends_on:
+      - mongo
+      - backend
+    networks:
+      - web
+    volumes:
+      - $PWD/nginx_conf:/etc/nginx/conf.d
+    container_name: nuclient_web-admin
+  frontend-client:
+    build:
+      context: ./frontend-client-app
+    links:
+      - backend
+    labels:
+      - "traefik.backend=web-client"
+      - "traefik.frontend.rule=Host:nuclient.serantes.pro, www.nuclient.serantes.pro, webnuclient.serantes.pro"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=80"
+    depends_on:
+      - mongo
+      - backend
+    networks:
+      - web
+    volumes:
+      - $PWD/nginx_conf:/etc/nginx/conf.d
+    container_name: nuclient_web-client
 networks:
   web:
     external: true
-  database:
-    internal: true
