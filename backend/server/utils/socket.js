@@ -2,18 +2,8 @@ require('../config/config');
 const fs = require('fs');
 let io;
 
-createSocketServer = (server) => {
-	io = require('socket.io')(server);
-	io.listen(3001);
-	addToLog('info', `Socket server listening on port ${process.env.SOCKET_PORT}`);
-	io.on('connection', (socket) => {
-		socket.on('log message', (message) => {
-			getLogMessages();
-		});
-	});
-};
-
-getLogMessages = () => {
+getLogMessages = (io) => {
+	io = io;
 	const date = new Date();
 	const filename =
 		date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
@@ -40,6 +30,5 @@ getIO = () => {
 
 module.exports = {
 	getIO,
-	getLogMessages,
-	createSocketServer
+	getLogMessages
 };
