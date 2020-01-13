@@ -15,6 +15,23 @@ logger = function() {
 
 addToLog = function(level, message) {
 	io = require('./socket').getIO();
+	const date = new Date();
+	const newFilename =
+		date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
+	if (newFilename !== filename) {
+		return new Promise((resolve, reject) => {
+			loggerObject = winston.createLogger({
+				format: winston.format.combine(myFormat),
+				transports: [
+					new winston.transports.Console(),
+					new winston.transports.File({
+						filename: `./logs/${newFilename}`
+					})
+				]
+			});
+			resolve(true);
+		});
+	}
 	logger().log({
 		level,
 		message
