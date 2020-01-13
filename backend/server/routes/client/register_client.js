@@ -1,7 +1,9 @@
 const express = require('express');
 let { checkUserToken } = require('../../middlewares/authentication');
 const Client = require('../../models/client');
-const mailer = require('../../utils/mail');
+const Store = require('../../models/store');
+const User = require('../../models/user');
+const { sendMail } = require('../../utils/mail');
 const sql = require('mssql');
 const app = express();
 const router = express.Router();
@@ -61,6 +63,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 				if (existingClient.length === 0) {
 					if (files) {
 						const response = await addSignature(client, res, files.signature);
+						// let response = { ok: true, clientDB: client };
 						if (!response.ok) {
 							return res.status(400).json({
 								ok: false,
@@ -71,20 +74,28 @@ saveClient = async (client_insert, store, body, files, res) => {
 							client = response.clientDB;
 						}
 					}
-					/*
-					const mail = await sendMail(req.store, newClient);
-					if (mail) {
-						Ok response. Problem: Allow users account sending mails
-					}
-					*/
+
 					const savedClient = await client.save();
+					// let savedClient = true;
 					if (savedClient) {
+						const user = await User.findById(store.user);
 						addToLog('info', `Client "${client.name}" created by store "${store.name}"`);
-						return res.status(200).json({
-							ok: true,
-							message: 'Client inserted',
-							type: 23
-						});
+						const mail = await sendMail(store, client, user);
+						// const mail = true;
+						if (mail) {
+							addToLog('info', `Email sent to "${client.email}"`);
+							return res.status(200).json({
+								ok: true,
+								message: 'Client inserted',
+								type: 23
+							});
+						} else {
+							return res.status(400).json({
+								ok: true,
+								message: 'Error sending email',
+								type: 29
+							});
+						}
 					} else {
 						return res.status(400).json({
 							ok: false,
@@ -245,28 +256,6 @@ addSignature = async (clientDB, res, signature) => {
 			ok: false,
 			error: 'Error moving signature file'
 		};
-	}
-};
-
-sendMail = async (store, client) => {
-	const mailOptions = {
-		from: ` ${store.email}`,
-		to: `${client.email}`,
-		subject: `Gracias por registrarse en ${store.name}`,
-		text: `Hemos recibido su solicitud. Muchas gracias`
-	};
-	try {
-		const mail = await mailer.transporter.sendMail(mailOptions);
-		if (mail) {
-			addToLog('info', `Successfully sent mail to client "${client.name}"`);
-			return true;
-		} else {
-			addToLog('error', `Error sending mail to client "${client.name}"`);
-			return false;
-		}
-	} catch (err) {
-		addToLog('error', `Error sending mail to client "${client.name} - ${err}"`);
-		return false;
 	}
 };
 
