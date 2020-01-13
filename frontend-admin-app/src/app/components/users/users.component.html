@@ -72,16 +72,46 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
-                                <!-- <tr>
-											<td>
-												<input (change)="selectLogoImage($event)" type="file" id="logo_file" />
-											</td>
-										</tr> -->
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Direccion" [(ngModel)]="user.address" name="address" required />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Twitter" [(ngModel)]="user.twitter" type="twitter" name="twitter" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Facebook" [(ngModel)]="user.facebook" type="facebook" name="facebook" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Instagram" [(ngModel)]="user.instagram" type="instagram" name="instagram" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Youtube" [(ngModel)]="user.youtube" type="youtube" name="youtube" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
                             </table>
                         </form>
                     </div>
                     <div class="col-6">
-                        <h4 class="text-center">Imagen de usuario</h4>
+                        <h4 class="text-center">Logo</h4>
                         <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="user.logo_img">X</button>
                         <div style="height: 150px; border: 1px solid lightgray">
                             <img *ngIf="user.logo_img" [src]="logo_imgURL" style="height: 150px">

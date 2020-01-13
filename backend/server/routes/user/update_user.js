@@ -43,14 +43,24 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					name: body.name,
 					email: body.email,
 					password: bcrypt.hashSync(body.password, 10),
-					logo_img: userDB.logo_img
+					logo_img: userDB.logo_img,
+					youtube: body.youtube,
+					instagram: body.instagram,
+					twitter: body.twitter,
+					facebook: body.facebook,
+					address: body.address
 				});
 			} else {
 				await userDB.update({
 					username: body.username,
 					name: body.name,
 					email: body.email,
-					logo_img: userDB.logo_img
+					logo_img: userDB.logo_img,
+					youtube: body.youtube,
+					instagram: body.instagram,
+					twitter: body.twitter,
+					facebook: body.facebook,
+					address: body.address
 				});
 			}
 			addToLog('info', `User "${userDB.username}" updated by user "${req.user.username}"`);

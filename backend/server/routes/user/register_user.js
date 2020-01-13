@@ -23,6 +23,11 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 				email: body.email,
 				password: bcrypt.hashSync(body.password, 10),
 				username: body.username,
+				youtube: body.youtube,
+				instagram: body.instagram,
+				twitter: body.twitter,
+				facebook: body.facebook,
+				address: body.address,
 				role: 'USER_ROLE'
 			});
 

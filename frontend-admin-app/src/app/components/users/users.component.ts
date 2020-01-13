@@ -38,7 +38,12 @@ export class UsersComponent implements OnInit {
 		password: '',
 		name: '',
 		email: '',
-		logo_img: ''
+		logo_img: '',
+		address: '',
+		twitter: '',
+		facebook: '',
+		instagram: '',
+		youtube: ''
 	};
 
 	showSpinner = false;
@@ -54,7 +59,12 @@ export class UsersComponent implements OnInit {
 			password: '',
 			name: '',
 			email: '',
-			logo_img: ''
+			logo_img: '',
+			address: '',
+			twitter: '',
+			facebook: '',
+			instagram: '',
+			youtube: ''
 		};
 	}
 
