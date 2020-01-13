@@ -21,8 +21,7 @@ router.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async
 					free_fields: free_fields
 				});
 			} else {
-				console.log(connection);
-				return res.status(200).json({
+				return res.status(400).json({
 					ok: false,
 					err: 'Error connecting to database'
 				});
