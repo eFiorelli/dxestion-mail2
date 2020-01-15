@@ -44,7 +44,7 @@ export class StoresComponent implements OnInit {
 	storeList: any[];
 	stores: any[];
 
-	imagePath = AppComponent.BACKEND_URL + '/files/logo/';
+	imagePath = AppComponent.BACKEND_URL + '/files/store/logo/';
 	BGimagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	noImage = './assets/no-image.jpg';
 	searchText = '';
