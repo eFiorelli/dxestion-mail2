@@ -74,7 +74,6 @@ saveClient = async (client_insert, store, body, files, res) => {
 							client = response.clientDB;
 						}
 					}
-
 					const savedClient = await client.save();
 					// let savedClient = true;
 					if (savedClient) {
@@ -149,20 +148,27 @@ sendClientToFRTManager = async (connection_params, client) => {
 		user: connection_params.database_username,
 		password: connection_params.database_password,
 		server: connection_params.database_url,
+		port: connection_params.database_port,
 		database: connection_params.database_name,
 		commerce_password: connection_params.commerce_password
 	};
 
 	try {
 		const connection = await sql.connect(
-			`mssql://${config.user}:${config.password}@${config.server}/${config.database}`
+			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
 		);
 		if (connection) {
 			const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-			const max_id = (await sql.query`SELECT ISNULL(MAX(CODCLIENTE)+1,0) as ID FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
-				where CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
-				CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0]
-				.ID;
+			const max_id = (await sql.query`select
+			case ISNULL(MAX(CODCLIENTE)+1,0)
+			when 0 then (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)
+			else ISNULL(MAX(CODCLIENTE)+1,0)
+			end as ID
+			FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
+			where
+			CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
+			CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0].ID;
+
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
 				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
@@ -172,7 +178,7 @@ sendClientToFRTManager = async (connection_params, client) => {
 				}
 				if (query.rowsAffected[0] === 1) {
 					/* Client inserted */
-					if (client.freeFields.length > 0) {
+					if (client.freeFields.length >= 0) {
 						const result = await saveFreeFields(max_id, client.freeFields);
 						if (result) {
 							return 0;
@@ -206,29 +212,51 @@ sendClientToAgora = async () => {};
 saveFreeFields = async (client_id, free_fields) => {
 	const ff = JSON.parse(free_fields);
 	let sql_string = '';
-	for (let i = 0; i < ff.length; i++) {
-		if (ff[i].selectedValue) {
-			if (ff[i].type === 'checkbox') {
-				if (ff[i].selectedValue === true) {
-					sql_string += `${ff[i].name}='T', `;
-				} else {
-					sql_string += `${ff[i].name}='F', `;
+	if (ff.length > 0) {
+		for (let i = 0; i < ff.length; i++) {
+			if (ff[i].selectedValue) {
+				if (ff[i].type === 'checkbox') {
+					if (ff[i].selectedValue === true) {
+						sql_string += `${ff[i].name}='T', `;
+					} else {
+						sql_string += `${ff[i].name}='F', `;
+					}
 				}
-			}
-			if (ff[i].type === 'select') {
-				if (ff[i].selectedValue !== null && ff[i].selectedValue !== undefined) {
-					sql_string += `${ff[i].name} = ${ff[i].selectedValue}, `;
+				if (ff[i].type === 'select') {
+					if (ff[i].selectedValue !== null && ff[i].selectedValue !== undefined) {
+						sql_string += `${ff[i].name} = ${ff[i].selectedValue}, `;
+					}
 				}
 			}
 		}
+		sql_string = sql_string.slice(0, -2);
+		sql_string = `update CLIENTESCAMPOSLIBRES set ${sql_string} where CODCLIENTE = ${client_id}`;
+	} else {
+		sql_string = '';
 	}
-	sql_string = sql_string.slice(0, -2);
-	sql_string = `update CLIENTESCAMPOSLIBRES set ${sql_string} where CODCLIENTE = ${client_id}`;
+
+	const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, FO, IDCENTRAL, TALLA, COLOR) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '001',0, 1, 12, 0, '', ${client_id}, 0, 1, '.','.')`;
 
 	try {
-		const query = await sql.query(sql_string);
-		if (query.rowsAffected[0] >= 0) {
-			return true;
+		if (sql_string !== '') {
+			const query = await sql.query(sql_string);
+			if (query.rowsAffected[0] >= 0) {
+				const rem_transactions = await sql.query(sql_string_rem_transactions);
+				if (rem_transactions.rowsAffected[0] > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		} else {
+			const rem_transactions = await sql.query(sql_string_rem_transactions);
+			if (rem_transactions.rowsAffected[0] > 0) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	} catch (err) {
 		return {
