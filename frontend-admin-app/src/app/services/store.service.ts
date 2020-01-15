@@ -24,11 +24,7 @@ export class StoreService {
 				}
 			}
 			if (signature_file) {
-				formData.append(
-					'signature',
-					signature_file,
-					signature_file.name
-				);
+				formData.append('signature', signature_file, signature_file.name);
 			}
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
@@ -41,10 +37,7 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/client/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader(
-				'Authorization',
-				localStorage.getItem('token')
-			);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}
@@ -63,11 +56,7 @@ export class StoreService {
 			}
 			for (let i = 0; i < bg_files.length; i++) {
 				if (bg_files[i] && typeof bg_files[i] !== 'string') {
-					formData.append(
-						`background_img_${i + 1}`,
-						bg_files[i],
-						bg_files[i].name
-					);
+					formData.append(`background_img_${i + 1}`, bg_files[i], bg_files[i].name);
 				}
 			}
 			if (logo_file) {
@@ -84,10 +73,7 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/register/store/';
 			xhr.open('POST', url, true);
-			xhr.setRequestHeader(
-				'Authorization',
-				localStorage.getItem('token')
-			);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}
@@ -107,11 +93,7 @@ export class StoreService {
 
 			for (let i = 0; i < bg_files.length; i++) {
 				if (bg_files[i] && typeof bg_files[i] !== 'string') {
-					formData.append(
-						`background_img_${i + 1}`,
-						bg_files[i],
-						bg_files[i].name
-					);
+					formData.append(`background_img_${i + 1}`, bg_files[i], bg_files[i].name);
 				}
 			}
 			if (logo_file) {
@@ -128,10 +110,7 @@ export class StoreService {
 			};
 			const url = AppComponent.BACKEND_URL + '/update/store/' + storeID;
 			xhr.open('PUT', url, true);
-			xhr.setRequestHeader(
-				'Authorization',
-				localStorage.getItem('token')
-			);
+			xhr.setRequestHeader('Authorization', localStorage.getItem('token'));
 			xhr.send(formData);
 		});
 	}
@@ -141,9 +120,7 @@ export class StoreService {
 	}
 
 	getUserStores(userID: string) {
-		return this.http.get(
-			`${AppComponent.BACKEND_URL}/stores?user_id=${userID}`
-		);
+		return this.http.get(`${AppComponent.BACKEND_URL}/stores?user_id=${userID}`);
 	}
 
 	getStores() {
@@ -151,11 +128,8 @@ export class StoreService {
 	}
 
 	checkStoreConnection(data) {
-		return this.http.post(
-			`${AppComponent.BACKEND_URL}/store/check_connection`,
-			{
-				data
-			}
-		);
+		return this.http.post(`${AppComponent.BACKEND_URL}/store/check_connection`, {
+			data
+		});
 	}
 }

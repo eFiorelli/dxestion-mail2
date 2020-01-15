@@ -121,13 +121,17 @@ export class StoreComponent implements OnInit {
 			return;
 		}
 
-		this.store.free_fields = this.freeFields.map((value: any) => {
-			if (value && value.active) {
-				return value;
-			}
-		});
-
-		this.store.selected_free_fields = JSON.stringify(this.store.free_fields);
+		if (this.freeFields) {
+			this.store.free_fields = this.freeFields.map((value: any) => {
+				if (value && value.active) {
+					return value;
+				}
+			});
+			this.store.selected_free_fields = JSON.stringify(this.store.free_fields);
+		} else {
+			this.store.free_fields = [];
+			this.store.selected_free_fields = '';
+		}
 
 		this.storeService
 			.updateStore(this.store, this.store._id)
@@ -218,17 +222,24 @@ export class StoreComponent implements OnInit {
 			database_port: this.store.database_port,
 			database_username: this.store.database_username
 		};
-		this.storeService.checkStoreConnection(data).subscribe((response: any) => {
-			if (response.ok) {
-				this.freeFields = response.free_fields.free_fields;
-				Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {
-					this.connectionError = false;
-				});
-			} else {
-				Swal.fire('Fallo', 'No es posible conectar con el servidor', 'error').then(() => {
+		this.storeService.checkStoreConnection(data).subscribe(
+			(response: any) => {
+				if (response.ok) {
+					this.freeFields = response.free_fields.free_fields;
+					Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {
+						this.connectionError = false;
+					});
+				} else {
+					Swal.fire('Fallo', 'No es posible conectar con el servidor', 'error').then(() => {
+						this.connectionError = true;
+					});
+				}
+			},
+			(error: any) => {
+				Swal.fire('Fallo', `No es posible conectar con el servidor: ${error.error.err}`, 'error').then(() => {
 					this.connectionError = true;
 				});
 			}
-		});
+		);
 	}
 }
