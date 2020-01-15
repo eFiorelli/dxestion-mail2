@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -17,12 +18,18 @@ export class HomeComponent implements OnInit {
 	@ViewChild(SignaturePad, { static: true })
 	signaturePad: SignaturePad;
 
-	constructor(public userService: UserService, private translate: TranslateService, private auth: AuthService) {}
+	constructor(
+		public userService: UserService,
+		private router: Router,
+		private translate: TranslateService,
+		private auth: AuthService
+	) {}
 
 	selectedFile: any;
 	imagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	backgroundImg = '';
 	freeFields = JSON.parse(localStorage.getItem('ff'));
+	loading = false;
 
 	client = {
 		email: '',
@@ -40,8 +47,8 @@ export class HomeComponent implements OnInit {
 	public signaturePadOptions: Object = {
 		// passed through to szimek/signature_pad constructor
 		minWidth: 5,
-		canvasWidth: 320,
-		canvasHeight: 80,
+		canvasWidth: 435,
+		canvasHeight: 140,
 		backgroundColor: 'white',
 		dotSize: 2,
 		border: '1px solid black'
@@ -83,7 +90,6 @@ export class HomeComponent implements OnInit {
 	registerClient() {
 		const ff = this.freeFields.filter((f) => f.selectedValue !== undefined && f.selectedValue !== null);
 		this.client.freeFields = JSON.stringify(ff);
-		console.log(this.client);
 		if (!this.client.name) {
 			const name_text = this.translate.instant('ERRORS.NAME');
 			Swal.fire({ title: 'Error', icon: 'error', text: name_text, heightAuto: false });
@@ -125,18 +131,25 @@ export class HomeComponent implements OnInit {
 			Swal.fire({ title: 'Error', icon: 'error', text: gpdr_text, heightAuto: false });
 			return;
 		}
-
+		this.loading = true;
 		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
 			.then((response) => {
+				this.loading = false;
 				const success_text = 'Cliente creado con exito';
 				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false }).then(() => {
 					this.flip();
 				});
 			})
 			.catch((error) => {
-				const error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				this.loading = false;
+				let error_text = '';
+				if (error.type) {
+					error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+				} else {
+					error_text = 'Error al guardar el cliente';
+				}
 				Swal.fire({ title: 'Error', text: error_text, icon: 'error', heightAuto: false });
 			});
 	}
@@ -157,6 +170,9 @@ export class HomeComponent implements OnInit {
 		}
 		this.freeFields = JSON.parse(localStorage.getItem('ff'));
 		this.parseFreeFields();
+		setTimeout(() => {
+			this.router.navigate([ '/slider' ]);
+		}, 1500);
 	}
 
 	clearSignaturePad() {

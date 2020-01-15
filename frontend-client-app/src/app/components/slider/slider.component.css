@@ -37,7 +37,7 @@
 .cb-slideshow li div {
 	z-index: 1000;
 	position: absolute;
-	bottom: 30px;
+	bottom: 230px;
 	left: 0px;
 	width: 100%;
 	text-align: center;
@@ -99,6 +99,7 @@
 	-ms-animation-delay: 30s;
 	animation-delay: 30s;
 }
+
 .cb-slideshow li:nth-child(2) div {
 	-webkit-animation-delay: 6s;
 	-moz-animation-delay: 6s;
@@ -331,4 +332,11 @@
 	.cb-slideshow li div h3 {
 		font-size: 80px;
 	}
+}
+
+.finger-pointer {
+	font-size: 102px;
+	color: white;
+	display: block;
+	margin-top: -10px;
 }

@@ -2,25 +2,25 @@
 <main style="margin-top: -64px !important;">
     <div class="container">
         <div class="row h-100">
-            <div class="col-12 col-md-10 mx-auto my-auto">
+            <div class="col-12 col-md-12 mx-auto my-auto">
                 <div class="card auth-card">
                     <div class="position-relative image-side"></div>
-                    <div class="form-side">
-                        <span class="logo-single"></span>
-                        <h6 class="mb-4">Alta de cliente</h6>
-                        <form>
+                    <div class="form-side" style="padding: 50px">
+                        <span class="logo-single" style="margin-bottom: 20px;"></span>
+                        <h6 class="mb-5" style="font-size: 22px">Alta de cliente</h6>
+                        <form style="font-size: 18px;">
                             <label class="form-group has-float-label mb-4">
-								<input name="name" class="form-control" [(ngModel)]="client.name" required/>
+								<input style="font-size: 18px" name="name" class="form-control" [(ngModel)]="client.name" required/>
 								<span>Nombre</span>
 							</label>
 
                             <label class="form-group has-float-label mb-4">
-								<input name="email" type="email" class="form-control" [(ngModel)]="client.email" pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required/>
+								<input style="font-size: 18px" name="email" type="email" class="form-control" [(ngModel)]="client.email" pattern="/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/" required/>
 								<span>Email</span>
 							</label>
 
                             <label class="form-group has-float-label mb-4">
-								<input name="phone" class="form-control" [(ngModel)]="client.phone" required/>
+								<input style="font-size: 18px" name="phone" class="form-control" [(ngModel)]="client.phone" required/>
 								<span>Teléfono</span>
 							</label>
 
@@ -30,9 +30,9 @@
 									(onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
 								<span>Firma</span>
 							</label>
-                            <button type="button" class="btn btn-xs btn-outline-dark mb-4" (click)="clearSignaturePad()">Limpiar firma</button>
+                            <button style="font-size: 16px" type="button" class="btn btn-xs btn-outline-dark mb-4" (click)="clearSignaturePad()">Limpiar firma</button>
                             <p class="mb-4" *ngIf="freeFields.length > 0">
-                                <a class="btn btn-light mb-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
+                                <a style="font-size: 16px" class="btn btn-light mb-1" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="true" aria-controls="collapseExample">
                                     Selecciona tus intereses (Opcional)
                                 </a>
                             </p>
@@ -62,7 +62,21 @@
                                 <label class="custom-control-label" for="category1">Acepto los términos y condiciones de uso</label>
                             </div>
                             <div class="d-flex justify-content-between align-items-center">
-                                <button class="btn btn-primary btn-lg btn-shadow" type="submit" (click)="registerClient()">ENVIAR</button>
+                                <button *ngIf="!loading" class="btn btn-primary btn-block btn-lg btn-shadow" style="height: 50px;" type="submit" (click)="registerClient()">ENVIAR</button>
+                                <div *ngIf="loading" class="sk-fading-circle">
+                                    <div class="sk-circle1 sk-circle"></div>
+                                    <div class="sk-circle2 sk-circle"></div>
+                                    <div class="sk-circle3 sk-circle"></div>
+                                    <div class="sk-circle4 sk-circle"></div>
+                                    <div class="sk-circle5 sk-circle"></div>
+                                    <div class="sk-circle6 sk-circle"></div>
+                                    <div class="sk-circle7 sk-circle"></div>
+                                    <div class="sk-circle8 sk-circle"></div>
+                                    <div class="sk-circle9 sk-circle"></div>
+                                    <div class="sk-circle10 sk-circle"></div>
+                                    <div class="sk-circle11 sk-circle"></div>
+                                    <div class="sk-circle12 sk-circle"></div>
+                                </div>
                                 <!-- <button (click)="flip()">Flip</button> -->
                             </div>
                         </form>
@@ -72,50 +86,3 @@
         </div>
     </div>
 </main>
-<!-- <div class="page-wrapper bg-gra-01 p-t-90 p-b-100 font-poppins" style="margin-top: -65px">
-		<div class="wrapper wrapper--w780">
-			<div class="card card-3">
-				<div class="card-heading" *ngIf="backgroundImg.length > 0" [ngStyle]="{ background: 'url(' + backgroundImg + ') top left/cover no-repeat'}"></div>
-				<div class="card-heading" *ngIf="backgroundImg.length === 0"></div>
-				<div class="card-body">
-					<h2 class="title">{{ 'HOME_PAGE.TITLE' | translate }}</h2>
-					<form method="POST">
-						<div class="input-group">
-							<input class="input--style-3" type="text" [(ngModel)]="client.name" placeholder="{{ 'HOME_PAGE.NAME' | translate }}" name="name" />
-						</div>
-						<div class="input-group">
-							<input class="input--style-3" type="email" [(ngModel)]="client.email" placeholder="{{ 'HOME_PAGE.EMAIL' | translate }}" name="email" />
-						</div>
-						<div class="input-group">
-							<input class="input--style-3" type="text" [(ngModel)]="client.phone" placeholder="{{ 'HOME_PAGE.PHONE' | translate }}" name="phone" />
-						</div>
-						<div class="input-group" style="margin-bottom: 5px; border-bottom: none;">
-							<label class="input--style-3">
-								{{ 'HOME_PAGE.SIGNATURE' | translate }}</label>
-						</div>
-						<signature-pad [options]="signaturePadOptions" (onBeginEvent)="drawStart()" (onEndEvent)="drawComplete()"></signature-pad>
-						<button class="btn btn--pill btn--green" [disabled]="!drawStatus" (click)="clearSignaturePad()" style="height: 35px; width: 150px; margin-left: 20%;">
-							Limpiar
-						</button>
-						<div class="input-group" style="border-bottom: none; margin: 10px 0 -10px 0">
-							<div class="page">
-								<div class="page__toggle">
-									<label class="toggle">
-										<input [(ngModel)]="client.gpdr" (click)="showGPDR(!client.gpdr)" name="gpdr" class="toggle__input" type="checkbox"/>
-										<span class="toggle__label">
-											<span class="toggle__text">{{ 'HOME_PAGE.GPDR' | translate }}</span>
-										</span>
-									</label>
-								</div>
-							</div>
-						</div>
-						<div class="p-t-10 text-center">
-							<button class="btn btn--pill btn--green" (click)="registerClient()" [disabled]="!( client.email && client.phone && client.name && this.signaturePad.toData().length > 0)">
-								{{ 'HOME_PAGE.SEND' | translate }}
-							</button>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div> -->
