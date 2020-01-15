@@ -13,8 +13,8 @@ import { DOCUMENT } from '@angular/common';
 export class LoginComponent implements OnInit {
 	constructor(private auth: AuthService, private router: Router, @Inject(DOCUMENT) private document: any) {}
 
-	username = 'tienda1';
-	password = '1234';
+	username = '';
+	password = '';
 	credentials: Object;
 	showSpinner: boolean;
 	elem;
