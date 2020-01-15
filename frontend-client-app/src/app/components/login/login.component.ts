@@ -23,8 +23,8 @@ export class LoginComponent implements OnInit {
 		localStorage.clear();
 		this.elem = document.documentElement;
 		setTimeout(() => {
-			// this.fullScreen();
-		}, 150);
+			this.fullScreen();
+		}, 350);
 	}
 
 	login(): void {
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 			(res) => {
 				if (res) {
 					this.showSpinner = false;
-					//this.fullScreen();
+					this.fullScreen();
 					this.router.navigate([ '/slider' ]);
 				}
 			},
