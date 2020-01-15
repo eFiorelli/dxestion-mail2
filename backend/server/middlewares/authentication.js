@@ -11,23 +11,30 @@ let checkUserToken = (req, res, next) => {
 		token = '';
 	}
 
-	jwt.verify(token, process.env.SEED, (err, decoded) => {
-		if (err) {
-			return res.status(401).json({
-				ok: false,
-				err: {
-					message: 'Invalid token',
-					err: err,
-					token: token,
-					seed: process.env.SEED
-				}
-			});
-		}
+	if (token) {
+		jwt.verify(token, process.env.SEED, (err, decoded) => {
+			if (err) {
+				return res.status(401).json({
+					ok: false,
+					err: {
+						message: 'Invalid token',
+						err: err,
+						token: token,
+						seed: process.env.SEED
+					}
+				});
+			}
 
-		req.user = decoded.user;
-		req.store = decoded.store;
-		next();
-	});
+			req.user = decoded.user;
+			req.store = decoded.store;
+			next();
+		});
+	} else {
+		return res.status(401).json({
+			ok: false,
+			message: 'Unauthorized'
+		});
+	}
 };
 
 // =================

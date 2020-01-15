@@ -12,10 +12,9 @@ router.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async
 	try {
 		if (data) {
 			const connection = await checkDatabaseConnection(data);
-			console.log(connection);
-			free_fields = await getFreeFields(data);
-			sql.close();
 			if (connection.ok) {
+				free_fields = await getFreeFields(data);
+				sql.close();
 				return res.status(200).json({
 					ok: true,
 					message: 'Connection success',
