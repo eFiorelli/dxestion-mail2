@@ -10,7 +10,7 @@
                         <h6 class="mb-5" style="font-size: 22px">Alta de cliente</h6>
                         <form style="font-size: 18px;">
                             <label class="form-group has-float-label mb-4">
-								<input style="font-size: 18px" name="name" class="form-control" [(ngModel)]="client.name" required/>
+								<input style="font-size: 18px" name="name" class="form-control" [(ngModel)]="client.name" (ngModelChange)="client.name = $event.toUpperCase()" required/>
 								<span>Nombre</span>
 							</label>
 
