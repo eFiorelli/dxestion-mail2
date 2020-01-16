@@ -59,7 +59,7 @@ export class StoreService {
 					formData.append(`background_img_${i + 1}`, bg_files[i], bg_files[i].name);
 				}
 			}
-			if (logo_file) {
+			if (logo_file && typeof logo_file !== 'string') {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
 			xhr.onreadystatechange = function() {
@@ -96,7 +96,8 @@ export class StoreService {
 					formData.append(`background_img_${i + 1}`, bg_files[i], bg_files[i].name);
 				}
 			}
-			if (logo_file) {
+
+			if (logo_file && typeof logo_file !== 'string') {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
 			xhr.onreadystatechange = function() {
