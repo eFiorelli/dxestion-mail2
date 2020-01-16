@@ -31,26 +31,32 @@ export class SliderComponent implements OnInit {
 			'background',
 			`url(${this.abs_path + this.bg_images[0]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(1) span').css('background-size', 'cover');
 		$('.cb-slideshow li:nth-child(2) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[1]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(2) span').css('background-size', 'cover');
 		$('.cb-slideshow li:nth-child(3) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[2]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(3) span').css('background-size', 'cover');
 		$('.cb-slideshow li:nth-child(4) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[3]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(4) span').css('background-size', 'cover');
 		$('.cb-slideshow li:nth-child(5) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[4]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(5) span').css('background-size', 'cover');
 		$('.cb-slideshow li:nth-child(6) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[5]}) no-repeat center center fixed`
 		);
+		$('.cb-slideshow li:nth-child(6) span').css('background-size', 'cover');
 	}
 
 	goToHome() {
