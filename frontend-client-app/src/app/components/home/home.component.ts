@@ -84,16 +84,16 @@ export class HomeComponent implements OnInit {
 	parseFreeFields() {
 		this.freeFields = this.freeFields.filter((f) => f !== undefined && f !== null);
 	}
-
+	/*
 	test() {
 		this.userService
 			.test(this.client)
 			.then((response) => {
 				this.loading = false;
-				const success_text = 'Cliente creado con exito';
-				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false }).then(() => {
-					this.flip();
-				});
+				// const success_text = 'Cliente creado con exito';
+				// Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false }).then(() => {
+				// 	this.flip();
+				// });
 			})
 			.catch((error) => {
 				this.loading = false;
@@ -106,6 +106,7 @@ export class HomeComponent implements OnInit {
 				Swal.fire({ title: 'Error', text: error_text, icon: 'error', heightAuto: false });
 			});
 	}
+	*/
 
 	registerClient() {
 		const ff = this.freeFields.filter((f) => f.selectedValue !== undefined && f.selectedValue !== null);
