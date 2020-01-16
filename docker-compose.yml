@@ -65,8 +65,8 @@ services:
     depends_on:
       - mongo
     volumes:
-      - $PWD/uploads/:/data/uploads
-      - $PWD/logs/:/data/logs
+      - $PWD/uploads/:/user/src/app/uploads
+      - $PWD/logs/:/user/src/app/logs
     networks:
       - web
       - database
