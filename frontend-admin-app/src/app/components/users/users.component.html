@@ -117,6 +117,41 @@
                             <img *ngIf="user.logo_img" [src]="logo_imgURL" style="height: 150px">
                             <input *ngIf="!user.logo_img" (change)="selectLogoImage($event); preview(0, $event.target.files)" type="file" id="logo_file" style="margin-top: 70px">
                         </div>
+                        <!-- Email stuff -->
+                        <br>
+                        <h4>Parámetros del email</h4>
+                        <form class="register-form">
+                            <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Servidor SMTP" [(ngModel)]="user.emailConfig.smtp" name="smtp" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Cuenta de correo" [(ngModel)]="user.emailConfig.emailAccount" type="email" name="emailAccount" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Puerto" [(ngModel)]="user.emailConfig.port" name="port" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Contraseña email" [(ngModel)]="user.emailConfig.emailPassword" type="password" name="emailPassword" />
+                                        </mat-form-field>
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
                     </div>
                 </div>
                 <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>

@@ -43,7 +43,13 @@ export class UsersComponent implements OnInit {
 		twitter: '',
 		facebook: '',
 		instagram: '',
-		youtube: ''
+		youtube: '',
+		emailConfig: {
+			smtp: '',
+			port: '',
+			emailAccount: '',
+			emailPassword: ''
+		}
 	};
 
 	showSpinner = false;
@@ -64,7 +70,13 @@ export class UsersComponent implements OnInit {
 			twitter: '',
 			facebook: '',
 			instagram: '',
-			youtube: ''
+			youtube: '',
+			emailConfig: {
+				smtp: '',
+				port: '',
+				emailAccount: '',
+				emailPassword: ''
+			}
 		};
 	}
 
@@ -101,16 +113,17 @@ export class UsersComponent implements OnInit {
 	}
 
 	registerUser() {
+		this.user.emailConfig = JSON.stringify(this.user.emailConfig);
 		this.showSpinner = true;
 		this.userService
 			.registerUser(this.user)
 			.then((response: any) => {
 				this.showSpinner = false;
 				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
-				Swal.fire('Exito', success_text, 'success').then(() => {
-					this.ngOnInit();
-					this.selectedTab = 0;
-				});
+				// Swal.fire('Exito', success_text, 'success').then(() => {
+				// 	this.ngOnInit();
+				// 	this.selectedTab = 0;
+				// });
 			})
 			.catch((error) => {
 				this.showSpinner = false;

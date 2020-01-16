@@ -55,7 +55,7 @@ export class UserService {
 					formData.append(key, userData[key]);
 				}
 			}
-			if (typeof logo_file !== 'string') {
+			if (logo_file && typeof logo_file !== 'string') {
 				formData.append('logo_image', logo_file, logo_file.name);
 			}
 			xhr.onreadystatechange = function() {

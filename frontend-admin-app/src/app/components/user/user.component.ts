@@ -53,6 +53,15 @@ export class UserComponent implements OnInit {
 			this.userService.getUserById(id).subscribe((user: any) => {
 				if (user.ok) {
 					this.user = user.user;
+					if (!this.user.emailConfig) {
+						this.user.emailConfig = {
+							smtp: '',
+							port: '',
+							emailAccount: '',
+							emailPassword: ''
+						};
+					}
+					// this.user.emailConfig = JSON.parse(this.user.emailConfig);
 				} else {
 					alert('Error');
 				}
@@ -72,6 +81,7 @@ export class UserComponent implements OnInit {
 	}
 
 	updateUser() {
+		this.user.emailConfig = JSON.stringify(this.user.emailConfig);
 		this.userService
 			.updateUser(this.user)
 			.then((response: any) => {
@@ -81,6 +91,7 @@ export class UserComponent implements OnInit {
 				});
 			})
 			.catch((error: any) => {
+				console.log(error);
 				const error_text = 'Ocurrió un problema al modificar el usuario';
 				Swal.fire('Error', error_text, 'error').then(() => {
 					this.router.navigate([ '/users' ]);
