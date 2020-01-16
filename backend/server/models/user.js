@@ -30,6 +30,10 @@ let userSchema = new Schema({
 		type: String,
 		required: false
 	},
+	email_img: {
+		type: String,
+		required: false
+	},
 	address: {
 		type: String,
 		required: false
@@ -42,7 +46,7 @@ let userSchema = new Schema({
 		type: String,
 		required: false
 	},
-	instragram: {
+	instagram: {
 		type: String,
 		required: false
 	},

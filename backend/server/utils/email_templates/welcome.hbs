@@ -755,7 +755,7 @@
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td class="esd-block-image es-p15b" align="center"><a target="_blank"><img class="adapt-img" src="https://tlr.stripocdn.email/content/guids/CABINET_63fbbc11db6741389cc3292b09a63e6d/images/63541516368770627.png" alt="Handshake" title="Handshake" width="600"></a></td>
+                                                                                    <td class="esd-block-image es-p15b" align="center"><a target="_blank"><img class="adapt-img" src="{{config.backend_url}}{{config.email_img_path}}{{email_img}}" alt="{{name}}" title="{{name}}" width="600"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -818,20 +818,13 @@
                                                                                         <table class="es-table-not-adapt es-social" cellspacing="0" cellpadding="0">
                                                                                             <tbody>
                                                                                                 <tr>
-                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ user.facebook }}"><img title="Facebook" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/facebook-logo-gray.png" alt="Fb" width="32" height="32"></a></td>
-                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ user.twitter }}"><img title="Twitter" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/twitter-logo-gray.png" alt="Tw" width="32" height="32"></a></td>
-                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ user.instagram }}"><img title="Instagram" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/instagram-logo-gray.png" alt="Inst" width="32" height="32"></a></td>
-                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ user.youtube }}"><img title="Youtube" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/youtube-logo-gray.png" alt="Yt" width="32" height="32"></a></td>
+                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ facebook }}"><img title="Facebook" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/facebook-logo-gray.png" alt="Fb" width="32" height="32"></a></td>
+                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ twitter }}"><img title="Twitter" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/twitter-logo-gray.png" alt="Tw" width="32" height="32"></a></td>
+                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ instagram }}"><img title="Instagram" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/instagram-logo-gray.png" alt="Inst" width="32" height="32"></a></td>
+                                                                                                    <td class="es-p10r" valign="top" align="center"><a target="_blank" href="{{ youtube }}"><img title="Youtube" src="https://tlr.stripocdn.email/content/assets/img/social-icons/logo-gray/youtube-logo-gray.png" alt="Yt" width="32" height="32"></a></td>
                                                                                                 </tr>
                                                                                             </tbody>
                                                                                         </table>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td class="esd-block-text es-p5t es-p5b" align="center" esd-links-underline="none">
-                                                                                        <p style="line-height: 21px;"><a target="_blank" style="line-height: 21px; text-decoration: none;" href="tel:{{user.phone}}">{{ user.phone }}</a></p>
-                                                                                        <p style="line-height: 21px;"><a target="_blank" href="{{ user.email }}" style="text-decoration: none;">{{ user.email }}</a></p>
-                                                                                        <p style="line-height: 21px;">{{ user.address }}</p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>

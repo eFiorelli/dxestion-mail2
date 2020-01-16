@@ -8,6 +8,30 @@ const sql = require('mssql');
 const app = express();
 const router = express.Router();
 
+router.post('/register/test', checkUserToken, async (req, res) => {
+	const body = req.body;
+	const store = req.store;
+	const client = new Client({
+		name: body.name,
+		email: body.email,
+		phone: body.phone,
+		store: store
+	});
+	try {
+		const user = await User.findById(store.user);
+		const mail = await sendMail(store, client, user);
+		return res.status(200).json({
+			ok: true
+		});
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			err: err,
+			type: 1
+		});
+	}
+});
+
 router.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	let client_insert;

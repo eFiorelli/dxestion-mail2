@@ -33,8 +33,20 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 			});
 
 			if (req.files) {
-				const images = [ { type: 'logo', image: req.files.logo_image } ];
-				user = await saveUserImages(user, res, images);
+				const images = [
+					{ type: 'logo', image: req.files.logo_image || '' },
+					{ type: 'email', image: req.files.email_image || '' }
+				];
+				updatedUser = await saveUserImages(user, res, images);
+				if (!updatedUser.ok) {
+					return res.status(400).json({
+						ok: false,
+						message: updatedUser.error,
+						type: 10
+					});
+				} else {
+					user = updatedUser.userDB;
+				}
 			}
 
 			const savedUser = await user.save();
@@ -64,32 +76,35 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 
 saveUserImages = async (userDB, res, images) => {
 	try {
-		let file = images[0].image;
-		// Valid extensions
-		let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-		let shortedName = file.name.split('.');
-		let extension = shortedName[shortedName.length - 1];
+		for (let i = 0; i < images.length; i++) {
+			let file = images[i].image;
+			if (file) {
+				// Valid extensions
+				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+				let shortedName = file.name.split('.');
+				let extension = shortedName[shortedName.length - 1];
 
-		if (validExtensions.indexOf(extension) < 0) {
-			return res.status(400).json({
-				ok: false,
-				meesage: 'Allowed extensions: ' + validExtensions.join(', ')
-			});
-		}
+				if (validExtensions.indexOf(extension) < 0) {
+					return res.status(400).json({
+						ok: false,
+						meesage: 'Allowed extensions: ' + validExtensions.join(', ')
+					});
+				}
 
-		// Change filename
-		let filename = `${userDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
+				// Change filename
+				let filename = `${userDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
 
-		file.mv(`uploads/user/${filename}`, (err) => {
-			if (err) {
-				return res.status(500).json({
-					ok: false,
-					err: err
-				});
+				if (type === 'logo') {
+					await file.mv(`uploads/user/${filename}`);
+					userDB.email_img = filename;
+				}
+				if (type === 'email') {
+					await file.mv(`uploads/user/email/${type}/${filename}`);
+					userDB.logo_img = filename;
+				}
 			}
-		});
-		userDB.logo_img = filename;
-		return userDB;
+		}
+		return { ok: true, userDB };
 	} catch (err) {
 		return res.status(500).json({
 			ok: false,

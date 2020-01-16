@@ -21,12 +21,11 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 		} else {
 			if (req.files) {
 				const images = [
-					{
-						type: 'logo',
-						image: req.files.logo_image || ''
-					}
+					{ type: 'logo', image: req.files.logo_image || '' },
+					{ type: 'email', image: req.files.email_image || '' }
 				];
 				const updatedUser = await updateUserImages(userDB, res, images);
+				console.log(updatedUser);
 				if (!updatedUser.ok) {
 					return res.status(500).json({
 						ok: false,
@@ -44,6 +43,7 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					email: body.email,
 					password: bcrypt.hashSync(body.password, 10),
 					logo_img: userDB.logo_img,
+					email_img: userDB.email_img,
 					youtube: body.youtube,
 					instagram: body.instagram,
 					twitter: body.twitter,
@@ -57,6 +57,7 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					name: body.name,
 					email: body.email,
 					logo_img: userDB.logo_img,
+					email_img: userDB.email_img,
 					youtube: body.youtube,
 					instagram: body.instagram,
 					twitter: body.twitter,
@@ -84,34 +85,51 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 
 updateUserImages = async (userDB, res, images) => {
 	try {
-		let file = images[0].image;
+		for (let i = 0; i < images.length; i++) {
+			let file = images[i].image;
+			if (file) {
+				// Valid extensions
+				let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
+				let shortedName = file.name.split('.');
+				let extension = shortedName[shortedName.length - 1];
 
-		// Valid extensions
-		let validExtensions = [ 'png', 'jpg', 'gif', 'jpeg' ];
-		let shortedName = file.name.split('.');
-		let extension = shortedName[shortedName.length - 1];
+				if (validExtensions.indexOf(extension) < 0) {
+					return { ok: false, error: 'Allowed extensions: ' + validExtensions.join(', ') };
+				}
 
-		if (validExtensions.indexOf(extension) < 0) {
-			return { ok: false, error: 'Allowed extensions: ' + validExtensions.join(', ') };
+				// Change filename
+				let filename = `${userDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
+
+				if (images[i].type === 'logo') {
+					if (userDB.logo_img) {
+						deleteUserFiles(images[i].type, userDB.logo_img);
+					}
+					await file.mv(`uploads/user/${filename}`);
+					userDB.logo_img = filename;
+				}
+				if (images[i].type === 'email') {
+					if (userDB.email_img) {
+						deleteUserFiles(images[i].type, userDB.email_img);
+					}
+					await file.mv(`uploads/user/${images[i].type}/${filename}`);
+					userDB.email_img = filename;
+				}
+			}
 		}
-
-		// Change filename
-		let filename = `${userDB._id}-${new Date().getMilliseconds() * Math.random()}.${extension}`;
-
-		if (userDB.logo_img) {
-			deleteUserFiles(userDB.logo_img);
-		}
-
-		await file.mv(`uploads/user/${filename}`);
-		userDB.logo_img = filename;
 		return { ok: true, userDB };
 	} catch (err) {
 		return { ok: false, error: 'Failed on moving file' };
 	}
 };
 
-deleteUserFiles = (filename) => {
-	let imagePath = path.resolve(`uploads/user/${filename}`);
+deleteUserFiles = (type, filename) => {
+	let imagePath = '';
+	if (type === 'logo') {
+		imagePath = path.resolve(`uploads/user/${filename}`);
+	}
+	if (type === 'email') {
+		imagePath = path.resolve(`uploads/user/email/${filename}`);
+	}
 	if (fs.existsSync(imagePath)) {
 		fs.unlinkSync(imagePath);
 	}
