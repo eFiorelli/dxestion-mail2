@@ -28,7 +28,8 @@ app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 				twitter: body.twitter,
 				facebook: body.facebook,
 				address: body.address,
-				role: 'USER_ROLE'
+				role: 'USER_ROLE',
+				emailConfig: JSON.parse(body.emailConfig)
 			});
 
 			if (req.files) {

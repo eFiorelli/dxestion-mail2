@@ -48,7 +48,8 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					instagram: body.instagram,
 					twitter: body.twitter,
 					facebook: body.facebook,
-					address: body.address
+					address: body.address,
+					emailConfig: JSON.parse(body.emailConfig)
 				});
 			} else {
 				await userDB.update({
@@ -60,7 +61,8 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					instagram: body.instagram,
 					twitter: body.twitter,
 					facebook: body.facebook,
-					address: body.address
+					address: body.address,
+					emailConfig: JSON.parse(body.emailConfig)
 				});
 			}
 			addToLog('info', `User "${userDB.username}" updated by user "${req.user.username}"`);

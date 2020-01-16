@@ -55,6 +55,10 @@ let userSchema = new Schema({
 		default: 'USER_ROLE',
 		enum: validRoles
 	},
+	emailConfig: {
+		type: Object,
+		required: false
+	},
 	active: {
 		type: Boolean,
 		default: true
