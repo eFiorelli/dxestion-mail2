@@ -22,13 +22,15 @@ export class UserComponent implements OnInit {
 	public imagePath;
 	background_imgURL: any;
 	backendImgUrl = AppComponent.BACKEND_URL + '/files/user/';
+	backendImgEmailUrl = AppComponent.BACKEND_URL + '/files/user/email/';
 	logo_imgURL: any;
+	email_imgURL: any;
 	public message: string;
 	showSpinner = false;
 	noImage = 'assets/no-image.png';
 	oldPassword = '';
 
-	preview(files: any) {
+	preview(type: any, files: any) {
 		if (files.length === 0) {
 			return;
 		}
@@ -43,7 +45,13 @@ export class UserComponent implements OnInit {
 		this.imagePath = files;
 		reader.readAsDataURL(files[0]);
 		reader.onload = (_event) => {
-			this.logo_imgURL = reader.result;
+			if (type === 'logo') {
+				this.logo_imgURL = reader.result;
+			}
+
+			if (type === 'email') {
+				this.email_imgURL = reader.result;
+			}
 		};
 	}
 
@@ -73,10 +81,21 @@ export class UserComponent implements OnInit {
 		this.user.logo_img = event.target.files[0];
 	}
 
-	removeImage(type: number) {
+	selectEmailImage(event) {
+		this.user.email_img = event.target.files[0];
+	}
+
+	removeLogoImage(type: number) {
 		if (type === 0) {
 			this.logo_imgURL = null;
 			this.user.logo_img = null;
+		}
+	}
+
+	removeEmailImage(type: number) {
+		if (type === 0) {
+			this.email_imgURL = null;
+			this.user.email_img = null;
 		}
 	}
 
@@ -91,7 +110,6 @@ export class UserComponent implements OnInit {
 				});
 			})
 			.catch((error: any) => {
-				console.log(error);
 				const error_text = 'Ocurrió un problema al modificar el usuario';
 				Swal.fire('Error', error_text, 'error').then(() => {
 					this.router.navigate([ '/users' ]);

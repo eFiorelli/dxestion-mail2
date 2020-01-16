@@ -84,12 +84,12 @@
                             <td style="border: 1px solid lightgray">
                                 <img *ngIf="user.logo_img && !logo_imgURL" bind-src="user.logo_img ? (backendImgUrl + user.logo_img): noImage" style="height: 150px">
 
-                                <input *ngIf="!user.logo_img" (change)="selectLogoImage($event); preview($event.target.files)" type="file" id="logo_file">
+                                <input *ngIf="!user.logo_img" (change)="selectLogoImage($event); preview('logo', $event.target.files)" type="file" id="logo_file">
                                 <img *ngIf="logo_imgURL" [src]="logo_imgURL" style="height: 150px">
                             </td>
                             <td>
-                                <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="user.logo_img" style="margin-left: 20px; width: 40px; height: 150px;">X</button>
-                                <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="!user.logo_img" style="margin-left: 20px; width: 40px; height: 150px;" disabled>X</button>
+                                <button (click)="removeLogoImage(0)" class="btn btn-danger" *ngIf="user.logo_img" style="margin-left: 20px; width: 40px; height: 150px;">X</button>
+                                <button (click)="removeLogoImage(0)" class="btn btn-danger" *ngIf="!user.logo_img" style="margin-left: 20px; width: 40px; height: 150px;" disabled>X</button>
                             </td>
                         </tr>
                     </tbody>
@@ -129,6 +129,23 @@
                         </tr>
                     </table>
                 </form>
+                <h4 class="text-center">Imagen del email</h4>
+                <table style="width: 100%">
+                    <tbody>
+                        <tr style="height: 150px;">
+                            <td style="border: 1px solid lightgray">
+                                <img *ngIf="user.email_img && !email_imgURL" bind-src="user.email_img ? (backendImgEmailUrl + user.email_img): noImage" style="height: 150px">
+
+                                <input *ngIf="!user.email_img" (change)="selectEmailImage($event); preview('email', $event.target.files)" type="file" id="email_file">
+                                <img *ngIf="email_imgURL" [src]="email_imgURL" style="height: 150px">
+                            </td>
+                            <td>
+                                <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="user.email_img" style="margin-left: 20px; width: 40px; height: 150px;">X</button>
+                                <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="!user.email_img" style="margin-left: 20px; width: 40px; height: 150px;" disabled>X</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
         <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>

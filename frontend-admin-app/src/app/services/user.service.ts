@@ -17,16 +17,21 @@ export class UserService {
 	/* Register new user */
 	registerUser(userData: any) {
 		const logo_file = userData.logo_img;
+		const email_file = userData.email_img;
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
 			for (const key in userData) {
-				if (key !== 'logo_img') {
+				if (key !== 'logo_img' && key !== 'email_img') {
 					formData.append(key, userData[key]);
 				}
 			}
 			if (logo_file) {
 				formData.append('logo_image', logo_file, logo_file.name);
+			}
+
+			if (email_file && typeof email_file !== 'string') {
+				formData.append('email_image', email_file, email_file.name);
 			}
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {
@@ -47,16 +52,21 @@ export class UserService {
 	/* Update user */
 	updateUser(userData: any) {
 		const logo_file = userData.logo_img;
+		const email_file = userData.email_img;
 		return new Promise((resolve, reject) => {
 			const formData = new FormData();
 			const xhr = new XMLHttpRequest();
 			for (const key in userData) {
-				if (key !== 'logo_img') {
+				if (key !== 'logo_img' && key !== 'email_img') {
 					formData.append(key, userData[key]);
 				}
 			}
 			if (logo_file && typeof logo_file !== 'string') {
 				formData.append('logo_image', logo_file, logo_file.name);
+			}
+
+			if (email_file && typeof email_file !== 'string') {
+				formData.append('email_image', email_file, email_file.name);
 			}
 			xhr.onreadystatechange = function() {
 				if (xhr.readyState === 4) {

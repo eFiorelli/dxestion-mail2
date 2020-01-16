@@ -25,8 +25,10 @@ export class UsersComponent implements OnInit {
 	users: any[];
 	userList: any[];
 	logo_imgURL: any;
+	email_imgURL: any;
 	uploaded_URL: any;
 	imagePath = AppComponent.BACKEND_URL + '/files/user/';
+	imageEmailPath = AppComponent.BACKEND_URL + '/files/user/email/';
 	noImage = './assets/no-image.jpg';
 	searchText = '';
 	usersListFiltered: any[];
@@ -39,6 +41,7 @@ export class UsersComponent implements OnInit {
 		name: '',
 		email: '',
 		logo_img: '',
+		email_img: '',
 		address: '',
 		twitter: '',
 		facebook: '',
@@ -66,6 +69,7 @@ export class UsersComponent implements OnInit {
 			name: '',
 			email: '',
 			logo_img: '',
+			email_img: '',
 			address: '',
 			twitter: '',
 			facebook: '',
@@ -120,10 +124,10 @@ export class UsersComponent implements OnInit {
 			.then((response: any) => {
 				this.showSpinner = false;
 				const success_text = this.translate.instant('SUCCESS.REGISTER_USER');
-				// Swal.fire('Exito', success_text, 'success').then(() => {
-				// 	this.ngOnInit();
-				// 	this.selectedTab = 0;
-				// });
+				Swal.fire('Exito', success_text, 'success').then(() => {
+					this.ngOnInit();
+					this.selectedTab = 0;
+				});
 			})
 			.catch((error) => {
 				this.showSpinner = false;
@@ -136,14 +140,25 @@ export class UsersComponent implements OnInit {
 		this.user.logo_img = event.target.files[0];
 	}
 
-	removeImage(type: number) {
+	selectEmailImage(event) {
+		this.user.email_img = event.target.files[0];
+	}
+
+	removeLogoImage(type: number) {
 		if (type === 0) {
 			this.logo_imgURL = null;
 			this.user.logo_img = null;
 		}
 	}
 
-	preview(type: number, files: any) {
+	removeEmailImage(type: number) {
+		if (type === 0) {
+			this.email_imgURL = null;
+			this.user.email_img = null;
+		}
+	}
+
+	preview(type: any, files: any) {
 		if (files.length === 0) {
 			return;
 		}
@@ -156,7 +171,10 @@ export class UsersComponent implements OnInit {
 		this.uploaded_URL = files;
 		reader.readAsDataURL(files[0]);
 		reader.onload = (_event) => {
-			if (type === 0) {
+			if (type === 'email') {
+				this.email_imgURL = reader.result;
+			}
+			if (type === 'logo') {
 				this.logo_imgURL = reader.result;
 			}
 		};
