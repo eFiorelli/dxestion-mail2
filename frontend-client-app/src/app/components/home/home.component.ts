@@ -12,7 +12,7 @@ declare var $: any;
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	styleUrls: [ './home.component.css' ]
+	styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
 	@ViewChild(SignaturePad, { static: true })
@@ -28,7 +28,7 @@ export class HomeComponent implements OnInit {
 	selectedFile: any;
 	imagePath = AppComponent.BACKEND_URL + '/files/store/background/';
 	backgroundImg = '';
-	freeFields = JSON.parse(localStorage.getItem('ff'));
+	freeFields = JSON.parse(sessionStorage.getItem('ff'));
 	loading = false;
 
 	client = {
@@ -74,15 +74,18 @@ export class HomeComponent implements OnInit {
 
 	ngOnInit() {
 		this.parseFreeFields();
-		if (localStorage.getItem('bg_image')) {
-			this.backgroundImg = this.imagePath + localStorage.getItem('bg_image');
+		if (sessionStorage.getItem('bg_image')) {
+			this.backgroundImg =
+				this.imagePath + sessionStorage.getItem('bg_image');
 		} else {
 			this.backgroundImg = '../../../assets/bg-heading-03.jpg';
 		}
 	}
 
 	parseFreeFields() {
-		this.freeFields = this.freeFields.filter((f) => f !== undefined && f !== null);
+		this.freeFields = this.freeFields.filter(
+			f => f !== undefined && f !== null
+		);
 	}
 	/*
 	test() {
@@ -109,69 +112,124 @@ export class HomeComponent implements OnInit {
 	*/
 
 	registerClient() {
-		const ff = this.freeFields.filter((f) => f.selectedValue !== undefined && f.selectedValue !== null);
+		const ff = this.freeFields.filter(
+			f => f.selectedValue !== undefined && f.selectedValue !== null
+		);
 		this.client.freeFields = JSON.stringify(ff);
 		if (!this.client.name) {
 			const name_text = this.translate.instant('ERRORS.NAME');
-			Swal.fire({ title: 'Error', icon: 'error', text: name_text, heightAuto: false });
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: name_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (!this.client.email) {
 			const email_text = this.translate.instant('ERRORS.EMAIL');
-			Swal.fire({ title: 'Error', icon: 'error', text: email_text, heightAuto: false });
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: email_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (!this.validateEmail(this.client.email)) {
-			const email_valid_text = this.translate.instant('ERRORS.VALID_EMAIL');
-			Swal.fire({ title: 'Error', icon: 'error', text: email_valid_text, heightAuto: false });
+			const email_valid_text = this.translate.instant(
+				'ERRORS.VALID_EMAIL'
+			);
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: email_valid_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (!this.client.phone) {
 			const phone_text = this.translate.instant('ERRORS.PHONE');
-			Swal.fire({ title: 'Error', icon: 'error', text: phone_text, heightAuto: false });
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: phone_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (!this.validatePhone(this.client.phone)) {
-			const phone_valid_text = this.translate.instant('ERRORS.VALID_PHONE');
-			Swal.fire({ title: 'Error', icon: 'error', text: phone_valid_text, heightAuto: false });
+			const phone_valid_text = this.translate.instant(
+				'ERRORS.VALID_PHONE'
+			);
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: phone_valid_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (this.signaturePad.toData().length === 0) {
 			const signature_text = this.translate.instant('ERRORS.SIGNATURE');
-			Swal.fire({ title: 'Error', icon: 'error', text: signature_text, heightAuto: false });
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: signature_text,
+				heightAuto: false
+			});
 			return;
 		}
 
 		if (!this.client.gpdr) {
 			const gpdr_text = this.translate.instant('ERRORS.GPDR_ACCEPT');
-			Swal.fire({ title: 'Error', icon: 'error', text: gpdr_text, heightAuto: false });
+			Swal.fire({
+				title: 'Error',
+				icon: 'error',
+				text: gpdr_text,
+				heightAuto: false
+			});
 			return;
 		}
 		this.loading = true;
-		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
+		this.client.signature = this.dataURItoBlob(
+			this.signaturePad.toDataURL('image/png')
+		);
 		this.userService
 			.registerClient(this.client)
-			.then((response) => {
+			.then(response => {
 				this.loading = false;
 				const success_text = 'Cliente creado con exito';
-				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false }).then(() => {
+				Swal.fire({
+					title: 'Exito',
+					text: success_text,
+					icon: 'success',
+					heightAuto: false
+				}).then(() => {
 					this.flip();
 				});
 			})
-			.catch((error) => {
+			.catch(error => {
 				this.loading = false;
 				let error_text = '';
 				if (error.type) {
-					error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
+					error_text = this.translate.instant(
+						`ERRORS.ERROR_TYPE_${error.type}`
+					);
 				} else {
 					error_text = 'Error al guardar el cliente';
 				}
-				Swal.fire({ title: 'Error', text: error_text, icon: 'error', heightAuto: false });
+				Swal.fire({
+					title: 'Error',
+					text: error_text,
+					icon: 'error',
+					heightAuto: false
+				});
 			});
 	}
 
@@ -189,10 +247,10 @@ export class HomeComponent implements OnInit {
 		if ($('#collapseExample').hasClass('show')) {
 			$('.btn.btn-light.mb-1').click();
 		}
-		this.freeFields = JSON.parse(localStorage.getItem('ff'));
+		this.freeFields = JSON.parse(sessionStorage.getItem('ff'));
 		this.parseFreeFields();
 		setTimeout(() => {
-			this.router.navigate([ '/slider' ]);
+			this.router.navigate(['/slider']);
 		}, 1500);
 	}
 
@@ -217,9 +275,15 @@ export class HomeComponent implements OnInit {
 
 	showGPDR(active) {
 		if (active) {
-			const gpdr_text = JSON.stringify(localStorage.getItem('gpdr_text'));
-			Swal.fire({ title: 'Acuerdo general de protección de datos', text: gpdr_text, heightAuto: false });
-			$('.swal2-html-container').css('font-size', '12px');
+			const gpdr_text = JSON.stringify(
+				sessionStorage.getItem('gpdr_text')
+			);
+			Swal.fire({
+				title: 'Acuerdo general de protección de datos',
+				text: gpdr_text,
+				heightAuto: false
+			});
+			$('.swal2-html-container').css('font-size', '10px');
 			$('.swal2-html-container').css('text-align', 'justify');
 		}
 	}
@@ -234,7 +298,10 @@ export class HomeComponent implements OnInit {
 		}
 
 		// separate out the mime component
-		const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+		const mimeString = dataURI
+			.split(',')[0]
+			.split(':')[1]
+			.split(';')[0];
 
 		// write the bytes of the string to a typed array
 		const ia = new Uint8Array(byteString.length);
@@ -242,7 +309,7 @@ export class HomeComponent implements OnInit {
 			ia[i] = byteString.charCodeAt(i);
 		}
 
-		return new Blob([ ia ], { type: mimeString });
+		return new Blob([ia], { type: mimeString });
 	}
 
 	validateEmail(mail) {

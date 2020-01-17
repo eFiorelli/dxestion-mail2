@@ -13,30 +13,42 @@ export class AuthService {
 	storeInfo;
 
 	login(credentials) {
-		return this.http.post(AppComponent.BACKEND_URL + '/login/store', { credentials }).pipe(
-			map((res: any) => {
-				this.storeInfo = res;
-				console.log(this.storeInfo);
-				localStorage.setItem('token', this.storeInfo.token);
-				localStorage.setItem('bg_image', this.storeInfo.store.background_img);
-				localStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
-				localStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
-				return true;
-			})
-		);
+		return this.http
+			.post(AppComponent.BACKEND_URL + '/login/store', { credentials })
+			.pipe(
+				map((res: any) => {
+					this.storeInfo = res;
+					console.log(this.storeInfo);
+					sessionStorage.setItem('token', this.storeInfo.token);
+					sessionStorage.setItem(
+						'bg_image',
+						this.storeInfo.store.background_img
+					);
+					sessionStorage.setItem(
+						'gpdr_text',
+						this.storeInfo.store.gpdr_text
+					);
+					sessionStorage.setItem(
+						'ff',
+						JSON.stringify(this.storeInfo.store.free_fields)
+					);
+					return true;
+				})
+			);
 	}
 
 	logout() {
-		localStorage.clear();
-		this.router.navigate([ '/login' ]);
+		sessionStorage.clear();
+		this.router.navigate(['/login']);
 	}
 
 	getToken() {
-		return localStorage.getItem('token') || null;
+		return sessionStorage.getItem('token') || null;
 	}
 
 	isAuthenticated(): boolean {
-		const token = localStorage.getItem('token');
+		const token = sessionStorage.getItem('token');
+		console.log(token);
 
 		if (token) {
 			return true;
@@ -46,6 +58,6 @@ export class AuthService {
 	}
 
 	isAdmin(): boolean {
-		return localStorage.getItem('role') === 'ADMIN_ROLE';
+		return sessionStorage.getItem('role') === 'ADMIN_ROLE';
 	}
 }
