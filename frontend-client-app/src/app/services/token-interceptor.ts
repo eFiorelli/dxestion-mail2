@@ -9,10 +9,10 @@ export class TokenInterceptor implements HttpInterceptor {
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 		let headers: any;
-		if (localStorage.getItem('token')) {
+		if (sessionStorage.getItem('token')) {
 			// Attach headers to request
 			headers = new HttpHeaders({
-				Authorization: localStorage.getItem('token'),
+				Authorization: sessionStorage.getItem('token'),
 				'Content-Type': 'application/json',
 				Accept: 'application/json'
 			});

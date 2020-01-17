@@ -12,7 +12,7 @@ declare var $: any;
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
-	styleUrls: ['./home.component.css']
+	styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
 	@ViewChild(SignaturePad, { static: true })
@@ -75,18 +75,16 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 		this.parseFreeFields();
 		if (sessionStorage.getItem('bg_image')) {
-			this.backgroundImg =
-				this.imagePath + sessionStorage.getItem('bg_image');
+			this.backgroundImg = this.imagePath + sessionStorage.getItem('bg_image');
 		} else {
 			this.backgroundImg = '../../../assets/bg-heading-03.jpg';
 		}
 	}
 
 	parseFreeFields() {
-		this.freeFields = this.freeFields.filter(
-			f => f !== undefined && f !== null
-		);
+		this.freeFields = this.freeFields.filter((f) => f !== undefined && f !== null);
 	}
+
 	/*
 	test() {
 		this.userService
@@ -112,9 +110,7 @@ export class HomeComponent implements OnInit {
 	*/
 
 	registerClient() {
-		const ff = this.freeFields.filter(
-			f => f.selectedValue !== undefined && f.selectedValue !== null
-		);
+		const ff = this.freeFields.filter((f) => f.selectedValue !== undefined && f.selectedValue !== null);
 		this.client.freeFields = JSON.stringify(ff);
 		if (!this.client.name) {
 			const name_text = this.translate.instant('ERRORS.NAME');
@@ -139,9 +135,7 @@ export class HomeComponent implements OnInit {
 		}
 
 		if (!this.validateEmail(this.client.email)) {
-			const email_valid_text = this.translate.instant(
-				'ERRORS.VALID_EMAIL'
-			);
+			const email_valid_text = this.translate.instant('ERRORS.VALID_EMAIL');
 			Swal.fire({
 				title: 'Error',
 				icon: 'error',
@@ -163,9 +157,7 @@ export class HomeComponent implements OnInit {
 		}
 
 		if (!this.validatePhone(this.client.phone)) {
-			const phone_valid_text = this.translate.instant(
-				'ERRORS.VALID_PHONE'
-			);
+			const phone_valid_text = this.translate.instant('ERRORS.VALID_PHONE');
 			Swal.fire({
 				title: 'Error',
 				icon: 'error',
@@ -197,12 +189,10 @@ export class HomeComponent implements OnInit {
 			return;
 		}
 		this.loading = true;
-		this.client.signature = this.dataURItoBlob(
-			this.signaturePad.toDataURL('image/png')
-		);
+		this.client.signature = this.dataURItoBlob(this.signaturePad.toDataURL('image/png'));
 		this.userService
 			.registerClient(this.client)
-			.then(response => {
+			.then((response) => {
 				this.loading = false;
 				const success_text = 'Cliente creado con exito';
 				Swal.fire({
@@ -214,13 +204,11 @@ export class HomeComponent implements OnInit {
 					this.flip();
 				});
 			})
-			.catch(error => {
+			.catch((error) => {
 				this.loading = false;
 				let error_text = '';
 				if (error.type) {
-					error_text = this.translate.instant(
-						`ERRORS.ERROR_TYPE_${error.type}`
-					);
+					error_text = this.translate.instant(`ERRORS.ERROR_TYPE_${error.type}`);
 				} else {
 					error_text = 'Error al guardar el cliente';
 				}
@@ -250,7 +238,7 @@ export class HomeComponent implements OnInit {
 		this.freeFields = JSON.parse(sessionStorage.getItem('ff'));
 		this.parseFreeFields();
 		setTimeout(() => {
-			this.router.navigate(['/slider']);
+			this.router.navigate([ '/slider' ]);
 		}, 1500);
 	}
 
@@ -275,9 +263,7 @@ export class HomeComponent implements OnInit {
 
 	showGPDR(active) {
 		if (active) {
-			const gpdr_text = JSON.stringify(
-				sessionStorage.getItem('gpdr_text')
-			);
+			const gpdr_text = JSON.stringify(sessionStorage.getItem('gpdr_text'));
 			Swal.fire({
 				title: 'Acuerdo general de protección de datos',
 				text: gpdr_text,
@@ -298,10 +284,7 @@ export class HomeComponent implements OnInit {
 		}
 
 		// separate out the mime component
-		const mimeString = dataURI
-			.split(',')[0]
-			.split(':')[1]
-			.split(';')[0];
+		const mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
 
 		// write the bytes of the string to a typed array
 		const ia = new Uint8Array(byteString.length);
@@ -309,7 +292,7 @@ export class HomeComponent implements OnInit {
 			ia[i] = byteString.charCodeAt(i);
 		}
 
-		return new Blob([ia], { type: mimeString });
+		return new Blob([ ia ], { type: mimeString });
 	}
 
 	validateEmail(mail) {

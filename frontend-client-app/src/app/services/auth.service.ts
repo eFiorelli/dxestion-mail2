@@ -13,33 +13,22 @@ export class AuthService {
 	storeInfo;
 
 	login(credentials) {
-		return this.http
-			.post(AppComponent.BACKEND_URL + '/login/store', { credentials })
-			.pipe(
-				map((res: any) => {
-					this.storeInfo = res;
-					console.log(this.storeInfo);
-					sessionStorage.setItem('token', this.storeInfo.token);
-					sessionStorage.setItem(
-						'bg_image',
-						this.storeInfo.store.background_img
-					);
-					sessionStorage.setItem(
-						'gpdr_text',
-						this.storeInfo.store.gpdr_text
-					);
-					sessionStorage.setItem(
-						'ff',
-						JSON.stringify(this.storeInfo.store.free_fields)
-					);
-					return true;
-				})
-			);
+		return this.http.post(AppComponent.BACKEND_URL + '/login/store', { credentials }).pipe(
+			map((res: any) => {
+				this.storeInfo = res;
+				console.log(this.storeInfo);
+				sessionStorage.setItem('token', this.storeInfo.token);
+				sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
+				sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
+				sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
+				return true;
+			})
+		);
 	}
 
 	logout() {
 		sessionStorage.clear();
-		this.router.navigate(['/login']);
+		this.router.navigate([ '/login' ]);
 	}
 
 	getToken() {
@@ -48,7 +37,6 @@ export class AuthService {
 
 	isAuthenticated(): boolean {
 		const token = sessionStorage.getItem('token');
-		console.log(token);
 
 		if (token) {
 			return true;

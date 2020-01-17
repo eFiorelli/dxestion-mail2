@@ -22,7 +22,7 @@ export class SliderComponent implements OnInit {
 	];
 
 	abs_path = AppComponent.BACKEND_URL + '/files/store/background/';
-	ls_images = localStorage.getItem('bg_image');
+	ls_images = sessionStorage.getItem('bg_image');
 	bg_images = this.ls_images.split(',');
 
 	ngOnInit() {
