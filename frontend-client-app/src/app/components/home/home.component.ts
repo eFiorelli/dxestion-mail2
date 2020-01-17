@@ -195,11 +195,7 @@ export class HomeComponent implements OnInit {
 			.then((response) => {
 				this.loading = false;
 				const success_text = 'Cliente creado con exito';
-				Swal.fire({
-					title: 'Exito',
-					text: success_text,
-					icon: 'success',
-					heightAuto: false
+				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false
 				}).then(() => {
 					this.flip();
 				});
