@@ -73,7 +73,7 @@ server.listen(process.env.PORT, () => {
 	addToLog('info', `Environment => ${process.env.NODE_ENV}`);
 	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);
 	addToLog('info', `HTTPS Listening on port ${process.env.SSL_PORT}`);
-	addToLog('info', `Socket server Listening on port ${process.env.PORT}`);
+	addToLog('info', `Socket server Listening on port ${process.env.SOCKET_PORT}`);
 	io.on('connection', (socket) => {
 		socket.on('log message', (message) => {
 			getLogMessages(io);
@@ -87,9 +87,7 @@ server.listen(process.env.SSL_PORT, () => {
 	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);
 	addToLog('info', `HTTPS Listening on port ${process.env.SSL_PORT}`);
 
-	console.log('socket');
 	io.on('connection', (socket) => {
-		console.log(socket);
 		socket.on('log message', (message) => {
 			// getLogMessages();
 		});

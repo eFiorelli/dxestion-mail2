@@ -45,7 +45,7 @@ checkDatabaseConnection = async (connection_params) => {
 		commerce_password: connection_params.commerce_password
 	};
 	try {
-		console.log(`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`);
+		// console.log(`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`);
 		const connection = await sql.connect(
 			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
 		);

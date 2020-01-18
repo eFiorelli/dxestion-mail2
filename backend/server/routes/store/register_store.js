@@ -96,7 +96,6 @@ router.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ]
 			}
 		}
 	} catch (err) {
-		console.log(err);
 		return res.status(500).json({
 			ok: false,
 			err: err,
@@ -138,7 +137,6 @@ saveStoreImages = async (storeDB, images) => {
 		}
 		return { ok: true, storeDB };
 	} catch (err) {
-		console.log(err);
 		return { ok: false, error: 'Failed on moving file' };
 	}
 };

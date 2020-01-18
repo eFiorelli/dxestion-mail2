@@ -25,7 +25,6 @@ app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => 
 					{ type: 'email', image: req.files.email_image || '' }
 				];
 				const updatedUser = await updateUserImages(userDB, res, images);
-				console.log(updatedUser);
 				if (!updatedUser.ok) {
 					return res.status(500).json({
 						ok: false,

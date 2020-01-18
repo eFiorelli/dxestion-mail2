@@ -1,16 +1,5 @@
-const config = require('../config/config');
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
-
-/*
-const transporter = nodemailer.createTransport({
-	service: config.EMAIL.service,
-	auth: {
-		user: config.EMAIL.auth.user,
-		pass: config.EMAIL.auth.pass
-	}
-});
-*/
 
 let sendMail = async (store, client, user) => {
 	const config = {

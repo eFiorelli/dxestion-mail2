@@ -10,7 +10,7 @@ process.env.BACKEND_URL = process.env.BACKEND_URL || 'https://backendnuclient.se
 
 process.env.PORT = process.env.PORT || 3000;
 
-process.env.SOCKET_PORT = process.env.SOCKET_PORT || 3001;
+process.env.SOCKET_PORT = process.env.SOCKET_PORT || 3000;
 
 process.env.SSL_PORT = process.env.SSL_PORT || 8080;
 
@@ -22,8 +22,8 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 // ======================
 // Token expiracy
 // ======================
-// 60 segundos * 60 minutos * 24 horas * 30 dias * 365 dias
-process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 30 * 365;
+// 1000 milisegundos * 60 segundos * 60 minutos * 24 horas
+process.env.TOKEN_EXPIRATION = 60 * 60 * 24 * 1000;
 
 // ======================
 // Token SEED
@@ -40,22 +40,8 @@ if (process.env.NODE_ENV === 'dev') {
 	process.env.MONGO_URI = urlDB;
 }
 
-const EMAIL = {
-	service: 'Gmail',
-	auth: {
-		user: 'miguel@dxestion.com',
-		pass: 'migueldx'
-	}
-};
-
 // ======================
-// Email config
-// ======================
-
-module.exports = { EMAIL };
-
-// ======================
-// Email config
+// Root config
 // ======================
 process.env.ROOT_PASSWORD = process.env.ROOT_PASSWORD || 'Dxestion0180';
 
