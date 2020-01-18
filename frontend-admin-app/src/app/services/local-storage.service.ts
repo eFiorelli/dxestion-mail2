@@ -14,7 +14,6 @@ export class LocalStorageService {
 	}
 
 	setItem(key: string, data: any) {
-		console.log('changed');
 		localStorage.setItem(key, data);
 		this.storageSub.next(true);
 	}

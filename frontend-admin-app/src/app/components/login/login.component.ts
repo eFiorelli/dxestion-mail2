@@ -22,9 +22,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	test() {
-		this.auth.test().subscribe((response: any) => {
-			console.log(response);
-		});
+		this.auth.test().subscribe((response: any) => {});
 	}
 
 	login(): void {
