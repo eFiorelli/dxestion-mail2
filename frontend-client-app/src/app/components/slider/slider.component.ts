@@ -26,7 +26,6 @@ export class SliderComponent implements OnInit {
 	bg_images = this.ls_images.split(',');
 
 	ngOnInit() {
-		console.log(this.bg_images);
 		$('.cb-slideshow li:nth-child(1) span').css(
 			'background',
 			`url(${this.abs_path + this.bg_images[0]}) no-repeat center center fixed`

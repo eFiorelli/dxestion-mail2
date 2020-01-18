@@ -73,6 +73,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.auth.validateToken().subscribe((response: any) => {});
 		this.parseFreeFields();
 		if (sessionStorage.getItem('bg_image')) {
 			this.backgroundImg = this.imagePath + sessionStorage.getItem('bg_image');
@@ -195,7 +196,11 @@ export class HomeComponent implements OnInit {
 			.then((response) => {
 				this.loading = false;
 				const success_text = 'Cliente creado con exito';
-				Swal.fire({ title: 'Exito', text: success_text, icon: 'success', heightAuto: false
+				Swal.fire({
+					title: 'Exito',
+					text: success_text,
+					icon: 'success',
+					heightAuto: false
 				}).then(() => {
 					this.flip();
 				});

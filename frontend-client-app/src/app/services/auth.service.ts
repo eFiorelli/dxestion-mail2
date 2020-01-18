@@ -16,12 +16,19 @@ export class AuthService {
 		return this.http.post(AppComponent.BACKEND_URL + '/login/store', { credentials }).pipe(
 			map((res: any) => {
 				this.storeInfo = res;
-				console.log(this.storeInfo);
 				sessionStorage.setItem('token', this.storeInfo.token);
 				sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
 				sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
 				sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
 				return true;
+			})
+		);
+	}
+
+	validateToken() {
+		return this.http.get(AppComponent.BACKEND_URL + '/login/validate_token').pipe(
+			map((res: any) => {
+				return res;
 			})
 		);
 	}
