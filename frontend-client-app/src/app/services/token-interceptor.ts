@@ -35,12 +35,12 @@ export class TokenInterceptor implements HttpInterceptor {
 				if (err.status === 401) {
 					if (err.error.err.err.message === 'invalid signature') {
 						Swal.fire('Error', 'Token no válido. Inicie sesión nuevamente', 'error').then(() => {
-							// this.router.navigate([ '/login' ]);
+							this.router.navigate([ '/login' ]);
 						});
 					}
 					if (err.error.err.err.message === 'jwt expired') {
 						Swal.fire('Error', 'Su sesión ha expirado', 'error').then(() => {
-							// this.router.navigate([ '/login' ]);
+							this.router.navigate([ '/login' ]);
 						});
 					}
 					return throwError(err);
