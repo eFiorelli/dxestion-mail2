@@ -44,7 +44,7 @@ router.post('/register/client', checkUserToken, async (req, res) => {
 				break;
 			case 'FrontRest':
 				/* Future versions */
-				client_insert = await sendClientToFRS();
+				client_insert = await sendClientToFRS(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'Agora':

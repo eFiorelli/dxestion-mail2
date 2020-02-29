@@ -10,6 +10,7 @@ const { getLogMessages } = require('./utils/socket');
 const https = require('https');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
+const cron = require('./utils/crontasks');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -74,23 +75,11 @@ server.listen(process.env.PORT, () => {
 	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);
 	addToLog('info', `HTTPS Listening on port ${process.env.SSL_PORT}`);
 	addToLog('info', `Socket server Listening on port ${process.env.SOCKET_PORT}`);
+	/* Start cron tasks */
+	cron.startTask();
 	io.on('connection', (socket) => {
 		socket.on('log message', (message) => {
 			getLogMessages(io);
 		});
 	});
 });
-
-/*
-server.listen(process.env.SSL_PORT, () => {
-	addToLog('info', `Environment => ${process.env.NODE_ENV}`);
-	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);
-	addToLog('info', `HTTPS Listening on port ${process.env.SSL_PORT}`);
-
-	io.on('connection', (socket) => {
-		socket.on('log message', (message) => {
-			// getLogMessages();
-		});
-	});
-});
-*/

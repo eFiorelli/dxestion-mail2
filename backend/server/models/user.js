@@ -63,6 +63,14 @@ let userSchema = new Schema({
 		type: Object,
 		required: false
 	},
+	googleConfig: {
+		type: Object,
+		require: false
+	},
+	googleToken: {
+		type: Object,
+		require: false
+	},
 	active: {
 		type: Boolean,
 		default: true

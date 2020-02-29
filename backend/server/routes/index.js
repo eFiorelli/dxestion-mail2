@@ -21,6 +21,7 @@ app.use(require('./user/register_user'));
 app.use(require('./user/update_user'));
 app.use(require('./user/delete_user'));
 app.use(require('./user/list_users'));
+app.use(require('./user/sync_gmail_account'));
 
 app.use(require('./logger/logger'));
 
