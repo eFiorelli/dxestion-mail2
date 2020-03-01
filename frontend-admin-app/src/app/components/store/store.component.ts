@@ -51,7 +51,7 @@ export class StoreComponent implements OnInit {
 	message = '';
 	clients = [];
 	commerce_password = false;
-	storeTypes = [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ];
+	storeTypes = [ 'FrontRetail/Manager', 'FrontRetail', 'FrontRest/Manager', 'FrontRest', 'Agora' ];
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 	user_role = localStorage.getItem('role');
 	freeFields = [];
