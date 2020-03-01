@@ -1,3 +1,4 @@
+const { GOOGLE_CONFIG } = require('../../config/config');
 const express = require('express');
 const User = require('../../models/user');
 const Store = require('../../models/store');
@@ -14,14 +15,22 @@ app.post('/user/:id/gmail_sync/authurl', [ checkUserToken, checkAdminRole ], asy
 	const body = req.body;
 	const id = req.params.id;
 	const user = await User.findById(id);
-	gmail.getNewToken(user.googleConfig, body.key).then(async (token) => {
-		await user.update({
-			googleToken: token
+	gmail
+		.getNewToken(GOOGLE_CONFIG, body.key)
+		.then(async (token) => {
+			await user.update({
+				googleToken: token
+			});
+			return res.status(200).json({
+				ok: true
+			});
+		})
+		.catch((error) => {
+			return res.status(200).json({
+				ok: false,
+				message: error
+			});
 		});
-	});
-	return res.status(200).json({
-		ok: true
-	});
 });
 
 /*
@@ -34,7 +43,7 @@ If user hasn't a Google token, the response is the AuthURL
 app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	const id = req.params.id;
 	const user = await User.findById(id);
-	const gmail_response = await gmail.init(user.googleConfig, '', user.googleToken);
+	const gmail_response = await gmail.init(GOOGLE_CONFIG, '', user.googleToken);
 	if (gmail_response.ok) {
 		const store = await Store.findOne({ user: id });
 		const erp_contacts = await getERPcontacts(store);
@@ -51,6 +60,7 @@ app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, 
 			});
 		}
 	} else {
+		console.log('err');
 		/* This is returned when user has NO Google token */
 		return res.status(200).json({
 			response: gmail_response.response,

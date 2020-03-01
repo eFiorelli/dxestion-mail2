@@ -1,3 +1,4 @@
+const { GOOGLE_CONFIG } = require('../config/config');
 const User = require('../models/user');
 const Store = require('../models/store');
 const { google } = require('googleapis');
@@ -64,7 +65,9 @@ async function listContacts(auth) {
 						connections.forEach((person) => {
 							contacts.push({
 								name: person.names ? person.names[0].displayName : '',
-								phone: person.phoneNumbers ? person.phoneNumbers[0].value : '',
+								phone_1: person.phoneNumbers ? person.phoneNumbers[0].value : '',
+								phone_2: person.phoneNumbers[1] ? person.phoneNumbers[1].value : '',
+								phone_3: person.phoneNumbers[2] ? person.phoneNumbers[2].value : '',
 								email: person.emailAddresses ? person.emailAddresses[0].value : ''
 							});
 						});
@@ -92,7 +95,7 @@ async function syncAllContacts() {
 		let store = await Store.findOne({ user: user });
 		let ERPContacts = await getERPcontacts(store);
 		if (ERPContacts.ok) {
-			let GoogleContacts = await init(user.googleConfig, '', user.googleToken);
+			let GoogleContacts = await init(GOOGLE_CONFIG, '', user.googleToken);
 			let newContacts = await compareContacts(GoogleContacts, ERPContacts.response);
 			await insertContacts(user, newContacts);
 		} else {
@@ -115,7 +118,7 @@ getERPcontacts = async (connection_params) => {
 			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
 		);
 		if (connection) {
-			const result = await sql.query`SELECT NOMBRECLIENTE as name, E_MAIL as email, TELEFONO1 as phone from CLIENTES where (E_MAIL is not null OR TELEFONO1 is not null)`;
+			const result = await sql.query`SELECT NOMBRECLIENTE as name, E_MAIL as email, TELEFONO1 as phone_1, MOBIL as phone_2, TELEFONO2 as phone_3 from CLIENTES where (E_MAIL is not null OR TELEFONO1 is not null)`;
 			if (result.recordset.length === 0) {
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
@@ -147,7 +150,11 @@ compareContacts = async (google, erp) => {
 		let insert = true;
 		if (erp[i].phone) {
 			for (let j = 0; j < google.length; j++) {
-				if (erp[i].phone === google[j].phone) {
+				if (
+					erp[i].phone_1 === google[j].phone_1 ||
+					erp[i].phone_2 === google[j].phone_2 ||
+					erp[i].phone_3 === google[j].phone_3
+				) {
 					insert = false;
 				}
 			}
@@ -167,21 +174,30 @@ insertContacts = async (user, contacts) => {
 	}
 
 	try {
-		const auth = new google.auth.OAuth2(
-			user.googleConfig.installed.client_id,
-			user.googleConfig.installed.client_secret,
-			user.googleConfig.installed.redirect_uris[0]
-		);
+		const { client_secret, client_id, redirect_uris } = GOOGLE_CONFIG.installed;
+		const auth = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
 
 		let contactInsertedCount = 0;
 		for (let contact of contacts) {
 			let contactObject = {
 				emailAddresses: [ { value: contact.email } ],
-				names: [ { displayName: contact.name } ],
+				names: [ { displayName: contact.name, givenName: contact.name, familyName: contact.name } ],
 				phoneNumbers: [
 					{
-						value: contact.phone,
-						canonicalForm: `+34${contact.phone}`,
+						value: contact.phone_1,
+						canonicalForm: `+34${contact.phone_1}`,
+						type: 'mobile',
+						formattedType: 'Mobile'
+					},
+					{
+						value: contact.phone_2,
+						canonicalForm: `+34${contact.phone_2}`,
+						type: 'mobile',
+						formattedType: 'Mobile,'
+					},
+					{
+						value: contact.phone_3,
+						canonicalForm: `+34${contact.phone_3}`,
 						type: 'mobile',
 						formattedType: 'Mobile'
 					}
@@ -189,12 +205,10 @@ insertContacts = async (user, contacts) => {
 			};
 			auth.setCredentials(user.googleToken);
 			contactInsertedCount += 1;
-			return;
 			const service = google.people({ version: 'v1', auth });
 			const { data: newContact } = await service.people.createContact({
 				requestBody: contactObject
 			});
-			console.log('\n\nCreated Contact:', newContact);
 		}
 		addToLog('info', `Contacts inserted for user "${user.name}": ${contactInsertedCount}`);
 	} catch (err) {

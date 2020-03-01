@@ -45,6 +45,18 @@ if (process.env.NODE_ENV === 'dev') {
 // ======================
 process.env.ROOT_PASSWORD = process.env.ROOT_PASSWORD || 'Dxestion0180';
 
+exports.GOOGLE_CONFIG = {
+	installed: {
+		client_id: '183642661476-3dbdvhcseoj21bc23e0d78td1adibd94.apps.googleusercontent.com',
+		project_id: 'nice-unison-268212',
+		auth_uri: 'https://accounts.google.com/o/oauth2/auth',
+		token_uri: 'https://oauth2.googleapis.com/token',
+		auth_provider_x509_cert_url: 'https://www.googleapis.com/oauth2/v1/certs',
+		client_secret: 'BlDFSBvddEGXwk-ohOdws9Lg',
+		redirect_uris: [ 'urn:ietf:wg:oauth:2.0:oob' ]
+	}
+};
+
 /**************************      ERROR CODES:      **************************/
 /*
 **** Register user ****
