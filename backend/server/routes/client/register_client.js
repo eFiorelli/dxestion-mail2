@@ -38,13 +38,23 @@ router.post('/register/client', checkUserToken, async (req, res) => {
 	try {
 		switch (req.store.store_type) {
 			case 'FrontRetail/Manager':
-				client_insert = await sendClientToFRTManager(req.store, body);
+				client_insert = await sendClientToFRTFRSManager(req.store, body);
+				// client_insert = 0;
+				await saveClient(client_insert, req.store, body, req.files, res);
+				break;
+			case 'FrontRetail':
+				client_insert = await sendClientToFRTFRSManager(req.store, body);
+				// client_insert = 0;
+				await saveClient(client_insert, req.store, body, req.files, res);
+				break;
+			case 'FrontRest/Manager':
+				client_insert = await sendClientToFRTFRSManager(req.store, body);
 				// client_insert = 0;
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRest':
 				/* Future versions */
-				client_insert = await sendClientToFRS(req.store, body);
+				client_insert = await sendClientToFRTFRSManager(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'Agora':
@@ -167,7 +177,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 	}
 };
 
-sendClientToFRTManager = async (connection_params, client) => {
+sendClientToFRTFRSManager = async (connection_params, client) => {
 	const config = {
 		user: connection_params.database_username,
 		password: connection_params.database_password,
@@ -202,10 +212,20 @@ sendClientToFRTManager = async (connection_params, client) => {
 				}
 				if (query.rowsAffected[0] === 1) {
 					/* Client inserted */
+					if (connection_params.store_type in [ 'FrontRetail/Manager', 'FrontRest/Manager' ]) {
+						const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, FO, IDCENTRAL, TALLA, COLOR) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '001',0, 1, 12, 0, '', ${client_id}, 0, 1, '.','.')`;
+						const rem_transactions = await sql.query(sql_string_rem_transactions);
+						if (rem_transactions.rowsAffected[0] <= 0) {
+							return 2;
+						}
+					}
+
 					if (client.freeFields.length >= 0) {
 						const result = await saveFreeFields(max_id, client.freeFields);
 						if (result) {
 							return 0;
+						} else {
+							return 2;
 						}
 					}
 				}
@@ -228,7 +248,7 @@ sendClientToFRTManager = async (connection_params, client) => {
 };
 
 /* Future versions */
-sendClientToFRS = async () => {};
+sendClientToFRSManager = async () => {};
 
 /* Future versions */
 sendClientToAgora = async () => {};
@@ -259,18 +279,11 @@ saveFreeFields = async (client_id, free_fields) => {
 		sql_string = '';
 	}
 
-	const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, FO, IDCENTRAL, TALLA, COLOR) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '001',0, 1, 12, 0, '', ${client_id}, 0, 1, '.','.')`;
-
 	try {
 		if (sql_string !== '') {
 			const query = await sql.query(sql_string);
 			if (query.rowsAffected[0] >= 0) {
-				const rem_transactions = await sql.query(sql_string_rem_transactions);
-				if (rem_transactions.rowsAffected[0] > 0) {
-					return true;
-				} else {
-					return false;
-				}
+				return true;
 			} else {
 				return false;
 			}
