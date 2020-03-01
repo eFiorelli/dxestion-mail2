@@ -7,7 +7,7 @@ let themeColors = {
 };
 
 let store_types = {
-	values: [ 'FrontRetail/Manager', 'FrontRest', 'Agora' ],
+	values: [ 'FrontRetail/Manager', 'FrontRetail', 'FrontRest/Manager', 'FrontRest', 'Agora' ],
 	message: '{VALUE} is not a valid shop type'
 };
 
