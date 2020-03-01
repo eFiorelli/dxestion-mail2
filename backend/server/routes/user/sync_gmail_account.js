@@ -55,7 +55,7 @@ app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, 
 			});
 		} else {
 			return res.status(200).json({
-				message: 'Unable to get ERP contacts',
+				message: erp_contacts.message,
 				ok: false
 			});
 		}

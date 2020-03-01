@@ -129,17 +129,20 @@ getERPcontacts = async (connection_params) => {
 			}
 		} else {
 			/* Error connecting to SQL server */
-			addToLog('error', `Unable to get ERP contacts for "${config.user}@${config.server}"`);
-			return { ok: false, error: 3 };
+			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			addToLog('error', error_message);
+			return { ok: false, error: 3, message: error_message };
 		}
 	} catch (err) {
 		if (err.code === 'ESOCKET') {
-			addToLog('error', `Unable to get ERP contacts for "${config.user}@${config.server}"`);
-			return { ok: false, error: 3 };
+			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			addToLog('error', error_message);
+			return { ok: false, error: 3, message: error_message };
 		} else {
 			/* Server error */
-			addToLog('error', `Unable to get ERP contacts for "${config.user}@${config.server}"`);
-			return { ok: false, error: 4 };
+			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			addToLog('error', error_message);
+			return { ok: false, error: 4, message: error_message };
 		}
 	}
 };
