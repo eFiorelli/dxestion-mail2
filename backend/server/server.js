@@ -11,6 +11,8 @@ const https = require('https');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const cron = require('./utils/crontasks');
+const helmet = require('helmet');
+const compression = require('compression');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -20,6 +22,12 @@ const io = require('socket.io')(server);
 createLogger().then(() => {
 	addToLog('info', 'App started');
 });
+
+/* Set Helmet middleware */
+app.use(helmet());
+
+/* Compress all responses */
+app.use(compression());
 
 /* Add headers */
 app.use((req, res, next) => {
