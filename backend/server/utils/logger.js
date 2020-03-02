@@ -3,6 +3,7 @@ const moment = require('moment');
 
 let io;
 let loggerObject = null;
+let filename = '';
 
 /* Log format */
 const myFormat = winston.format.printf(({ level, message }) => {
@@ -28,6 +29,10 @@ addToLog = function(level, message) {
 						filename: `./logs/${newFilename}`
 					})
 				]
+			});
+			logger().log({
+				level,
+				message
 			});
 			resolve(true);
 		});

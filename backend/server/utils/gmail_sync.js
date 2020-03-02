@@ -147,11 +147,24 @@ getERPcontacts = async (connection_params) => {
 	}
 };
 
-compareContacts = async (google, erp) => {
+parseERPContacts = async (contacts) => {
+	for (let contact of contacts) {
+		if (contact.phone_2 !== null && contact.phone_2.length <= 0) {
+			contact.phone_2 = null;
+		}
+		if (contact.phone_3 !== null && contact.phone_3.length <= 0) {
+			contact.phone_3 = null;
+		}
+	}
+	return contacts;
+};
+
+compareContacts = async (google, erpaux) => {
+	erp = await parseERPContacts(erpaux);
 	let newContacts = [];
 	for (let i = 0; i < erp.length; i++) {
 		let insert = true;
-		if (erp[i].phone) {
+		if (erp[i].phone_1) {
 			for (let j = 0; j < google.length; j++) {
 				if (
 					erp[i].phone_1 === google[j].phone_1 ||
@@ -161,10 +174,10 @@ compareContacts = async (google, erp) => {
 					insert = false;
 				}
 			}
-			if (insert) {
-				newContacts.push(erp[i]);
-				insert = true;
-			}
+		}
+		if (insert) {
+			newContacts.push(erp[i]);
+			insert = true;
 		}
 	}
 	return newContacts;
@@ -173,18 +186,18 @@ compareContacts = async (google, erp) => {
 insertContacts = async (user, contacts) => {
 	if (contacts.length === 0) {
 		addToLog('info', `No contacts inserted for user: "${user.name}"`);
-		return;
+		return { ok: true, count: 0 };
 	}
 
 	try {
 		const { client_secret, client_id, redirect_uris } = GOOGLE_CONFIG.installed;
 		const auth = new google.auth.OAuth2(client_id, client_secret, redirect_uris[0]);
-
+		auth.setCredentials(user.googleToken);
 		let contactInsertedCount = 0;
 		for (let contact of contacts) {
 			let contactObject = {
 				emailAddresses: [ { value: contact.email } ],
-				names: [ { displayName: contact.name, givenName: contact.name, familyName: contact.name } ],
+				names: [ { displayName: contact.name, givenName: contact.name } ],
 				phoneNumbers: [
 					{
 						value: contact.phone_1,
@@ -206,7 +219,7 @@ insertContacts = async (user, contacts) => {
 					}
 				]
 			};
-			auth.setCredentials(user.googleToken);
+
 			contactInsertedCount += 1;
 			const service = google.people({ version: 'v1', auth });
 			const { data: newContact } = await service.people.createContact({
@@ -214,8 +227,10 @@ insertContacts = async (user, contacts) => {
 			});
 		}
 		addToLog('info', `Contacts inserted for user "${user.name}": ${contactInsertedCount}`);
+		return { ok: true, count: contactInsertedCount };
 	} catch (err) {
 		addToLog('error', `Error creating contacts for user: "${user.name}": ${err}`);
+		return { ok: false, err };
 	}
 };
 

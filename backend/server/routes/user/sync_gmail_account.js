@@ -42,28 +42,48 @@ If user hasn't a Google token, the response is the AuthURL
 */
 app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	const id = req.params.id;
-	const user = await User.findById(id);
-	const gmail_response = await gmail.init(GOOGLE_CONFIG, '', user.googleToken);
-	if (gmail_response.ok) {
-		const store = await Store.findOne({ user: id });
-		const erp_contacts = await getERPcontacts(store);
-		if (erp_contacts.ok) {
-			const contactsUpdated = await compareContacts(gmail_response.response, erp_contacts);
-			return res.status(200).json({
-				response: contactsUpdated,
-				ok: true
-			});
+	try {
+		const user = await User.findById(id);
+		const gmail_response = await gmail.init(GOOGLE_CONFIG, '', user.googleToken);
+		if (gmail_response.ok) {
+			const store = await Store.findOne({ user: id });
+			const erp_contacts = await getERPcontacts(store);
+			if (erp_contacts.ok) {
+				const contactsUpdated = await compareContacts(gmail_response.response, erp_contacts.response);
+				if (contactsUpdated && contactsUpdated.length > 0) {
+					const insertedContacts = await insertContacts(user, contactsUpdated);
+					if (insertedContacts.ok) {
+						return res.status(200).json({
+							count: insertedContacts.count,
+							ok: true
+						});
+					} else {
+						return res.status(200).json({
+							message: insertedContacts.err,
+							ok: false
+						});
+					}
+				} else {
+					return res.status(200).json({
+						ok: false
+					});
+				}
+			} else {
+				return res.status(200).json({
+					message: erp_contacts.message,
+					ok: false
+				});
+			}
 		} else {
+			/* This is returned when user has NO Google token */
 			return res.status(200).json({
-				message: erp_contacts.message,
+				message: gmail_response.response,
 				ok: false
 			});
 		}
-	} else {
-		console.log('err');
-		/* This is returned when user has NO Google token */
+	} catch (err) {
 		return res.status(200).json({
-			response: gmail_response.response,
+			message: 'Error updating gmail contacts',
 			ok: false
 		});
 	}
