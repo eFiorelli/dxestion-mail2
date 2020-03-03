@@ -1,5 +1,6 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const session = require('../../utils/session');
 
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
@@ -32,7 +33,25 @@ router.post('/login/:type', async (req, res) => {
 			const storeDB = await Store.findOne({
 				username: username
 			});
-			await storeLogin(res, storeDB, credentials);
+			await storeLogin(req, res, storeDB, credentials);
+		}
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			err: err,
+			type: 1
+		});
+	}
+});
+
+router.get('/logout/:type', async (req, res) => {
+	const type = req.params.type;
+	try {
+		if (type === 'store') {
+			const currentSession = await session.destroySession(req.session);
+			return res.status(200).json({
+				ok: true
+			});
 		}
 	} catch (err) {
 		return res.status(500).json({
@@ -80,7 +99,7 @@ userLogin = async (res, userDB, credentials) => {
 	}
 };
 
-storeLogin = async (res, storeDB, credentials) => {
+storeLogin = async (req, res, storeDB, credentials) => {
 	if (storeDB) {
 		if (!bcrypt.compareSync(credentials.password, storeDB.password) && storeDB.password !== credentials.password) {
 			return res.status(400).json({
@@ -103,13 +122,20 @@ storeLogin = async (res, storeDB, credentials) => {
 			gpdr_text: storeDB.gpdr_text
 		};
 
-		addToLog('info', `Store "${returnedStore.name}" logged in client app`);
-
-		return res.status(200).json({
-			ok: true,
-			store: returnedStore,
-			token: token
-		});
+		const newSession = await session.createSession(returnedStore, req.session);
+		if (newSession) {
+			addToLog('info', `Store "${returnedStore.name}" logged in client app`);
+			return res.status(200).json({
+				ok: true,
+				store: returnedStore,
+				token: token
+			});
+		} else {
+			return res.status(200).json({
+				ok: false,
+				message: 'There is already a store logged in'
+			});
+		}
 	} else {
 		return res.status(400).json({
 			ok: false,

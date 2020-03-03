@@ -87,20 +87,22 @@ async function syncAllContacts() {
 	/* Retrieve all users and sync contacts */
 	query = User.find({
 		active: true,
-		googleConfig: { $exists: true }
+		googleToken: { $exists: true }
 	});
-	query.select('_id name googleConfig googleToken');
+	query.select('_id name googleToken');
 	const userList = await query.exec();
 	for (let user of userList) {
+		addToLog('info', `Start Gmail sync for user: "${user.name}"`);
 		let store = await Store.findOne({ user: user });
 		let ERPContacts = await getERPcontacts(store);
 		if (ERPContacts.ok) {
 			let GoogleContacts = await init(GOOGLE_CONFIG, '', user.googleToken);
-			let newContacts = await compareContacts(GoogleContacts, ERPContacts.response);
+			let newContacts = await compareContacts(GoogleContacts.response, ERPContacts.response);
 			await insertContacts(user, newContacts);
 		} else {
 			addToLog('error', `Unable to get contacts from ERP for user: "${user.name}"`);
 		}
+		addToLog('info', `End Gmail sync for user: "${user.name}"`);
 	}
 }
 
@@ -129,18 +131,18 @@ getERPcontacts = async (connection_params) => {
 			}
 		} else {
 			/* Error connecting to SQL server */
-			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			const error_message = `Unable to get ERP contacts for this address: "${config.user}@${config.server}"`;
 			addToLog('error', error_message);
 			return { ok: false, error: 3, message: error_message };
 		}
 	} catch (err) {
 		if (err.code === 'ESOCKET') {
-			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			const error_message = `Unable to get ERP contacts for this address:"${config.user}@${config.server}"`;
 			addToLog('error', error_message);
 			return { ok: false, error: 3, message: error_message };
 		} else {
 			/* Server error */
-			const error_message = `Unable to get ERP contacts for "${config.user}@${config.server}"`;
+			const error_message = `Unable to get ERP contacts for this address:"${config.user}@${config.server}"`;
 			addToLog('error', error_message);
 			return { ok: false, error: 4, message: error_message };
 		}
@@ -149,6 +151,7 @@ getERPcontacts = async (connection_params) => {
 
 parseERPContacts = async (contacts) => {
 	for (let contact of contacts) {
+		contact.phone_1 = contact.phone_1.trim();
 		if (contact.phone_2 !== null && contact.phone_2.length <= 0) {
 			contact.phone_2 = null;
 		}
@@ -167,17 +170,17 @@ compareContacts = async (google, erpaux) => {
 		if (erp[i].phone_1) {
 			for (let j = 0; j < google.length; j++) {
 				if (
-					erp[i].phone_1 === google[j].phone_1 ||
-					erp[i].phone_2 === google[j].phone_2 ||
-					erp[i].phone_3 === google[j].phone_3
+					erp[i].phone_1 == google[j].phone_1 ||
+					erp[i].phone_2 == google[j].phone_2 ||
+					erp[i].phone_3 == google[j].phone_3
 				) {
 					insert = false;
 				}
 			}
-		}
-		if (insert) {
-			newContacts.push(erp[i]);
-			insert = true;
+			if (insert) {
+				newContacts.push(erp[i]);
+				insert = true;
+			}
 		}
 	}
 	return newContacts;

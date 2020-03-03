@@ -13,6 +13,8 @@ const bodyParser = require('body-parser');
 const cron = require('./utils/crontasks');
 const helmet = require('helmet');
 const compression = require('compression');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const server = require('http').createServer(app);
@@ -28,6 +30,12 @@ app.use(helmet());
 
 /* Compress all responses */
 app.use(compression());
+
+/* Add cookies support */
+app.use(cookieParser());
+
+/* Add express sessions middleware */
+app.use(session({ secret: 'session-secret', resave: false, saveUninitialized: true, cookie: { secure: true } }));
 
 /* Add headers */
 app.use((req, res, next) => {
