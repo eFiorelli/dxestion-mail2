@@ -41,7 +41,7 @@ export class NavbarComponent implements OnInit {
 			allowOutsideClick: () => !Swal.isLoading()
 		}).then((code) => {
 			if (code.value === '0180') {
-				this.auth.logout();
+				this.auth.logout().subscribe(() => {});
 			}
 		});
 	}

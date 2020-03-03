@@ -15,12 +15,16 @@ export class AuthService {
 	login(credentials) {
 		return this.http.post(AppComponent.BACKEND_URL + '/login/store', { credentials }).pipe(
 			map((res: any) => {
-				this.storeInfo = res;
-				sessionStorage.setItem('token', this.storeInfo.token);
-				sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
-				sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
-				sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
-				return true;
+				if (res.ok) {
+					this.storeInfo = res;
+					sessionStorage.setItem('token', this.storeInfo.token);
+					sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
+					sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
+					sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
+					return { ok: true, data: res };
+				} else {
+					return { ok: false, error: res.message };
+				}
 			})
 		);
 	}
@@ -34,8 +38,15 @@ export class AuthService {
 	}
 
 	logout() {
-		sessionStorage.clear();
-		this.router.navigate([ '/login' ]);
+		console.log('logout');
+		return this.http.get(AppComponent.BACKEND_URL + '/logout/store').pipe(
+			map((res: any) => {
+				if (res.ok) {
+					sessionStorage.clear();
+					this.router.navigate([ '/login' ]);
+				}
+			})
+		);
 	}
 
 	getToken() {

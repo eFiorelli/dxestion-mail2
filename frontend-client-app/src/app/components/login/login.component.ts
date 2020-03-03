@@ -30,11 +30,13 @@ export class LoginComponent implements OnInit {
 		this.showSpinner = true;
 		this.credentials = { username: this.username, password: this.password };
 		this.auth.login(this.credentials).subscribe(
-			(res) => {
-				if (res) {
+			(res: any) => {
+				if (res.ok) {
 					this.showSpinner = false;
 					this.fullScreen();
 					this.router.navigate([ '/slider' ]);
+				} else {
+					Swal.fire('Login incorrecto', res.error, 'error');
 				}
 			},
 			(error) => {
