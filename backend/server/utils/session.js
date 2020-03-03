@@ -1,31 +1,43 @@
 const Session = require('../models/session');
+let io;
 
-createSession = async (store, session) => {
+createSession = async (store, session, sessionID) => {
 	try {
 		const existingSession = await Session.find({ store: store._id });
-		if (existingSession.length > 0) {
-			return false;
-			/* Do stuff */
+		if (existingSession.length >= parseInt(store.allowed_connections)) {
+			return {
+				ok: false,
+				message: `Yo have reached the connections limit for this store: ${store.allowed_connections}`
+			};
 		} else {
 			const newSession = new Session({
 				store: store._id,
-				session: session
+				session: session,
+				sessionID: sessionID
 			});
 			await newSession.save();
-			return true;
+			return { ok: true, session: newSession };
+		}
+	} catch (err) {
+		return { ok: false, message: err };
+	}
+};
+
+destroySession = async (sessionID) => {
+	try {
+		if (sessionID !== null && sessionID !== 'null') {
+			const deletedSession = await Session.remove({ _id: sessionID });
+			// io.emit('session destroy', deletedSession);
 		}
 	} catch (err) {
 		console.log(err);
-		return false;
 	}
 };
 
-destroySession = async (session) => {
-	try {
-		const deletedSession = await Session.remove({ session: session });
-	} catch (err) {
-		console.log(err);
-	}
+module.exports = {
+	init(sio) {
+		io = sio;
+	},
+	createSession,
+	destroySession
 };
-
-module.exports = { createSession, destroySession };

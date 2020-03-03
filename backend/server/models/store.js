@@ -88,6 +88,10 @@ let storeSchema = new Schema({
 		type: String,
 		required: [ true, 'GPDR text is required' ]
 	},
+	allowed_connections: {
+		type: String,
+		default: 1
+	},
 	active: {
 		type: Boolean,
 		default: true

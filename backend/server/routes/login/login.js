@@ -44,11 +44,12 @@ router.post('/login/:type', async (req, res) => {
 	}
 });
 
-router.get('/logout/:type', async (req, res) => {
+router.get('/logout/:type/:sessionID', async (req, res) => {
 	const type = req.params.type;
+	const sessionID = req.params.sessionID;
 	try {
 		if (type === 'store') {
-			const currentSession = await session.destroySession(req.session);
+			const currentSession = await session.destroySession(sessionID);
 			return res.status(200).json({
 				ok: true
 			});
@@ -119,21 +120,23 @@ storeLogin = async (req, res, storeDB, credentials) => {
 			background_img: storeDB.background_img,
 			logo_img: storeDB.logo_img,
 			free_fields: storeDB.free_fields,
-			gpdr_text: storeDB.gpdr_text
+			gpdr_text: storeDB.gpdr_text,
+			allowed_connections: storeDB.allowed_connections
 		};
 
-		const newSession = await session.createSession(returnedStore, req.session);
-		if (newSession) {
+		const newSession = await session.createSession(returnedStore, req.session, req.sessionID);
+		if (newSession.ok) {
 			addToLog('info', `Store "${returnedStore.name}" logged in client app`);
 			return res.status(200).json({
 				ok: true,
 				store: returnedStore,
+				session: newSession.session,
 				token: token
 			});
 		} else {
 			return res.status(200).json({
 				ok: false,
-				message: 'There is already a store logged in'
+				message: newSession.message
 			});
 		}
 	} else {

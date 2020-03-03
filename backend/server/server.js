@@ -10,15 +10,16 @@ const { getLogMessages } = require('./utils/socket');
 const https = require('https');
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
+const session = require('express-session');
 const cron = require('./utils/crontasks');
 const helmet = require('helmet');
 const compression = require('compression');
-const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
+require('./utils/session').init(io);
 
 /* Create logger */
 createLogger().then(() => {

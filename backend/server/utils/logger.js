@@ -69,8 +69,13 @@ formatDate = function(n) {
 	return n < 10 ? '0' + n : n;
 };
 
+sio = function() {
+	return io;
+};
+
 module.exports = {
 	logger,
 	createLogger,
-	addToLog
+	addToLog,
+	sio
 };

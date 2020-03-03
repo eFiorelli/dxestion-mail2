@@ -12,6 +12,10 @@ let sessionSchema = new Schema({
 		type: Object,
 		required: [ true, 'Session is required' ]
 	},
+	sessionID: {
+		type: String,
+		required: true
+	},
 	created_date: {
 		type: Date,
 		default: Date.now

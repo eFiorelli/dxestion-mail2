@@ -37,7 +37,8 @@ router.post('/register/store', [ checkUserToken, checkAdminRole, checkUserRole ]
 				commerce_password: body.commerce_password,
 				user: body.user,
 				free_fields: body.selected_free_fields,
-				gpdr_text: body.gpdr_text
+				gpdr_text: body.gpdr_text,
+				allowed_connections: body.allowed_connections
 			});
 
 			if (req.files) {

@@ -77,7 +77,8 @@ router.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole 
 					background_img: storeDB.background_img,
 					logo_img: storeDB.logo_img,
 					free_fields: body.selected_free_fields,
-					gpdr_text: body.gpdr_text
+					gpdr_text: body.gpdr_text,
+					allowed_connections: body.allowed_connections
 				});
 			} else {
 				updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
@@ -95,7 +96,8 @@ router.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole 
 					background_img: storeDB.background_img,
 					logo_img: storeDB.logo_img,
 					free_fields: body.selected_free_fields,
-					gpdr_text: body.gpdr_text
+					gpdr_text: body.gpdr_text,
+					allowed_connections: body.allowed_connections
 				});
 			}
 			if (updatedStore) {
