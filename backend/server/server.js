@@ -3,23 +3,26 @@ require('./utils/folder_tree');
 require('./utils/admin_user');
 
 const mongoose = require('./utils/database');
-const express = require('express');
 const path = require('path');
-const { createLogger, addToLog } = require('./utils/logger');
-const { getLogMessages } = require('./utils/socket');
-const https = require('https');
+
+const express = require('express');
+const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const session = require('express-session');
+
+require('./utils/session').initSession(io);
+require('./utils/socket').initSocket(io);
+require('./utils/logger').initLogger(io);
+
+const { createLogger, addToLog, getLogMessages } = require('./utils/logger');
+
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
-const session = require('express-session');
 const cron = require('./utils/crontasks');
 const helmet = require('helmet');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
-
-const app = express();
-const server = require('http').createServer(app);
-const io = require('socket.io')(server);
-require('./utils/session').init(io);
 
 /* Create logger */
 createLogger().then(() => {
@@ -96,7 +99,7 @@ server.listen(process.env.PORT, () => {
 	cron.startTask();
 	io.on('connection', (socket) => {
 		socket.on('log message', (message) => {
-			getLogMessages(io);
+			getLogMessages();
 		});
 	});
 });

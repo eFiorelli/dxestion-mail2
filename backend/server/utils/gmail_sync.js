@@ -137,12 +137,12 @@ getERPcontacts = async (connection_params) => {
 		}
 	} catch (err) {
 		if (err.code === 'ESOCKET') {
-			const error_message = `Unable to get ERP contacts for this address:"${config.user}@${config.server}"`;
+			const error_message = `Unable to get ERP contacts for this address: "${config.user}@${config.server}"`;
 			addToLog('error', error_message);
 			return { ok: false, error: 3, message: error_message };
 		} else {
 			/* Server error */
-			const error_message = `Unable to get ERP contacts for this address:"${config.user}@${config.server}"`;
+			const error_message = `Unable to get ERP contacts for this address: "${config.user}@${config.server}"`;
 			addToLog('error', error_message);
 			return { ok: false, error: 4, message: error_message };
 		}

@@ -35,8 +35,8 @@ destroySession = async (sessionID) => {
 };
 
 module.exports = {
-	init(sio) {
-		io = sio;
+	initSession(socketIO) {
+		io = socketIO;
 	},
 	createSession,
 	destroySession

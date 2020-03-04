@@ -1,5 +1,6 @@
 const winston = require('winston');
 const moment = require('moment');
+const fs = require('fs');
 
 let io;
 let loggerObject = null;
@@ -15,7 +16,6 @@ logger = function() {
 };
 
 addToLog = function(level, message) {
-	io = require('./socket').getIO();
 	const date = new Date();
 	const newFilename =
 		date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
@@ -64,18 +64,33 @@ createLogger = function() {
 	});
 };
 
+getLogMessages = () => {
+	const date = new Date();
+	const filename =
+		date.getFullYear() + '.' + formatDate(date.getMonth() + 1) + '.' + formatDate(date.getDate()) + '-dxestion.log';
+
+	if (fs.existsSync(`./logs/${filename}`)) {
+		var lineReader = require('readline').createInterface({
+			input: require('fs').createReadStream(`./logs/${filename}`)
+		});
+
+		lineReader.on('line', function(line) {
+			io.emit('log message', line);
+		});
+	}
+};
+
 /* Function to set date format */
 formatDate = function(n) {
 	return n < 10 ? '0' + n : n;
 };
 
-sio = function() {
-	return io;
-};
-
 module.exports = {
+	initLogger(socketIO) {
+		io = socketIO;
+	},
 	logger,
 	createLogger,
 	addToLog,
-	sio
+	getLogMessages
 };
