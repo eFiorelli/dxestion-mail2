@@ -11,7 +11,6 @@ startTask = async () => {
 	addToLog('info', 'Started crontask');
 	await c.syncAllContacts();
 	task.start();
-	emitSocketMessage('hey', 'hoy');
 };
 
 stopTask = () => {
