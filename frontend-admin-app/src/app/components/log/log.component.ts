@@ -24,7 +24,8 @@ export class LogComponent implements OnInit {
 				const hour = message.split(' ')[1].split(']')[0];
 				const type = message.split(' - ')[1].split(': ')[0];
 				const text = message.split(': ')[1];
-				const splitMessage = { date, hour, type, text };
+				const user = message.split('"')[1];
+				const splitMessage = { date, hour, type, text, user };
 				messageArray.unshift(splitMessage);
 			}
 		});
@@ -44,7 +45,8 @@ export class LogComponent implements OnInit {
 						let hour = messages[i].split(' ')[1].split(']')[0];
 						let type = messages[i].split(' - ')[1].split(': ')[0];
 						let text = messages[i].split(': ')[1];
-						let splitMessage = { date, hour, type, text };
+						let user = messages[i].split('"')[1];
+						let splitMessage = { date, hour, type, text, user };
 						messageArray.unshift(splitMessage);
 					}
 				}

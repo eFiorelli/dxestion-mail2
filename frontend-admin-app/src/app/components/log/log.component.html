@@ -4,7 +4,7 @@
             <div class="container" style="width: 75%; margin-top: 65px;">
                 <ul class="list-group" style="font-size: 14px">
                     <li *ngFor="let message of logMessages" class="list-group-item" style="padding: 0.5rem 1.25rem" [ngClass]="{'text-blue':message.type === 'info', 'text-yellow':message.type === 'warn', 'text-red':message.type === 'error'}">
-                        {{ message.date }} - {{ message.hour }} || {{ message.type }} => {{ message.text }}
+                        {{ message.date }} - {{ message.hour }} || {{ message.type }} => {{ message.text }} <span *ngIf="message.user">"{{ message.user}}"</span>
                     </li>
                 </ul>
             </div>
@@ -23,7 +23,7 @@
                 <div class="container" style="width: 75%; ">
                     <ul class="list-group" style="font-size: 14px">
                         <li *ngFor="let oldMessage of oldLogMessages" class="list-group-item" style="padding: 0.5rem 1.25rem" [ngClass]="{'text-blue': oldMessage.type === 'info', 'text-yellow': oldMessage.type === 'warn', 'text-red': oldMessage.type === 'error'}">
-                            {{ oldMessage.date }} - {{ oldMessage.hour }} || {{ oldMessage.type }} => {{ oldMessage.text }}
+                            {{ oldMessage.date }} - {{ oldMessage.hour }} || {{ oldMessage.type }} => {{ oldMessage.text }} <span *ngIf="oldMessage.user">"{{ oldMessage.user}}"</span>
                         </li>
                     </ul>
                 </div>
