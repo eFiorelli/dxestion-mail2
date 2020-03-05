@@ -39,7 +39,8 @@ export class StoreComponent implements OnInit {
 		background_img: [],
 		free_fields: [],
 		selected_free_fields: '',
-		gpdr_text: ''
+		gpdr_text: '',
+		allowed_connections: 1
 	};
 	userList: any;
 	logo_imgURL: any;

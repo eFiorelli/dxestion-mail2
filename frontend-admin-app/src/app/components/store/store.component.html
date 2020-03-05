@@ -43,6 +43,11 @@
                                     </td>
                                 </tr>
                             </table>
+                            <hr>
+                            <h4>Número de conexiones simultáneas</h4>
+                            <mat-form-field class="register-full-width">
+                                <input matInput [(ngModel)]="store.allowed_connections" type="number" name="allowed_connections" style="font-size: 40px;">
+                            </mat-form-field>
                         </div>
                         <div class="col-6" *ngIf="user_role === 'ADMIN_ROLE'" [ngClass]="{'background-red': connectionError === true, 'background-green': connectionError === false}">
                             <h4>{{ 'STORES_PAGE.CONNECTION_DATA' | translate }}</h4>
