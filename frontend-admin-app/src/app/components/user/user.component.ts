@@ -29,6 +29,10 @@ export class UserComponent implements OnInit {
 	showSpinner = false;
 	noImage = 'assets/no-image.png';
 	oldPassword = '';
+	gmailSyncFlag = false;
+
+	showURL = false;
+	authURL = '';
 
 	preview(type: any, files: any) {
 		if (files.length === 0) {
@@ -61,6 +65,9 @@ export class UserComponent implements OnInit {
 			this.userService.getUserById(id).subscribe((user: any) => {
 				if (user.ok) {
 					this.user = user.user;
+					if (this.user.googleToken) {
+						this.gmailSyncFlag = true;
+					}
 					if (!this.user.emailConfig) {
 						this.user.emailConfig = {
 							smtp: '',
@@ -115,6 +122,42 @@ export class UserComponent implements OnInit {
 					this.router.navigate([ '/users' ]);
 				});
 			});
+	}
+
+	gmailSync(id: string) {
+		this.showSpinner = true;
+		this.userService.syncUserGmail(id).subscribe((response: any) => {
+			this.showSpinner = false;
+			if (response.ok) {
+				Swal.fire('Success', `Synced ${response.count} contacts`, 'success');
+			} else {
+				if (response.message) {
+					Swal.fire('Error', `${response.message}`, 'error');
+				} else {
+					Swal.fire({
+						title: 'Authorize Google account:',
+						html: `Please, visit the following URL and copy the code in the box below: <br><br> <a target="_blank" href=${response.response}> Authorize Google Account</a>`,
+						icon: 'info',
+						input: 'text'
+					}).then((resp) => {
+						if (resp.value) {
+							this.sendAuth(id, resp.value);
+						}
+					});
+				}
+			}
+		});
+	}
+
+	sendAuth(id: string, key: string) {
+		this.userService.sendURLAuth(id, key).subscribe((response: any) => {
+			this.showSpinner = false;
+			if (response.ok) {
+				Swal.fire('Success', 'Google account successfully synced', 'success');
+			} else {
+				Swal.fire('Error', response.message, 'error');
+			}
+		});
 	}
 
 	cancel() {}

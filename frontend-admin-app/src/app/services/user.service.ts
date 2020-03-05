@@ -96,4 +96,12 @@ export class UserService {
 	getLogger(date) {
 		return this.http.post(`${AppComponent.BACKEND_URL}/logger`, { date: date });
 	}
+
+	syncUserGmail(id: string) {
+		return this.http.get(`${AppComponent.BACKEND_URL}/user/${id}/gmail_sync`);
+	}
+
+	sendURLAuth(id: string, key: string) {
+		return this.http.post(`${AppComponent.BACKEND_URL}/user/${id}/gmail_sync/authurl`, { key: key });
+	}
 }
