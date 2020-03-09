@@ -1,9 +1,9 @@
 const express = require('express');
 const User = require('../../models/user');
 const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
-const app = express();
+const router = express.Router();
 
-app.get('/users', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.get('/users', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	try {
 		const users = await User.find(
 			{
@@ -38,7 +38,7 @@ app.get('/users', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	}
 });
 
-app.get('/user/:id', [ checkUserToken ], async (req, res) => {
+router.get('/user/:id', [ checkUserToken ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {
@@ -72,4 +72,4 @@ app.get('/user/:id', [ checkUserToken ], async (req, res) => {
 	}
 });
 
-module.exports = app;
+module.exports = router;

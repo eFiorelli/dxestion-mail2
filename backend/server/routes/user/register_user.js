@@ -2,9 +2,9 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
-const app = express();
+const router = express.Router();
 
-app.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let body = req.body;
 
 	try {
@@ -114,4 +114,4 @@ saveUserImages = async (userDB, res, images) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;

@@ -3,7 +3,7 @@ const c = require('./gmail_sync');
 
 const task = cron.schedule('0 */6 * * *', async () => {
 	addToLog('info', 'Google contacts cron task executed!');
-	// await c.syncAllContacts();
+	await c.syncAllContacts();
 	addToLog('info', 'Google contacts cron task ended!');
 });
 

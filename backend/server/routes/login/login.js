@@ -5,7 +5,6 @@ const session = require('../../utils/session');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/user');
 const Store = require('../../models/store');
-const app = express();
 const router = express.Router();
 
 router.post('/login/:type', async (req, res) => {

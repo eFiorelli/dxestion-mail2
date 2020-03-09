@@ -5,7 +5,6 @@ const Store = require('../../models/store');
 const User = require('../../models/user');
 const { sendMail } = require('../../utils/mail');
 const sql = require('mssql');
-const app = express();
 const router = express.Router();
 
 router.post('/register/test', checkUserToken, async (req, res) => {

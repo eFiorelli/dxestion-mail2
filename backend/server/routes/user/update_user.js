@@ -4,9 +4,9 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
-const app = express();
+const router = express.Router();
 
-app.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let body = req.body;
 	const id = body._id;
 
@@ -134,4 +134,4 @@ deleteUserFiles = (type, filename) => {
 	}
 };
 
-module.exports = app;
+module.exports = router;

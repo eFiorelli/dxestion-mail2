@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
-const app = express();
 const router = express.Router();
 
 router.post('/logger', [ checkUserToken, checkAdminRole ], async (req, res) => {

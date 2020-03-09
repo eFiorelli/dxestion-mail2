@@ -1,7 +1,6 @@
 const express = require('express');
 const Client = require('../../models/client');
 const { checkUserToken } = require('../../middlewares/authentication');
-const app = express();
 const router = express.Router();
 
 router.get('/clients', [ checkUserToken ], async (req, res) => {

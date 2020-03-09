@@ -4,14 +4,14 @@ const User = require('../../models/user');
 const Store = require('../../models/store');
 const gmail = require('../../utils/gmail_sync');
 const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
-const app = express();
+const router = express.Router();
 
 /*
 
 This function takes the code returned by the authURL and stores the token
 
 */
-app.post('/user/:id/gmail_sync/authurl', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/user/:id/gmail_sync/authurl', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	const body = req.body;
 	const id = req.params.id;
 	const user = await User.findById(id);
@@ -40,7 +40,7 @@ and compare them to add contacts to Gmail
 If user hasn't a Google token, the response is the AuthURL
 
 */
-app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	const id = req.params.id;
 	try {
 		const user = await User.findById(id);
@@ -89,4 +89,4 @@ app.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, 
 	}
 });
 
-module.exports = app;
+module.exports = router;
