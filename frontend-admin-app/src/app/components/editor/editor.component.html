@@ -1,0 +1,11 @@
+<div style="margin-top: 50px;">
+    <div id="editor">
+        <form [formGroup]="editorForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <quill-editor [styles]="editorStyle" formControlName="editor"></quill-editor>
+            </div>
+            <button class="btn btn-primary" type="submit">Send</button>
+        </form>
+        <!-- <ckeditor [editor]="editor" [config]="editorConfig" [(ngModel)]="model.data" data=""></ckeditor> -->
+    </div>
+</div>
