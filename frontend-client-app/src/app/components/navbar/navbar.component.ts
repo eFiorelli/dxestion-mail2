@@ -3,6 +3,7 @@ import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import Swal from 'sweetalert2';
+import { SocketService } from '../../services/socket.service';
 
 declare var $;
 
@@ -14,11 +15,15 @@ declare var $;
 export class NavbarComponent implements OnInit {
 	activeLang = 'es';
 
-	constructor(public auth: AuthService, private router: Router, private translate: TranslateService) {
+	constructor(public auth: AuthService, private socket: SocketService, private translate: TranslateService) {
 		this.translate.setDefaultLang(this.activeLang);
 	}
 
-	ngOnInit() {}
+	ngOnInit() {
+		this.socket.listen('session destroy').subscribe((response: any) => {
+			/* Session destroyed */
+		});
+	}
 
 	changeLanguage(lang: string) {
 		this.activeLang = lang;
@@ -45,4 +50,6 @@ export class NavbarComponent implements OnInit {
 			}
 		});
 	}
+
+	directLogout() {}
 }

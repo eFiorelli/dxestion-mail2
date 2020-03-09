@@ -2,19 +2,24 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
-import { DOCUMENT } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
+import { SocketService } from '../../services/socket.service';
 
-// tslint:disable: indent
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
 	styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
-	constructor(private auth: AuthService, private router: Router, @Inject(DOCUMENT) private document: any) {}
+	constructor(
+		private auth: AuthService,
+		private router: Router,
+		private translate: TranslateService,
+		private socket: SocketService
+	) {}
 
-	username = '';
-	password = '';
+	username = 'tienda1';
+	password = '1234';
 	credentials: Object;
 	showSpinner: boolean;
 	elem;
@@ -44,6 +49,12 @@ export class LoginComponent implements OnInit {
 				this.showSpinner = false;
 			}
 		);
+	}
+
+	logout() {
+		// this.auth.logout().subscribe(() => {});
+		const notification = 'Hey hey';
+		alert('Push received: ' + JSON.stringify(notification));
 	}
 
 	fullScreen() {

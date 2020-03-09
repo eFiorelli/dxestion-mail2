@@ -18,6 +18,7 @@ export class AuthService {
 				if (res.ok) {
 					this.storeInfo = res;
 					sessionStorage.setItem('token', this.storeInfo.token);
+					sessionStorage.setItem('session', res.session._id);
 					sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
 					sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
 					sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
@@ -38,8 +39,8 @@ export class AuthService {
 	}
 
 	logout() {
-		console.log('logout');
-		return this.http.get(AppComponent.BACKEND_URL + '/logout/store').pipe(
+		let sessionID = sessionStorage.getItem('session');
+		return this.http.get(AppComponent.BACKEND_URL + `/logout/store/${sessionID}`).pipe(
 			map((res: any) => {
 				if (res.ok) {
 					sessionStorage.clear();

@@ -26,6 +26,9 @@ import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
+/* Socket.io stuff */
+import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
+
 /* Signature pad */
 import { SignaturePadModule } from 'angular2-signaturepad';
 
@@ -42,6 +45,8 @@ import {
 	MatDialogModule
 } from '@angular/material';
 import { SliderComponent } from './components/slider/slider.component';
+
+const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 
 @NgModule({
 	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent, SliderComponent ],
@@ -71,7 +76,8 @@ import { SliderComponent } from './components/slider/slider.component';
 				deps: [ HttpClient ]
 			}
 		}),
-		SignaturePadModule
+		SignaturePadModule,
+		SocketIoModule.forRoot(config)
 	],
 	providers: [
 		{
