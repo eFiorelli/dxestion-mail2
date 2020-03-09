@@ -104,4 +104,8 @@ export class UserService {
 	sendURLAuth(id: string, key: string) {
 		return this.http.post(`${AppComponent.BACKEND_URL}/user/${id}/gmail_sync/authurl`, { key: key });
 	}
+
+	changeAdminPassword(id: string, password: string) {
+		return this.http.post(`${AppComponent.BACKEND_URL}/change_admin_password`, { id, password });
+	}
 }

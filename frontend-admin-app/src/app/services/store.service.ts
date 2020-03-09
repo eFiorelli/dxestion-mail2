@@ -133,4 +133,8 @@ export class StoreService {
 			data
 		});
 	}
+
+	getStoreConnections(id: string) {
+		return this.http.get(`${AppComponent.BACKEND_URL}/store/${id}/connections`);
+	}
 }
