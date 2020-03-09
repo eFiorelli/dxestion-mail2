@@ -7,6 +7,10 @@ import { AppComponent } from '../../app.component';
 import Swal from 'sweetalert2';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { SocketService } from '../../services/socket.service';
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+registerLocaleData(localeEs, 'es');
 
 class ImageSnippet {
 	pending: boolean = false;
@@ -57,6 +61,7 @@ export class StoreComponent implements OnInit {
 	user_role = localStorage.getItem('role');
 	freeFields = [];
 	connectionError = null;
+	connectionList = [];
 
 	selectedFiles: ImageSnippet[] = [];
 
@@ -67,7 +72,8 @@ export class StoreComponent implements OnInit {
 		private userService: UserService,
 		private router: Router,
 		private translate: TranslateService,
-		private auth: AuthService
+		private auth: AuthService,
+		private socket: SocketService
 	) {}
 
 	ngOnInit() {
@@ -88,6 +94,20 @@ export class StoreComponent implements OnInit {
 					this.clients = response_clients.clients;
 				});
 			});
+		});
+
+		this.socket.listen('session created').subscribe((message: any) => {
+			if (message.store === this.store._id) {
+				this.connectionList.push(message);
+			}
+		});
+
+		this.socket.listen('session destroy').subscribe((message: any) => {
+			if (message.store === this.store._id) {
+				this.connectionList = this.connectionList.filter((conn) => {
+					return conn._id !== message._id;
+				});
+			}
 		});
 	}
 
@@ -242,5 +262,15 @@ export class StoreComponent implements OnInit {
 				});
 			}
 		);
+	}
+
+	getConnections(event) {
+		if (event.index === 2) {
+			this.storeService.getStoreConnections(this.store._id).subscribe((connections: any) => {
+				if (connections.ok) {
+					this.connectionList = connections.sessions;
+				}
+			});
+		}
 	}
 }
