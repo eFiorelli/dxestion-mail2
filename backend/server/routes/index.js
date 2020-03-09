@@ -15,6 +15,7 @@ app.use(require('./store/update_store'));
 app.use(require('./store/delete_store'));
 app.use(require('./store/list_stores'));
 app.use(require('./store/check_connection'));
+app.use(require('./store/get_connections'));
 
 /* User routes */
 app.use(require('./user/register_user'));
@@ -23,9 +24,8 @@ app.use(require('./user/delete_user'));
 app.use(require('./user/list_users'));
 app.use(require('./user/sync_gmail_account'));
 
-app.use(require('./logger/logger'));
+app.use(require('./admin/change_admin_password'));
 
-/* Other stuff */
-app.use(require('./upload'));
+app.use(require('./logger/logger'));
 
 module.exports = app;

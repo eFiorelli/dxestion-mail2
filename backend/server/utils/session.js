@@ -16,6 +16,7 @@ createSession = async (store, session, sessionID) => {
 				sessionID: sessionID
 			});
 			await newSession.save();
+			io.emit('session created', newSession);
 			return { ok: true, session: newSession };
 		}
 	} catch (err) {
@@ -26,8 +27,8 @@ createSession = async (store, session, sessionID) => {
 destroySession = async (sessionID) => {
 	try {
 		if (sessionID !== null && sessionID !== 'null') {
-			const deletedSession = await Session.remove({ _id: sessionID });
-			// io.emit('session destroy', deletedSession);
+			const deletedSession = await Session.findByIdAndDelete({ _id: sessionID });
+			io.emit('session destroy', deletedSession);
 		}
 	} catch (err) {
 		console.log(err);
