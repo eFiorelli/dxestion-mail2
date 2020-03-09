@@ -28,6 +28,10 @@ export class HomeComponent implements OnInit {
 		this.router.navigate([ '/profile' ]);
 	}
 
+	goToSettings() {
+		this.router.navigate([ '/settings' ]);
+	}
+
 	logout() {
 		this.auth.logout();
 	}
