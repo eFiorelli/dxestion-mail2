@@ -54,6 +54,10 @@ import { StoresComponent } from './components/stores/stores.component';
 import { StoreComponent } from './components/store/store.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { LogComponent } from './components/log/log.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EditorComponent } from './components/editor/editor.component';
+
+import { QuillModule } from 'ngx-quill';
 
 const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 
@@ -71,7 +75,9 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 		StoresComponent,
 		StoreComponent,
 		ProfileComponent,
-		LogComponent
+		LogComponent,
+		SettingsComponent,
+		EditorComponent
 	],
 	imports: [
 		RouterModule,
@@ -102,7 +108,8 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 				deps: [ HttpClient ]
 			}
 		}),
-		SocketIoModule.forRoot(config)
+		SocketIoModule.forRoot(config),
+		QuillModule.forRoot()
 	],
 	entryComponents: [ DialogComponent ],
 	providers: [
