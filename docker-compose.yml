@@ -21,10 +21,12 @@ services:
       # - $PWD/ssl_certs/common:/etc/traefik/certs
     container_name: traefik
   mongo:
-    image: mvertes/alpine-mongo
-    #environment: 
-      #- MONGO_INITDB_ROOT_USERNAME=dxestion
-      #- MONGO_INITDB_ROOT_PASSWORD=Dxestion0180
+    image: bitnami/mongodb:latest
+    environment: 
+      - MONGODB_ROOT_PASSWORD=ab.cd1/1
+      - MONGODB_USERNAME=nuclient1
+      - MONGODB_PASSWORD=nuclient.1/1
+      - MONGODB_DATABASE=nuclient
     volumes:
       - $PWD/data/:/data/db
     ports:
