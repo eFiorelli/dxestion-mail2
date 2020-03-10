@@ -33,10 +33,14 @@ process.env.SEED = process.env.SEED || 'develop-seed';
 // ======================
 // Database
 // ======================
+
+process.env.DB_USERNAME = process.env.DB_USERNAME || 'nuclient1';
+process.env.DB_PWD = process.env.DB_PWD || 'nuclient.1/1';
+process.env.DB_NAME = process.env.DB_NAME || 'nuClient';
 let urlDB;
 
 if (process.env.NODE_ENV === 'dev') {
-	urlDB = 'mongodb://localhost:27017/dxestionMail';
+	urlDB = `mongodb://localhost:27017/dxestionMail`;
 	process.env.MONGO_URI = urlDB;
 }
 

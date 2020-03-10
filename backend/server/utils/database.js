@@ -30,6 +30,8 @@ createConnection = async () => {
 		setTimeout(async () => {
 			try {
 				await mongoose.connect(process.env.MONGO_URI, {
+					user: process.env.DB_USERNAME,
+					pass: process.env.DB_PWD,
 					useNewUrlParser: true
 				});
 			} catch (error) {
