@@ -63,8 +63,8 @@ let userSchema = new Schema({
 		type: Object,
 		required: false
 	},
-	googleConfig: {
-		type: Object,
+	googleSync: {
+		type: Boolean,
 		require: false
 	},
 	googleToken: {
