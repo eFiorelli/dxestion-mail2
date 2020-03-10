@@ -9,12 +9,35 @@ services:
       - MONGODB_PASSWORD=nuclient.1/1
       - MONGODB_DATABASE=nuClient
     volumes:
-      - $PWD/data/:/data/db
+      - $PWD/data/:/bitnami
     ports:
       - "27017:27017"
     networks:
-      - web
+      - database
+    user: "0"
     container_name: nuclient_mongo
+  mongo-express:
+    image: mongo-express
+    restart: always
+    labels:
+      - "traefik.backend=mongo-express"
+      - "traefik.frontend.rule=Host:admindb.nuclient.es"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.port=8081"
+      - "traefik.docker.network=web"
+    links:
+      - mongo
+    environment:
+      - ME_CONFIG_OPTIONS_EDITORTHEME="ambiance"
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_BASICAUTH_USERNAME=dxestion
+      - ME_CONFIG_BASICAUTH_PASSWORD=Dxestion0180
+      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD=ab.cd1/1
+    networks:
+      - web
+      - database
+    container_name: mongo-express
   backend:
     build:
       context: ./backend
@@ -25,6 +48,7 @@ services:
       - "traefik.frontend.rule=Host:backendnuclient.serantes.pro"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=3000"
+      - "traefik.docker.network=web"
     depends_on:
       - mongo
     volumes:
@@ -32,6 +56,7 @@ services:
       - $PWD/logs/:/user/src/app/logs
     networks:
       - web
+      - database
     container_name: nuclient_backend
 
   frontend-admin:
@@ -73,3 +98,5 @@ services:
 networks:
   web:
     external: true
+  database:
+    internal: true
