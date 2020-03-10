@@ -7,7 +7,7 @@ services:
       - MONGODB_ROOT_PASSWORD=ab.cd1/1
       - MONGODB_USERNAME=nuclient1
       - MONGODB_PASSWORD=nuclient.1/1
-      - MONGODB_DATABASE=nuclient
+      - MONGODB_DATABASE=nuClient
     volumes:
       - $PWD/data/:/data/db
     ports:
