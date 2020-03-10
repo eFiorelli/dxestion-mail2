@@ -62,6 +62,7 @@ router.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) 
 					twitter: body.twitter,
 					facebook: body.facebook,
 					address: body.address,
+					googleSync: body.googleSync,
 					emailConfig: JSON.parse(body.emailConfig)
 				});
 			}

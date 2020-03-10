@@ -28,6 +28,7 @@ router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, re
 				twitter: body.twitter,
 				facebook: body.facebook,
 				address: body.address,
+				googleSync: body.googleSync,
 				role: 'USER_ROLE',
 				emailConfig: JSON.parse(body.emailConfig)
 			});
