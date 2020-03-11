@@ -21,7 +21,7 @@ const APP_ROUTES: Routes = [
 	{ path: 'stores/:id', component: StoresComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'store/:id', component: StoreComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'login', component: LoginComponent },
-	{ path: 'profile', component: ProfileComponent, canActivate: [ AdminGuardService ] },
+	{ path: 'profile', component: ProfileComponent, canActivate: [ AuthGuardService ] },
 	{ path: 'settings', component: SettingsComponent, canActivate: [ AdminGuardService ] },
 	{ path: 'log', component: LogComponent, canActivate: [ AdminGuardService ] },
 	{ path: '**', pathMatch: 'full', redirectTo: 'login' }
