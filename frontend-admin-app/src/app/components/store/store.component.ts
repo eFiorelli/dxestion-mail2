@@ -72,7 +72,7 @@ export class StoreComponent implements OnInit {
 		private userService: UserService,
 		private router: Router,
 		private translate: TranslateService,
-		private auth: AuthService,
+		public auth: AuthService,
 		private socket: SocketService
 	) {}
 

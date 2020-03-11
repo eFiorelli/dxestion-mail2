@@ -22,11 +22,9 @@ export class EditorComponent implements OnInit {
 		});
 	}
 
-	// onSubmit() {
-	// 	console.log('emit');
-	// 	this.updatePreview.emit(this.editorForm.get('editor').value);
-	// 	// console.log(this.editorForm.get('editor').value);
-	// }
+	onSubmit() {
+		this.updatePreview.emit(this.editorForm.get('editor').value);
+	}
 
 	updateChanges() {
 		this.updatePreview.emit(this.editorForm.get('editor').value);

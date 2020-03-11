@@ -78,11 +78,13 @@
                             </table>
                         </form>
                         <br>
-                        <h4 class="text-center">Sincronización con Gmail</h4>
-                        <div class="register-full-width">
-                            <mat-checkbox name="gmailSync" [(ngModel)]="gmailSyncFlag">¿Enlazar con cuenta de Gmail?</mat-checkbox>
+                        <div *ngIf="auth.isAdmin()">
+                            <h4 class="text-center">Sincronización con Gmail</h4>
+                            <div class="register-full-width">
+                                <mat-checkbox name="gmailSync" [(ngModel)]="gmailSyncFlag">¿Enlazar con cuenta de Gmail?</mat-checkbox>
+                            </div>
+                            <button class="btn btn-primary" (click)="gmailSync(user._id)">Test/Start sync</button>
                         </div>
-                        <button class="btn btn-primary" (click)="gmailSync(user._id)">Test/Start sync</button>
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-5">
@@ -105,8 +107,8 @@
                         </table>
                         <br>
                         <!-- Email stuff -->
-                        <h4>Parámetros del email</h4>
-                        <form class="register-form">
+                        <h4 *ngIf="auth.isAdmin()">Parámetros del email</h4>
+                        <form *ngIf="auth.isAdmin()" class="register-form">
                             <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
                                 <tr>
                                     <td>
@@ -138,8 +140,8 @@
                                 </tr>
                             </table>
                         </form>
-                        <h4 class="text-center">Imagen del email</h4>
-                        <table style="width: 100%">
+                        <h4 *ngIf="auth.isAdmin()" class="text-center">Imagen del email</h4>
+                        <table *ngIf="auth.isAdmin()" style="width: 100%">
                             <tbody>
                                 <tr style="height: 150px;">
                                     <td style="border: 1px solid lightgray">

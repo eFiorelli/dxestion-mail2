@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from 'src/app/services/user.service';
-import { StoreService } from 'src/app/services/store.service';
+import { UserService } from '../../services/user.service';
+import { StoreService } from '../../services/store.service';
 import { AppComponent } from '../../app.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { AuthService } from '../../services/auth.service';
 // import * as html2canvas from 'html2canvas';
 
 declare let $;
@@ -17,6 +18,7 @@ declare let JsBarcode: any;
 })
 export class UserComponent implements OnInit {
 	constructor(
+		public auth: AuthService,
 		private userService: UserService,
 		private storeService: StoreService,
 		private activatedRoute: ActivatedRoute,
@@ -199,7 +201,6 @@ export class UserComponent implements OnInit {
 
 	downloadBarcode() {
 		const element = document.getElementById('barcodePreview');
-		console.log(element);
 		html2canvas(element).then(function(canvas) {
 			var a = document.createElement('a');
 			// toDataURL defaults to png, so we need to request a jpeg, then convert for file download.

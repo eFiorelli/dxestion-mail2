@@ -44,12 +44,14 @@
                                 </tr>
                             </table>
                             <hr>
-                            <h4>Número de conexiones simultáneas</h4>
-                            <mat-form-field class="register-full-width">
-                                <input matInput [(ngModel)]="store.allowed_connections" type="number" name="allowed_connections" style="font-size: 40px;">
-                            </mat-form-field>
+                            <div *ngIf="auth.isAdmin()">
+                                <h4>Número de conexiones simultáneas</h4>
+                                <mat-form-field class="register-full-width">
+                                    <input matInput [(ngModel)]="store.allowed_connections" type="number" name="allowed_connections" style="font-size: 40px;">
+                                </mat-form-field>
+                            </div>
                         </div>
-                        <div class="col-6" *ngIf="user_role === 'ADMIN_ROLE'" [ngClass]="{'background-red': connectionError === true, 'background-green': connectionError === false}">
+                        <div class="col-6" *ngIf="auth.isAdmin()" [ngClass]="{'background-red': connectionError === true, 'background-green': connectionError === false}">
                             <h4>{{ 'STORES_PAGE.CONNECTION_DATA' | translate }}</h4>
                             <table class="table-register" width="100%" cellspacing="0">
                                 <tr>
@@ -156,7 +158,7 @@
                             </div>
                         </div>
                         <div class="col-6">
-                            <div *ngIf="user_role === 'ADMIN_ROLE'">
+                            <div *ngIf="auth.isAdmin()">
                                 <h4 class="text-center">{{ 'STORES_PAGE.STORE_TYPE' | translate }}</h4>
                                 <select style="width: 90%; height: 40px;" name="store_type" [(ngModel)]="store.store_type" required>
 									<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}
@@ -206,7 +208,7 @@
             </mat-card-content>
         </mat-card>
     </mat-tab>
-    <mat-tab label="Conexiones por tienda" style="height: 100vh; padding:30px">
+    <mat-tab *ngIf="auth.isAdmin()" label="Conexiones por tienda" style="height: 100vh; padding:30px">
         <mat-card class="register-card text-center">
             <mat-card-header>
                 <h4>Conexiones por tienda</h4>
