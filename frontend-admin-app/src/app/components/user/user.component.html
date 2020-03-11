@@ -161,11 +161,42 @@
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button (click)="updateUser()" color="primary">Guardar cambios</button>
-                <button mat-raised-button (click)="cancel()" color="primary">Descartar cambios</button>
+                <!-- <button mat-raised-button (click)="cancel()" color="primary">Descartar cambios</button> -->
             </mat-card-actions>
         </mat-card>
     </mat-tab>
     <mat-tab label="Envíos y promociones" style="height: 100vh; padding:30px">
-        <app-editor></app-editor>
+        <h4 class="mt-5">Crear código de barras para promoción</h4>
+        <hr>
+        <div class="row">
+            <div class="col-3">
+                <br><br>
+                <small>Introduce código de barras:</small>
+                <br>
+                <input #barcode (keyup)="updateBarcode(barcode.value)">
+            </div>
+            <div class="col-4">
+                <div id="barcodePreview" style="width: 270px;">
+                    <svg id="barcode"></svg>
+                </div>
+                <button *ngIf="!blankBarcode" class="btn btn-success btn-block" (click)="downloadBarcode()">Descargar código de barras</button>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-7">
+                <h4 class="mt-5">Crear nueva promoción para envíos de WhatsApp</h4>
+                <hr>
+                <small>(Las imágenes se deben subir del tamaño deseado)</small>
+                <app-editor (updatePreview)="updatePreview($event)"></app-editor>
+            </div>
+            <div class="col-5">
+                <h4 class="mt-5">Vista previa</h4>
+                <hr>
+                <div *ngIf="!blankEditor" id="editorPreview" class="editor-preview">
+                </div>
+            </div>
+            <button *ngIf="!blankEditor" class="btn btn-success btn-block" (click)="downloadImage()">Descargar imagen</button>
+        </div>
     </mat-tab>
 </mat-tab-group>

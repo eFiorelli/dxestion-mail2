@@ -4,6 +4,11 @@ import { StoreService } from 'src/app/services/store.service';
 import { AppComponent } from '../../app.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
+// import * as html2canvas from 'html2canvas';
+
+declare let $;
+declare let html2canvas: any;
+declare let JsBarcode: any;
 
 @Component({
 	selector: 'app-user',
@@ -33,6 +38,9 @@ export class UserComponent implements OnInit {
 
 	showURL = false;
 	authURL = '';
+
+	blankEditor = true;
+	blankBarcode = true;
 
 	preview(type: any, files: any) {
 		if (files.length === 0) {
@@ -160,5 +168,44 @@ export class UserComponent implements OnInit {
 		});
 	}
 
-	cancel() {}
+	updatePreview(data) {
+		if (data) {
+			this.blankEditor = false;
+			data = data.replace(/<img/g, '<img style="width: auto; max-width: 100%"');
+			data = data.replace(/ql-align-center/g, 'text-center');
+			data = data.replace(/ql-align-right/g, 'text-right');
+			data = data.replace(/ql-align-justify/g, 'text-justify');
+			$('#editorPreview').html(data);
+		}
+	}
+
+	downloadImage() {
+		const element = document.getElementById('editorPreview');
+		html2canvas(element).then(function(canvas) {
+			var a = document.createElement('a');
+			// toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+			a.href = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream');
+			a.download = 'promocion.jpg';
+			a.click();
+		});
+	}
+
+	updateBarcode(text) {
+		this.blankBarcode = false;
+		setTimeout(() => {
+			JsBarcode('#barcode', text);
+		}, 100);
+	}
+
+	downloadBarcode() {
+		const element = document.getElementById('barcodePreview');
+		console.log(element);
+		html2canvas(element).then(function(canvas) {
+			var a = document.createElement('a');
+			// toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
+			a.href = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream');
+			a.download = 'barcode.jpg';
+			a.click();
+		});
+	}
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -8,9 +8,10 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class EditorComponent implements OnInit {
 	editorForm: FormGroup;
+	@Output() updatePreview = new EventEmitter<string>();
 
 	editorStyle = {
-		height: '300px'
+		height: '500px'
 	};
 
 	constructor() {}
@@ -21,7 +22,13 @@ export class EditorComponent implements OnInit {
 		});
 	}
 
-	onSubmit() {
-		console.log(this.editorForm.get('editor').value);
+	// onSubmit() {
+	// 	console.log('emit');
+	// 	this.updatePreview.emit(this.editorForm.get('editor').value);
+	// 	// console.log(this.editorForm.get('editor').value);
+	// }
+
+	updateChanges() {
+		this.updatePreview.emit(this.editorForm.get('editor').value);
 	}
 }

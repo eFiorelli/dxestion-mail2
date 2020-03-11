@@ -1,8 +1,15 @@
-.register-full-width{
-    display: block;
-    padding: 0px 20px;
+.register-full-width {
+	display: block;
+	padding: 0px 20px;
 }
 
 div.mat-card-header-text {
-    width: 100% !important;
+	width: 100% !important;
+}
+
+.editor-preview {
+	border: 2px solid lightslategray;
+	border-radius: 10px;
+	padding: 20px;
+	margin-top: 80px;
 }
