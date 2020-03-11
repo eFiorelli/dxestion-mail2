@@ -18,17 +18,23 @@ import { TokenInterceptor } from './services/token-interceptor';
 
 /* Auth & guards services */
 import { AuthService } from './services/auth.service';
-import { AuthGuardService } from './services/auth-guard.service';
-import { AdminGuardService } from './services/admin-guard.service';
+import { AuthGuardService } from './guards/auth-guard.service';
+import { AdminGuardService } from './guards/admin-guard.service';
 
 /* Components */
 import { AppComponent } from './app.component';
+
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { RegisterComponent } from './components/register/register.component';
 import { UsersComponent } from './components/users/users.component';
-import { DialogComponent } from './components/dialog/dialog.component';
+import { UserComponent } from './components/user/user.component';
+import { StoresComponent } from './components/stores/stores.component';
+import { StoreComponent } from './components/store/store.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { LogComponent } from './components/log/log.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { EditorComponent } from './components/editor/editor.component';
 
 import { FilterUsersPipe } from './pipes/filter-users.pipe';
 /* Socket config */
@@ -49,13 +55,6 @@ import {
 	MatDatepickerModule,
 	MatNativeDateModule
 } from '@angular/material';
-import { UserComponent } from './components/user/user.component';
-import { StoresComponent } from './components/stores/stores.component';
-import { StoreComponent } from './components/store/store.component';
-import { ProfileComponent } from './components/profile/profile.component';
-import { LogComponent } from './components/log/log.component';
-import { SettingsComponent } from './components/settings/settings.component';
-import { EditorComponent } from './components/editor/editor.component';
 
 import { QuillModule } from 'ngx-quill';
 
@@ -64,12 +63,11 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 @NgModule({
 	declarations: [
 		AppComponent,
+		FilterUsersPipe,
 		HomeComponent,
 		LoginComponent,
 		NavbarComponent,
-		RegisterComponent,
 		UsersComponent,
-		DialogComponent,
 		FilterUsersPipe,
 		UserComponent,
 		StoresComponent,
@@ -80,11 +78,11 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 		EditorComponent
 	],
 	imports: [
+		APP_ROUTING,
 		RouterModule,
 		HttpClientModule,
 		BrowserModule,
 		BrowserAnimationsModule,
-		APP_ROUTING,
 		FormsModule,
 		ReactiveFormsModule,
 		MatInputModule,
@@ -111,7 +109,7 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 		SocketIoModule.forRoot(config),
 		QuillModule.forRoot()
 	],
-	entryComponents: [ DialogComponent ],
+	entryComponents: [],
 	providers: [
 		{
 			provide: HTTP_INTERCEPTORS,
