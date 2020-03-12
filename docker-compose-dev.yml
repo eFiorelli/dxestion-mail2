@@ -10,8 +10,6 @@ services:
       - MONGODB_DATABASE=nuClient
     volumes:
       - $PWD/data/:/bitnami
-    ports:
-      - "27017:27017"
     networks:
       - database
     user: "0"
@@ -21,7 +19,7 @@ services:
     restart: always
     labels:
       - "traefik.backend=mongo-express"
-      - "traefik.frontend.rule=Host:admindb.nuclient.es"
+      - "traefik.frontend.rule=Host:admindb.serantes.pro"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8081"
       - "traefik.docker.network=web"
@@ -47,8 +45,8 @@ services:
       - "traefik.backend=nuclientbackend"
       - "traefik.frontend.rule=Host:backendnuclient.serantes.pro"
       - "traefik.frontend.entryPoints=http,https"
-      - "traefik.port=3000"
       - "traefik.docker.network=web"
+      - "traefik.port=3000"
     depends_on:
       - mongo
     volumes:
