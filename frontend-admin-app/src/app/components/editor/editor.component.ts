@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({
@@ -8,6 +8,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class EditorComponent implements OnInit {
 	editorForm: FormGroup;
+	// @Input() qr: string;
 	@Output() updatePreview = new EventEmitter<string>();
 
 	editorStyle = {
@@ -20,6 +21,15 @@ export class EditorComponent implements OnInit {
 		this.editorForm = new FormGroup({
 			editor: new FormControl(null)
 		});
+	}
+
+	ngOnChanges(changes: [{ qr: string }]): void {
+		// if (changes['qr'].currentValue) {
+		// 	let qrcode = changes['qr'].currentValue;
+		// 	qrcode = `<p><img src="${qrcode}"></p>`;
+		// 	console.log(qrcode);
+		// 	this.editorForm.get('editor').setValue(qrcode);
+		// }
 	}
 
 	onSubmit() {

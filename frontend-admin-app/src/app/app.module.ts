@@ -57,6 +57,7 @@ import {
 } from '@angular/material';
 
 import { QuillModule } from 'ngx-quill';
+import { QRCodeModule } from 'angular2-qrcode';
 
 const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 
@@ -107,7 +108,8 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 			}
 		}),
 		SocketIoModule.forRoot(config),
-		QuillModule.forRoot()
+		QuillModule.forRoot(),
+		QRCodeModule
 	],
 	entryComponents: [],
 	providers: [

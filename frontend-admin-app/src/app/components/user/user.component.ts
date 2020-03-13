@@ -9,7 +9,6 @@ import { AuthService } from '../../services/auth.service';
 
 declare let $;
 declare let html2canvas: any;
-declare let JsBarcode: any;
 
 @Component({
 	selector: 'app-user',
@@ -42,7 +41,9 @@ export class UserComponent implements OnInit {
 	authURL = '';
 
 	blankEditor = true;
-	blankBarcode = true;
+	blankQRrcode = true;
+	qrCode = '';
+	abc = '';
 
 	preview(type: any, files: any) {
 		if (files.length === 0) {
@@ -192,20 +193,19 @@ export class UserComponent implements OnInit {
 		});
 	}
 
-	updateBarcode(text) {
-		this.blankBarcode = false;
-		setTimeout(() => {
-			JsBarcode('#barcode', text);
-		}, 100);
+	updateQRrcode(text) {
+		this.blankQRrcode = false;
+		this.qrCode = text;
 	}
 
-	downloadBarcode() {
-		const element = document.getElementById('barcodePreview');
-		html2canvas(element).then(function(canvas) {
+	downloadQRrcode() {
+		const element = document.getElementById('qrCodePreview').childNodes[1].childNodes[0];
+		let t = '';
+		html2canvas(element).then((canvas) => {
 			var a = document.createElement('a');
-			// toDataURL defaults to png, so we need to request a jpeg, then convert for file download.
 			a.href = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream');
-			a.download = 'barcode.jpg';
+			a.download = 'qrcode.jpg';
+			t = a.href;
 			a.click();
 		});
 	}
