@@ -7,30 +7,6 @@ const { sendMail } = require('../../utils/mail');
 const sql = require('mssql');
 const router = express.Router();
 
-router.post('/register/test', checkUserToken, async (req, res) => {
-	const body = req.body;
-	const store = req.store;
-	const client = new Client({
-		name: body.name,
-		email: body.email,
-		phone: body.phone,
-		store: store
-	});
-	try {
-		const user = await User.findById(store.user);
-		const mail = await sendMail(store, client, user);
-		return res.status(200).json({
-			ok: true
-		});
-	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err,
-			type: 1
-		});
-	}
-});
-
 router.post('/register/client', checkUserToken, async (req, res) => {
 	let body = req.body;
 	let client_insert;
@@ -52,13 +28,13 @@ router.post('/register/client', checkUserToken, async (req, res) => {
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRest':
-				/* Future versions */
+				// client_insert = 0;
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'Agora':
-				/* Future versions */
-				client_insert = await sendClientToAgora();
+				// client_insert = 0;
+				client_insert = await sendClientToAgora(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			default:
@@ -86,6 +62,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 					name: body.name,
 					email: body.email,
 					phone: body.phone,
+					invoice_details: body.invoice_detail,
 					store: store
 				});
 				const existingClient = await Client.find({
@@ -204,7 +181,14 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
 
 			const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
 			if (result.recordset.length === 0) {
-				const query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client.cif}, ${client.address}, ${client.city}, ${client.province}, ${client.zip_code})`;
+				let query;
+				if (client.invoice_detail) {
+					query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client
+						.invoice_detail.cif}, ${client.invoice_detail.address}, ${client.invoice_detail.city}, ${client
+						.invoice_detail.province}, ${client.invoice_detail.zip_code})`;
+				} else {
+					query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+				}
 				if (query.code === 'EREQUEST') {
 					/* Bad SQL statement */
 					return 2;
@@ -246,11 +230,62 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
 	}
 };
 
-/* Future versions */
-sendClientToFRSManager = async () => {};
+sendClientToAgora = async (connection_params, client) => {
+	sql.close();
+	const config = {
+		user: connection_params.database_username,
+		password: connection_params.database_password,
+		server: connection_params.database_url,
+		port: connection_params.database_port,
+		database: connection_params.database_name,
+		commerce_password: connection_params.commerce_password
+	};
 
-/* Future versions */
-sendClientToAgora = async () => {};
+	try {
+		const connection = await sql.connect(
+			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
+		);
+		if (connection) {
+			const result = await sql.query`SELECT * from CUSTOMER where (EMAIL = ${client.email}) OR (TELEPHONE = ${client.phone})`;
+			const max_id = (await sql.query`select ISNULL(MAX(ID)+1,0) as ID FROM CUSTOMER WITH (SERIALIZABLE, UPDLOCK)`)
+				.recordset[0].ID;
+			if (result.recordset.length === 0) {
+				let query;
+				if (client.invoice_detail) {
+					query = await sql.query`insert into CUSTOMER (ID, FISCALNAME, CIF, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client
+						.invoice_detail.cif ||
+						''}, ${client.name}, ${client.phone}, ${config.email}, ${client.name}, 0.00, 1, 0, 0, '', ${client
+						.invoice_detail.address || ''}, ${client.invoice_detail.city || ''}, ${client.invoice_detail
+						.province || ''}, ${client.invoice_detail.zip_code || ''}, '')`;
+				} else {
+					query = await sql.query`insert into CUSTOMER (ID, FISCALNAME, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client.name}, ${client.phone}, ${client.email}, ${client.name}, 0.00, 1, 0, 0, '', '', '', '', '', '')`;
+				}
+
+				if (query.code === 'EREQUEST') {
+					/* Bad SQL statement */
+					return 2;
+				}
+				if (query.rowsAffected[0] === 1) {
+					/* Client inserted */
+					return 0;
+				}
+			} else {
+				/* Client already exists */
+				return 1;
+			}
+		} else {
+			/* Error connecting to SQL server */
+			return 3;
+		}
+	} catch (err) {
+		if (err.code === 'ESOCKET') {
+			return 3;
+		} else {
+			/* Server error */
+			return 4;
+		}
+	}
+};
 
 saveFreeFields = async (client_id, free_fields) => {
 	const ff = JSON.parse(free_fields);
