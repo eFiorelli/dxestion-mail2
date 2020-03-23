@@ -65,7 +65,8 @@ router.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (re
 					}
 				} else {
 					return res.status(200).json({
-						ok: false
+						ok: false,
+						error: 'No contacts to update'
 					});
 				}
 			} else {
