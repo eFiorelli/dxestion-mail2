@@ -128,8 +128,8 @@ export class StoreService {
 		return this.http.get(`${AppComponent.BACKEND_URL}/stores`);
 	}
 
-	checkStoreConnection(data) {
-		return this.http.post(`${AppComponent.BACKEND_URL}/store/check_connection`, {
+	checkStoreConnection(data: any, type: string) {
+		return this.http.post(`${AppComponent.BACKEND_URL}/store/check_connection/${type}`, {
 			data
 		});
 	}
