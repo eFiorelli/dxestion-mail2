@@ -78,6 +78,7 @@ router.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole 
 					logo_img: storeDB.logo_img,
 					free_fields: body.selected_free_fields,
 					gpdr_text: body.gpdr_text,
+					store_type: body.store_type,
 					allowed_connections: body.allowed_connections
 				});
 			} else {
@@ -97,6 +98,7 @@ router.put('/update/store/:id', [ checkUserToken, checkAdminRole, checkUserRole 
 					logo_img: storeDB.logo_img,
 					free_fields: body.selected_free_fields,
 					gpdr_text: body.gpdr_text,
+					store_type: body.store_type,
 					allowed_connections: body.allowed_connections
 				});
 			}
