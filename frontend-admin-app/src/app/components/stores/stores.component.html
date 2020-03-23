@@ -146,7 +146,8 @@
                                 </tr>
                                 <tr style="margin: 20px 0px;">
                                     <td>
-                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión y obtener campos libres</button>
+                                        <button *ngIf="newStore.store_type === 'Agora'" mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection('agora')" color="primary">Probar conexión</button>
+                                        <button *ngIf="newStore.store_type !== 'Agora'" mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection('icg')" color="primary">Probar conexión y obtener campos libres</button>
                                     </td>
                                 </tr>
                             </table>

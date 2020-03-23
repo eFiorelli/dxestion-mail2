@@ -235,7 +235,7 @@ export class StoreComponent implements OnInit {
 		this.store.background_img[index] = null;
 	}
 
-	testConnection() {
+	testConnection(type: string) {
 		const data = {
 			database_url: this.store.database_url,
 			database_password: this.store.database_password,
@@ -243,10 +243,12 @@ export class StoreComponent implements OnInit {
 			database_port: this.store.database_port,
 			database_username: this.store.database_username
 		};
-		this.storeService.checkStoreConnection(data).subscribe(
+		this.storeService.checkStoreConnection(data, type).subscribe(
 			(response: any) => {
 				if (response.ok) {
-					this.freeFields = response.free_fields.free_fields;
+					if (type === 'icg') {
+						this.freeFields = response.free_fields.free_fields;
+					}
 					Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {
 						this.connectionError = false;
 					});

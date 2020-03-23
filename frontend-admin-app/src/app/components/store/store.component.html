@@ -100,7 +100,7 @@
                                         </mat-form-field>
                                     </td>
                                 </tr>
-                                <tr *ngIf="freeFields && freeFields.length > 0">
+                                <tr *ngIf="store.store_type !== 'Agora' && freeFields && freeFields.length > 0">
                                     <br>
                                     <h4>Campos libres activados</h4>
                                     <table class="table table-bordered table-responsive text-left" style="max-width: 470px; margin: 20px 0px;">
@@ -127,7 +127,9 @@
                                 </tr>
                                 <tr style="margin: 20px 0px;">
                                     <td>
-                                        <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión y obtener campos libres</button>
+                                        <!-- <button mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection()" color="primary">Probar conexión y obtener campos libres</button> -->
+                                        <button *ngIf="store.store_type === 'Agora'" mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection('agora')" color="primary">Probar conexión</button>
+                                        <button *ngIf="store.store_type !== 'Agora'" mat-raised-button style="height: 40px; font-size:18px" (click)="testConnection('icg')" color="primary">Probar conexión y obtener campos libres</button>
                                     </td>
                                 </tr>
                             </table>

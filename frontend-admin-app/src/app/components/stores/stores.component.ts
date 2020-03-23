@@ -225,7 +225,7 @@ export class StoresComponent implements OnInit {
 		// this.newStore.background_img[index] = null;
 	}
 
-	testConnection() {
+	testConnection(type: string) {
 		const data = {
 			database_url: this.newStore.database_url,
 			database_password: this.newStore.database_password,
@@ -233,7 +233,7 @@ export class StoresComponent implements OnInit {
 			database_port: this.newStore.database_port,
 			database_username: this.newStore.database_username
 		};
-		this.storeService.checkStoreConnection(data).subscribe((response: any) => {
+		this.storeService.checkStoreConnection(data, type).subscribe((response: any) => {
 			if (response.ok) {
 				this.freeFields = response.free_fields.free_fields;
 				Swal.fire('Exito', 'Conexión realizada', 'success').then(() => {
