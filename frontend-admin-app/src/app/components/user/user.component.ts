@@ -143,11 +143,9 @@ export class UserComponent implements OnInit {
 				Swal.fire('Success', `Synced ${response.count} contacts`, 'success');
 			} else {
 				if (response.message) {
-					Swal.fire('Error', `${response.message}`, 'error');
-				} else {
 					Swal.fire({
 						title: 'Authorize Google account:',
-						html: `Please, visit the following URL and copy the code in the box below: <br><br> <a target="_blank" href=${response.response}> Authorize Google Account</a>`,
+						html: `Please, visit the following URL and copy the code in the box below: <br><br> <a target="_blank" href=${response.message}> Authorize Google Account</a>`,
 						icon: 'info',
 						input: 'text'
 					}).then((resp) => {
@@ -155,6 +153,8 @@ export class UserComponent implements OnInit {
 							this.sendAuth(id, resp.value);
 						}
 					});
+				} else {
+					Swal.fire('Info', `${response.error}`, 'info');
 				}
 			}
 		});
