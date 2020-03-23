@@ -1,25 +1,30 @@
 const express = require('express');
 const sql = require('mssql');
-const Store = require('../../models/store');
-const User = require('../../models/user');
-const { checkUserToken, checkAdminRole, checkUserRole } = require('../../middlewares/authentication');
-const app = express();
+const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
 const router = express.Router();
 
-router.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/store/check_connection/:type', [ checkUserToken, checkAdminRole ], async (req, res) => {
 	let data = req.body.data;
+	let type = req.params.type;
 	let free_fields;
 	try {
 		if (data) {
 			const connection = await checkDatabaseConnection(data);
 			if (connection.ok) {
-				free_fields = await getFreeFields(data);
-				sql.close();
-				return res.status(200).json({
-					ok: true,
-					message: 'Connection success',
-					free_fields: free_fields
-				});
+				if (type == 'icg') {
+					free_fields = await getFreeFields(data);
+					return res.status(200).json({
+						ok: true,
+						message: 'Connection success',
+						free_fields: free_fields
+					});
+				}
+				if (type == 'agora') {
+					return res.status(200).json({
+						ok: true,
+						message: 'Connection success'
+					});
+				}
 			} else {
 				return res.status(400).json({
 					ok: false,
@@ -36,6 +41,7 @@ router.post('/store/check_connection', [ checkUserToken, checkAdminRole ], async
 });
 
 checkDatabaseConnection = async (connection_params) => {
+	sql.close();
 	const config = {
 		user: connection_params.database_username,
 		password: connection_params.database_password,
@@ -45,7 +51,6 @@ checkDatabaseConnection = async (connection_params) => {
 		commerce_password: connection_params.commerce_password
 	};
 	try {
-		// console.log(`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`);
 		const connection = await sql.connect(
 			`mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
 		);
