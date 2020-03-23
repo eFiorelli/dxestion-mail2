@@ -39,6 +39,10 @@ let clientSchema = new Schema({
 		type: String,
 		required: false
 	},
+	invoice_detail: {
+		type: Object,
+		required: false
+	},
 	store: {
 		type: Schema.Types.ObjectId,
 		ref: 'Store',
