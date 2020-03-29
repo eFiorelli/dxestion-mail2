@@ -41,20 +41,19 @@ import { FilterUsersPipe } from './pipes/filter-users.pipe';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 
 /* Angular material modules */
-import {
-	MatInputModule,
-	MatButtonModule,
-	MatCheckboxModule,
-	MatToolbarModule,
-	MatSnackBarModule,
-	MatProgressSpinnerModule,
-	MatFormFieldModule,
-	MatCardModule,
-	MatDialogModule,
-	MatTabsModule,
-	MatDatepickerModule,
-	MatNativeDateModule
-} from '@angular/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { QuillModule } from 'ngx-quill';
 import { QRCodeModule } from 'angular2-qrcode';
@@ -96,6 +95,7 @@ const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 		MatFormFieldModule,
 		MatTabsModule,
 		MatDatepickerModule,
+		DragDropModule,
 		MatNativeDateModule,
 		MatProgressSpinnerModule,
 		TranslateModule.forRoot({
