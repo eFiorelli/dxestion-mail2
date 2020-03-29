@@ -194,12 +194,13 @@ export class UserComponent implements OnInit {
 	}
 
 	updateQRrcode(text) {
+		console.log('launch');
 		this.blankQRrcode = false;
 		this.qrCode = text;
 	}
 
 	downloadQRrcode() {
-		const element = document.getElementById('qrCodePreview').childNodes[1].childNodes[0];
+		const element: any = document.getElementById('qrCodePreview').childNodes[0].childNodes[0];
 		let t = '';
 		html2canvas(element).then((canvas) => {
 			var a = document.createElement('a');
