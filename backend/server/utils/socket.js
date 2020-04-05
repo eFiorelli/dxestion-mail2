@@ -2,7 +2,6 @@ require('../config/config');
 let io;
 
 emitSocketMessage = (event, message) => {
-	console.log('Emit message:', event, '-', message);
 	io.emit(event, message);
 };
 

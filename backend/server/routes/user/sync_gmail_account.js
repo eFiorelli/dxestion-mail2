@@ -3,35 +3,35 @@ const express = require('express');
 const User = require('../../models/user');
 const Store = require('../../models/store');
 const gmail = require('../../utils/gmail_sync');
-const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const router = express.Router();
 
-/*
-
-This function takes the code returned by the authURL and stores the token
-
-*/
-router.post('/user/:id/gmail_sync/authurl', [ checkUserToken, checkAdminRole ], async (req, res) => {
-	const body = req.body;
-	const id = req.params.id;
-	const user = await User.findById(id);
-	gmail
-		.getNewToken(GOOGLE_CONFIG, body.key)
-		.then(async (token) => {
-			await user.update({
-				googleToken: token
+/* This function takes the code returned by the authURL and stores the token */
+router.post(
+	'/user/:id/gmail_sync/authurl',
+	[ checkUserToken, checkDistributorRole, checkAdminRole ],
+	async (req, res) => {
+		const body = req.body;
+		const id = req.params.id;
+		const user = await User.findById(id);
+		gmail
+			.getNewToken(GOOGLE_CONFIG, body.key)
+			.then(async (token) => {
+				await user.update({
+					googleToken: token
+				});
+				return res.status(200).json({
+					ok: true
+				});
+			})
+			.catch((error) => {
+				return res.status(200).json({
+					ok: false,
+					message: error
+				});
 			});
-			return res.status(200).json({
-				ok: true
-			});
-		})
-		.catch((error) => {
-			return res.status(200).json({
-				ok: false,
-				message: error
-			});
-		});
-});
+	}
+);
 
 /*
 
@@ -40,7 +40,7 @@ and compare them to add contacts to Gmail
 If user hasn't a Google token, the response is the AuthURL
 
 */
-router.get('/user/:id/gmail_sync', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.get('/user/:id/gmail_sync', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	const id = req.params.id;
 	try {
 		const user = await User.findById(id);

@@ -28,7 +28,7 @@ function getNewToken(credentials, authCode) {
 		access_type: 'offline',
 		scope: SCOPES
 	});
-	console.log('Authorize this app by visiting this url:', authUrl);
+	// console.log('Authorize this app by visiting this url:', authUrl);
 	if (!authCode) {
 		return authUrl;
 	}

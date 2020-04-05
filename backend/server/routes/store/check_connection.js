@@ -1,44 +1,48 @@
 const express = require('express');
 const sql = require('mssql');
-const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const router = express.Router();
 
-router.post('/store/check_connection/:type', [ checkUserToken, checkAdminRole ], async (req, res) => {
-	let data = req.body.data;
-	let type = req.params.type;
-	let free_fields;
-	try {
-		if (data) {
-			const connection = await checkDatabaseConnection(data);
-			if (connection.ok) {
-				if (type == 'icg') {
-					free_fields = await getFreeFields(data);
-					return res.status(200).json({
-						ok: true,
-						message: 'Connection success',
-						free_fields: free_fields
+router.post(
+	'/store/check_connection/:type',
+	[ checkUserToken, checkDistributorRole, checkDistributorRole, checkAdminRole ],
+	async (req, res) => {
+		let data = req.body.data;
+		let type = req.params.type;
+		let free_fields;
+		try {
+			if (data) {
+				const connection = await checkDatabaseConnection(data);
+				if (connection.ok) {
+					if (type == 'icg') {
+						free_fields = await getFreeFields(data);
+						return res.status(200).json({
+							ok: true,
+							message: 'Connection success',
+							free_fields: free_fields
+						});
+					}
+					if (type == 'agora') {
+						return res.status(200).json({
+							ok: true,
+							message: 'Connection success'
+						});
+					}
+				} else {
+					return res.status(400).json({
+						ok: false,
+						err: 'Error connecting to database'
 					});
 				}
-				if (type == 'agora') {
-					return res.status(200).json({
-						ok: true,
-						message: 'Connection success'
-					});
-				}
-			} else {
-				return res.status(400).json({
-					ok: false,
-					err: 'Error connecting to database'
-				});
 			}
+		} catch (err) {
+			return res.status(500).json({
+				ok: false,
+				err: err
+			});
 		}
-	} catch (err) {
-		return res.status(500).json({
-			ok: false,
-			err: err
-		});
 	}
-});
+);
 
 checkDatabaseConnection = async (connection_params) => {
 	sql.close();

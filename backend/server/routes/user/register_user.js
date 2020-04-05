@@ -1,11 +1,12 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
-const { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const router = express.Router();
 
-router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.post('/register/user', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	let body = req.body;
+	const user = User.findById(req.user._id);
 
 	try {
 		const userDB = await User.findOne({
@@ -18,7 +19,7 @@ router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, re
 				type: 2
 			});
 		} else {
-			let user = new User({
+			let newUser = new User({
 				name: body.name,
 				email: body.email,
 				password: bcrypt.hashSync(body.password, 10),
@@ -29,8 +30,9 @@ router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, re
 				facebook: body.facebook,
 				address: body.address,
 				googleSync: body.googleSync,
-				role: 'USER_ROLE',
-				emailConfig: JSON.parse(body.emailConfig)
+				role: body.role,
+				emailConfig: JSON.parse(body.emailConfig),
+				distributor: user
 			});
 
 			if (req.files) {
@@ -38,7 +40,7 @@ router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, re
 					{ type: 'logo', image: req.files.logo_image || '' },
 					{ type: 'email', image: req.files.email_image || '' }
 				];
-				updatedUser = await saveUserImages(user, res, images);
+				updatedUser = await saveUserImages(newUser, res, images);
 				if (!updatedUser.ok) {
 					return res.status(400).json({
 						ok: false,
@@ -46,11 +48,11 @@ router.post('/register/user', [ checkUserToken, checkAdminRole ], async (req, re
 						type: 10
 					});
 				} else {
-					user = updatedUser.userDB;
+					newUser = updatedUser.userDB;
 				}
 			}
 
-			const savedUser = await user.save();
+			const savedUser = await newUser.save();
 			if (savedUser) {
 				addToLog('info', `User "${savedUser.username}" added by user "${req.user.username}"`);
 				return res.status(200).json({

@@ -24,8 +24,12 @@ app.use(require('./user/delete_user'));
 app.use(require('./user/list_users'));
 app.use(require('./user/sync_gmail_account'));
 
-app.use(require('./admin/change_admin_password'));
+/* Promotion routes */
+app.use(require('./promotions/get_promotions'));
+app.use(require('./promotions/save_promotion'));
 
+/* Utils routes */
+app.use(require('./admin/change_admin_password'));
 app.use(require('./logger/logger'));
 
 module.exports = app;

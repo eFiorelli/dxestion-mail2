@@ -54,12 +54,28 @@ let checkAdminRole = (req, res, next) => {
 };
 
 // =================
-// check admin user role
+// check distributor role
+// =================
+let checkDistributorRole = (req, res, next) => {
+	let user = req.user;
+
+	if (user.role === 'DISTRIBUTOR_ROLE') {
+		next();
+	} else {
+		return res.status(400).json({
+			ok: false,
+			message: 'User is not distributor'
+		});
+	}
+};
+
+// =================
+// check user role
 // =================
 let checkUserRole = (req, res, next) => {
 	let user = req.user;
 
-	if (user.role === 'USER_ROLE' || user.role === 'ADMIN_ROLE') {
+	if (user.role === 'USER_ROLE' || user.role === 'ADMIN_ROLE' || user.role === 'DISTRIBUTOR_ROLE') {
 		next();
 	} else {
 		return res.status(400).json({
@@ -72,5 +88,6 @@ let checkUserRole = (req, res, next) => {
 module.exports = {
 	checkUserToken,
 	checkAdminRole,
+	checkDistributorRole,
 	checkUserRole
 };

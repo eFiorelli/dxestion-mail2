@@ -1,9 +1,9 @@
 const express = require('express');
-let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+let { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const router = express.Router();
 
-router.delete('/update/user/:id', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.delete('/update/user/:id', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	let id = req.params.id;
 
 	try {

@@ -10,19 +10,18 @@ const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const session = require('express-session');
-
-require('./utils/session').initSession(io);
-require('./utils/socket').initSocket(io);
-require('./utils/logger').initLogger(io);
-
-const { createLogger, addToLog, getLogMessages } = require('./utils/logger');
-
 const fileUpload = require('express-fileupload');
 const bodyParser = require('body-parser');
 const cron = require('./utils/crontasks');
 const helmet = require('helmet');
 const compression = require('compression');
 const cookieParser = require('cookie-parser');
+
+/* Init services that require socket connection */
+require('./utils/session').initSession(io);
+require('./utils/socket').initSocket(io);
+require('./utils/logger').initLogger(io);
+const { createLogger, addToLog, getLogMessages } = require('./utils/logger');
 
 /* Create logger */
 createLogger().then(() => {
@@ -88,8 +87,6 @@ app.use('/files', express.static(path.resolve(__dirname, '../uploads')));
 mongoose.createConnection();
 
 /* Start app */
-// app.listen(process.env.PORT);
-
 server.listen(process.env.PORT, () => {
 	addToLog('info', `Environment => ${process.env.NODE_ENV}`);
 	addToLog('info', `HTTP Listening on port ${process.env.PORT}`);

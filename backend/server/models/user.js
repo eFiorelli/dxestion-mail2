@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 let validRoles = {
-	values: [ 'ADMIN_ROLE', 'USER_ROLE' ],
+	values: [ 'ADMIN_ROLE', 'DISTRIBUTOR_ROLE', 'USER_ROLE' ],
 	message: '{VALUE} is not a valid role'
 };
 
@@ -78,6 +78,11 @@ let userSchema = new Schema({
 	created_date: {
 		type: Date,
 		default: Date.now
+	},
+	distributor: {
+		type: Schema.Types.ObjectId,
+		ref: 'User',
+		required: [ true, 'Distributor is required' ]
 	}
 });
 

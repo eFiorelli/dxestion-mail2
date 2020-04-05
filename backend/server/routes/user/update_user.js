@@ -2,11 +2,11 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const bcrypt = require('bcrypt');
-let { checkUserToken, checkAdminRole } = require('../../middlewares/authentication');
+let { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
 const router = express.Router();
 
-router.put('/update/user', [ checkUserToken, checkAdminRole ], async (req, res) => {
+router.put('/update/user', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	let body = req.body;
 	const id = body._id;
 
