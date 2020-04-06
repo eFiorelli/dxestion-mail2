@@ -14,26 +14,21 @@ router.post('/register/client', checkUserToken, async (req, res) => {
 		switch (req.store.store_type) {
 			case 'FrontRetail/Manager':
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
-				// client_insert = 0;
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRetail':
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
-				// client_insert = 0;
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRest/Manager':
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
-				// client_insert = 0;
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'FrontRest':
-				// client_insert = 0;
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
 			case 'Agora':
-				// client_insert = 0;
 				client_insert = await sendClientToAgora(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
@@ -148,6 +143,7 @@ saveClient = async (client_insert, store, body, files, res) => {
 		return res.status(500).json({
 			ok: false,
 			message: 'Server error',
+			err: err,
 			type: 1
 		});
 	}

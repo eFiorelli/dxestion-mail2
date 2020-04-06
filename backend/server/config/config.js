@@ -2,7 +2,7 @@
 // Backend URL
 // ======================
 
-process.env.BACKEND_URL = process.env.BACKEND_URL || 'https://backendnuclient.serantes.pro';
+process.env.BACKEND_URL = process.env.BACKEND_URL || 'http://localhost';
 
 // ======================
 // Ports

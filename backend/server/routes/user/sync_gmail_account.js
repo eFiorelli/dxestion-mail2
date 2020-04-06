@@ -85,7 +85,8 @@ router.get('/user/:id/gmail_sync', [ checkUserToken, checkDistributorRole, check
 	} catch (err) {
 		return res.status(200).json({
 			message: 'Error updating gmail contacts',
-			ok: false
+			ok: false,
+			err: err
 		});
 	}
 });

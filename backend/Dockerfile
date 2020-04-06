@@ -15,10 +15,10 @@ RUN npm install
 # Bundle app source
 COPY . .
 
-RUN mkdir server/config/ssl_certs
 RUN npm install pm2 -g
 
 ENV NODE_ENV prod
+ENV BACKEND_URL https://backendnuclient.serantes.pro
 ENV MONGO_URI mongodb://mongo:27017/nuClient
 ENV DB_USERNAME nuclient1
 ENV DB_PWD nuclient.1/1
