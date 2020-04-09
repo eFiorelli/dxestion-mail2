@@ -1,7 +1,6 @@
 const express = require('express');
 let { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const Store = require('../../models/store');
-const app = express();
 const router = express.Router();
 
 router.delete('/update/store/:id', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {

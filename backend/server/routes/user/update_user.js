@@ -43,6 +43,7 @@ router.put('/update/user', [ checkUserToken, checkDistributorRole, checkAdminRol
 					password: bcrypt.hashSync(body.password, 10),
 					logo_img: userDB.logo_img,
 					email_img: userDB.email_img,
+					role: body.role,
 					youtube: body.youtube,
 					instagram: body.instagram,
 					twitter: body.twitter,
@@ -57,6 +58,7 @@ router.put('/update/user', [ checkUserToken, checkDistributorRole, checkAdminRol
 					email: body.email,
 					logo_img: userDB.logo_img,
 					email_img: userDB.email_img,
+					role: body.role,
 					youtube: body.youtube,
 					instagram: body.instagram,
 					twitter: body.twitter,
@@ -75,6 +77,7 @@ router.put('/update/user', [ checkUserToken, checkDistributorRole, checkAdminRol
 			});
 		}
 	} catch (err) {
+		console.log(err);
 		return res.status(500).json({
 			ok: false,
 			err: err,

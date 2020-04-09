@@ -9,12 +9,11 @@ let {
 	checkDistributorRole
 } = require('../../middlewares/authentication');
 const Store = require('../../models/store');
-const app = express();
 const router = express.Router();
 
 router.put(
 	'/update/store/:id',
-	[ checkUserToken, checkAdminRole, checkDistributorRole, checkUserRole ],
+	[ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ],
 	async (req, res) => {
 		let body = req.body;
 		let id = req.params.id;

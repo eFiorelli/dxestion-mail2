@@ -10,7 +10,7 @@ const {
 const app = express();
 const router = express.Router();
 
-router.get('/stores', [ checkAdminRole, checkUserToken, checkUserRole, checkDistributorRole ], async (req, res) => {
+router.get('/stores', [ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	try {
 		let query = '';
 		if (!req.query.user_id && req.user.role === 'ADMIN_ROLE') {
@@ -52,7 +52,7 @@ router.get('/stores', [ checkAdminRole, checkUserToken, checkUserRole, checkDist
 	}
 });
 
-router.get('/store/:id', [ checkAdminRole, checkUserRole, checkUserToken, checkDistributorRole ], async (req, res) => {
+router.get('/store/:id', [ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {

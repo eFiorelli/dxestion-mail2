@@ -1,11 +1,6 @@
 const express = require('express');
 const Session = require('../../models/session');
-const {
-	checkUserToken,
-	checkAdminRole,
-	checkUserRole,
-	checkDistributorRole
-} = require('../../middlewares/authentication');
+const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const router = express.Router();
 
 router.get('/store/:id/connections', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {

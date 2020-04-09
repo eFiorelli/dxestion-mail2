@@ -9,7 +9,7 @@ const task = cron.schedule('0 */6 * * *', async () => {
 
 startTask = async () => {
 	addToLog('info', 'Started crontask');
-	await c.syncAllContacts();
+	// await c.syncAllContacts();
 	task.start();
 };
 

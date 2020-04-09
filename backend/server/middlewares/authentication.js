@@ -42,8 +42,7 @@ let checkUserToken = (req, res, next) => {
 // =================
 let checkAdminRole = (req, res, next) => {
 	let user = req.user;
-
-	if (user.role === 'ADMIN_ROLE') {
+	if (user.role && user.role === 'ADMIN_ROLE') {
 		next();
 	} else {
 		return res.status(400).json({
@@ -59,7 +58,7 @@ let checkAdminRole = (req, res, next) => {
 let checkDistributorRole = (req, res, next) => {
 	let user = req.user;
 
-	if (user.role === 'DISTRIBUTOR_ROLE') {
+	if (user.role === 'DISTRIBUTOR_ROLE' || user.role === 'ADMIN_ROLE') {
 		next();
 	} else {
 		return res.status(400).json({
