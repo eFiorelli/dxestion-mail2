@@ -25,6 +25,7 @@ export class UserComponent implements OnInit {
 	) {}
 
 	user: any;
+	distributorList: any;
 	public imagePath;
 	background_imgURL: any;
 	backendImgUrl = AppComponent.BACKEND_URL + '/files/user/';
@@ -44,6 +45,8 @@ export class UserComponent implements OnInit {
 	blankQRrcode = true;
 	qrCode = '';
 	abc = '';
+
+	userRoles = [ 'USER_ROLE', 'DISTRIBUTOR_ROLE' ];
 
 	preview(type: any, files: any) {
 		if (files.length === 0) {
@@ -76,7 +79,7 @@ export class UserComponent implements OnInit {
 			this.userService.getUserById(id).subscribe((user: any) => {
 				if (user.ok) {
 					this.user = user.user;
-					if (this.user.googleToken) {
+					if (this.user.googleSync) {
 						this.gmailSyncFlag = true;
 					}
 					if (!this.user.emailConfig) {
@@ -91,6 +94,9 @@ export class UserComponent implements OnInit {
 				} else {
 					alert('Error');
 				}
+			});
+			this.userService.getDistributorUsers().subscribe((users: any) => {
+				this.distributorList = users.users;
 			});
 		});
 	}
@@ -118,6 +124,11 @@ export class UserComponent implements OnInit {
 	}
 
 	updateUser() {
+		if (this.gmailSyncFlag) {
+			this.user.googleSync = true;
+		} else {
+			this.user.googleSync = false;
+		}
 		this.user.emailConfig = JSON.stringify(this.user.emailConfig);
 		this.userService
 			.updateUser(this.user)

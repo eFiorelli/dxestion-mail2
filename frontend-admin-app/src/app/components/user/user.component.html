@@ -1,59 +1,6 @@
 <!-- <mat-tab-group (selectedTabChange)="getConnections($event)"> -->
 <mat-tab-group>
-    <mat-tab label="Envíos y promociones" style="height: 100vh; padding:30px">
-        <div *ngIf="auth.isAdmin()">
 
-            <h4 class="mt-5">Crear código de barras para promoción</h4>
-            <hr>
-            <div class="row">
-                <div class="col-3">
-                    <br><br>
-                    <small>Introduce código de barras:</small>
-                    <br>
-                    <input #qrcode (keyup)="updateQRrcode(qrcode.value)">
-                </div>
-                <div class="col-3 text-center">
-                    <div id="qrCodePreview" style="margin-bottom: 10px;">
-                        <qr-code *ngIf="qrCode" [value]="qrCode" [size]="150"></qr-code>
-                    </div>
-                    <button *ngIf="!blankQRrcode" class="btn btn-success" (click)="downloadQRrcode()">Descargar código de barras</button>
-                </div>
-            </div>
-            <hr>
-        </div>
-        <div>
-            <!-- <div class="row">
-                <div class="col-7">
-                    <h4 class="mt-5">Crear nueva promoción para envíos de WhatsApp</h4>
-                    <hr>
-                    <small>(Las imágenes se deben subir del tamaño deseado)</small>
-                    <app-editor (updatePreview)="updatePreview($event)"></app-editor>
-                </div>
-                <div class="col-5">
-                    <h4 class="mt-5">Vista previa</h4>
-                    <hr>
-                    <div *ngIf="!blankEditor" id="editorPreview" class="editor-preview">
-                    </div>
-                </div>
-                <button *ngIf="!blankEditor" class="btn btn-success btn-block" (click)="downloadImage()">Descargar imagen</button>
-			</div> -->
-            <h4 class="mt-5">Drag & Drop</h4>
-            <div class="promotion-box">
-                <div class="drag-drop-common logo-box" cdkDragBoundary=".promotion-box" cdkDrag>
-                    <img *ngIf="user" bind-src="user.logo_img ? (backendImgUrl + user.logo_img): noImage">
-                </div>
-                <div class="drag-drop-common code-box" cdkDragBoundary=".promotion-box" cdkDrag>
-                    QR Code
-                </div>
-                <div class="drag-drop-common body-box" cdkDragBoundary=".promotion-box" cdkDrag>
-                    Body
-                </div>
-                <div class="drag-drop-common footer-box" cdkDragBoundary=".promotion-box" cdkDrag>
-                    Footer
-                </div>
-            </div>
-        </div>
-    </mat-tab>
     <mat-tab label="Datos del usuario" style="height: 100vh; padding:30px">
         <mat-card class="register-card text-center">
             <mat-card-header style="width: 100%">
@@ -135,9 +82,26 @@
                         <div *ngIf="auth.isAdmin()">
                             <h4 class="text-center">Sincronización con Gmail</h4>
                             <div class="register-full-width">
-                                <mat-checkbox name="gmailSync" [(ngModel)]="gmailSyncFlag">¿Enlazar con cuenta de Gmail?</mat-checkbox>
+                                <mat-checkbox name="googleSync" [(ngModel)]="gmailSyncFlag">¿Enlazar con cuenta de Gmail?</mat-checkbox>
                             </div>
                             <button mat-raised-button color="primary" (click)="gmailSync(user._id)">Test/Start sync</button>
+                        </div>
+                        <div *ngIf="auth.isAdmin()">
+                            <h4 class="text-center">Rol de usuario</h4>
+                            <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="user.role" required>
+								<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
+								<option style="height: 30px" *ngFor="let role of userRoles" [ngValue]="role">
+									{{ role == 'USER_ROLE' ? 'Usuario' : 'Distribuidor' }}
+								</option>
+							</select>
+                            <br>
+                            <h4 class="text-center">Distribuidor</h4>
+                            <select style="width: 90%; height: 40px;" name="user" [(ngModel)]="user.distributor" required>
+								<option disabled hidden [ngValue]="0">{{ 'STORES_PAGE.CHOOSE_ONE' | translate }}</option>
+								<option style="height: 30px" *ngFor="let distributor of distributorList" [ngValue]="distributor._id">
+									{{ distributor.username }}
+								</option>
+							</select>
                         </div>
                     </div>
                     <div class="col-md-1"></div>
@@ -220,5 +184,59 @@
                 <!-- <button mat-raised-button (click)="cancel()" color="primary">Descartar cambios</button> -->
             </mat-card-actions>
         </mat-card>
+    </mat-tab>
+    <mat-tab label="Envíos y promociones" style="height: 100vh; padding:30px">
+        <div *ngIf="auth.isAdmin()">
+
+            <h4 class="mt-5">Crear código de barras para promoción</h4>
+            <hr>
+            <div class="row">
+                <div class="col-3">
+                    <br><br>
+                    <small>Introduce código de barras:</small>
+                    <br>
+                    <input #qrcode (keyup)="updateQRrcode(qrcode.value)">
+                </div>
+                <div class="col-3 text-center">
+                    <div id="qrCodePreview" style="margin-bottom: 10px;">
+                        <qr-code *ngIf="qrCode" [value]="qrCode" [size]="150"></qr-code>
+                    </div>
+                    <button *ngIf="!blankQRrcode" class="btn btn-success" (click)="downloadQRrcode()">Descargar código de barras</button>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div>
+            <!-- <div class="row">
+                <div class="col-7">
+                    <h4 class="mt-5">Crear nueva promoción para envíos de WhatsApp</h4>
+                    <hr>
+                    <small>(Las imágenes se deben subir del tamaño deseado)</small>
+                    <app-editor (updatePreview)="updatePreview($event)"></app-editor>
+                </div>
+                <div class="col-5">
+                    <h4 class="mt-5">Vista previa</h4>
+                    <hr>
+                    <div *ngIf="!blankEditor" id="editorPreview" class="editor-preview">
+                    </div>
+                </div>
+                <button *ngIf="!blankEditor" class="btn btn-success btn-block" (click)="downloadImage()">Descargar imagen</button>
+			</div> -->
+            <h4 class="mt-5">Drag & Drop</h4>
+            <div class="promotion-box">
+                <div class="drag-drop-common logo-box" cdkDragBoundary=".promotion-box" cdkDrag>
+                    <img *ngIf="user" bind-src="user.logo_img ? (backendImgUrl + user.logo_img): noImage">
+                </div>
+                <div class="drag-drop-common code-box" cdkDragBoundary=".promotion-box" cdkDrag>
+                    QR Code
+                </div>
+                <div class="drag-drop-common body-box" cdkDragBoundary=".promotion-box" cdkDrag>
+                    Body
+                </div>
+                <div class="drag-drop-common footer-box" cdkDragBoundary=".promotion-box" cdkDrag>
+                    Footer
+                </div>
+            </div>
+        </div>
     </mat-tab>
 </mat-tab-group>

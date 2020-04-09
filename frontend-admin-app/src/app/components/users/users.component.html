@@ -8,7 +8,7 @@
                 </div>
                 <div class="row" style="margin: 0px 20px 30px 20px">
                     <div *ngFor="let user of userList" class="col-lg-3 col-md-4 col-sm-6" (click)="userDetail(user._id)" style="margin-top: 40px; cursor: pointer;">
-                        <div class="card custom-user-card">
+                        <div class="card custom-user-card" [ngStyle]="user.role == 'DISTRIBUTOR_ROLE' && {'background': '#b1f5c08a'}">
                             <img bind-src="user.logo_img ? imagePath + user.logo_img : noImage" class="card-img-top custom-user-img" alt="{{ user.name }}" />
                             <div class="card-body">
                                 <h5 class="card-title text-center text-capitalize">
@@ -112,7 +112,7 @@
                     </div>
                     <div class="col-6">
                         <h4 class="text-center">Logo</h4>
-                        <button (click)="removeImage(0)" class="btn btn-danger" *ngIf="user.logo_img">X</button>
+                        <button (click)="removeLogoImage(0)" class="btn btn-danger" *ngIf="user.logo_img">X</button>
                         <div style="height: 150px; border: 1px solid lightgray">
                             <img *ngIf="user.logo_img" [src]="logo_imgURL" style="height: 150px">
                             <input *ngIf="!user.logo_img" (change)="selectLogoImage($event); preview('logo', $event.target.files)" type="file" id="logo_file" style="margin-top: 70px">

@@ -12,17 +12,13 @@ import { TranslateService } from '@ngx-translate/core';
 export class LoginComponent implements OnInit {
 	constructor(private auth: AuthService, private router: Router, private translate: TranslateService) {}
 
-	username = 'dxestion';
-	password = 'Dxestion0180';
+	username = '';
+	password = '';
 	credentials: Object;
 	showSpinner: boolean;
 
 	ngOnInit(): void {
 		localStorage.clear();
-	}
-
-	test() {
-		this.auth.test().subscribe((response: any) => {});
 	}
 
 	login(): void {

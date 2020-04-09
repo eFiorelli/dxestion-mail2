@@ -108,4 +108,8 @@ export class UserService {
 	changeAdminPassword(id: string, password: string) {
 		return this.http.post(`${AppComponent.BACKEND_URL}/change_admin_password`, { id, password });
 	}
+
+	getDistributorUsers() {
+		return this.http.get(`${AppComponent.BACKEND_URL}/users/distributors`);
+	}
 }

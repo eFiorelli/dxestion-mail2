@@ -93,7 +93,8 @@
                                     <td>
                                         <div class="register-full-width">
                                             <mat-checkbox name="commerce_password" [(ngModel)]="commerce_password">
-                                                ¿{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}?</mat-checkbox>
+                                                ¿{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}?
+                                            </mat-checkbox>
                                         </div>
                                         <mat-form-field *ngIf="commerce_password" class="register-full-width">
                                             <input matInput placeholder="{{ 'STORES_PAGE.COMMERCE_PASSWORD' | translate }}" [(ngModel)]="store.commerce_password" type="password" name="commerce_password">
