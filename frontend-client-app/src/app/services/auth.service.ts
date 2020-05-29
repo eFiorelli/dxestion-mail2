@@ -30,6 +30,24 @@ export class AuthService {
 		);
 	}
 
+	directAccessLogin(storeID){
+		return this.http.post(AppComponent.BACKEND_URL + '/login/store/direct_access', { storeID }).pipe(
+			map((res: any) => {
+				if (res.ok) {
+					this.storeInfo = res;
+					sessionStorage.setItem('token', this.storeInfo.token);
+					sessionStorage.setItem('session', res.session._id);
+					sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
+					sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
+					sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
+					return { ok: true, data: res };
+				} else {
+					return { ok: false, error: res.message };
+				}
+			})
+		);
+	}
+
 	validateToken() {
 		return this.http.get(AppComponent.BACKEND_URL + '/login/validate_token').pipe(
 			map((res: any) => {

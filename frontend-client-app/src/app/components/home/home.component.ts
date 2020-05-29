@@ -47,8 +47,8 @@ export class HomeComponent implements OnInit {
 	public signaturePadOptions: Object = {
 		// passed through to szimek/signature_pad constructor
 		minWidth: 5,
-		canvasWidth: 435,
-		canvasHeight: 140,
+		canvasWidth: 305,
+		canvasHeight: 100,
 		backgroundColor: 'white',
 		dotSize: 2,
 		border: '1px solid black'
@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit {
 					icon: 'success',
 					heightAuto: false
 				}).then(() => {
-					this.flip();
+					// this.flip();
 				});
 			})
 			.catch((error) => {
@@ -268,10 +268,12 @@ export class HomeComponent implements OnInit {
 			Swal.fire({
 				title: 'Acuerdo general de protección de datos',
 				text: gpdr_text,
-				heightAuto: false
+				heightAuto: true
 			});
 			$('.swal2-html-container').css('font-size', '10px');
 			$('.swal2-html-container').css('text-align', 'justify');
+			$('.swal2-header').css('font-size', '10px');
+			$('.swal2-container').css('overflow-y', 'auto');
 		}
 	}
 

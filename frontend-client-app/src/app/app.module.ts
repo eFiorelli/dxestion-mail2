@@ -45,11 +45,12 @@ import {
 	MatDialogModule
 } from '@angular/material';
 import { SliderComponent } from './components/slider/slider.component';
+import { DirectAccessComponent } from './components/direct-access/direct-access.component';
 
 const config: SocketIoConfig = { url: AppComponent.SOCKET_URL, options: {} };
 
 @NgModule({
-	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent, SliderComponent ],
+	declarations: [ AppComponent, HomeComponent, LoginComponent, NavbarComponent, SliderComponent, DirectAccessComponent ],
 	imports: [
 		RouterModule,
 		HttpClientModule,
