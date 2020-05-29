@@ -72,3 +72,13 @@ div.mat-card-header-text {
 	max-width: 100%;
 	border: dotted #ccc 2px;
 }
+
+.user-container {
+	display: flex;
+}
+
+.section-container {
+	width: 90%;
+	padding: 0px 10px;
+	border: 1px solid lightgray;
+}

@@ -1,6 +1,5 @@
-<!-- <mat-tab-group (selectedTabChange)="getConnections($event)"> -->
+<!--
 <mat-tab-group>
-
     <mat-tab label="Datos del usuario" style="height: 100vh; padding:30px">
         <mat-card class="register-card text-center">
             <mat-card-header style="width: 100%">
@@ -11,7 +10,7 @@
             <mat-card-content>
                 <div class="row" *ngIf="user">
                     <div class="col-sm-6">
-                        <form class="register-form">
+                        <form class="register-form" *ngIf="user">
                             <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
                                 <tr>
                                     <td>
@@ -124,7 +123,6 @@
                             </tbody>
                         </table>
                         <br>
-                        <!-- Email stuff -->
                         <h4 *ngIf="auth.isAdmin()">Parámetros del email</h4>
                         <form *ngIf="auth.isAdmin()" class="register-form">
                             <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
@@ -181,7 +179,6 @@
             </mat-card-content>
             <mat-card-actions>
                 <button mat-raised-button (click)="updateUser()" color="primary">Guardar cambios</button>
-                <!-- <button mat-raised-button (click)="cancel()" color="primary">Descartar cambios</button> -->
             </mat-card-actions>
         </mat-card>
     </mat-tab>
@@ -207,21 +204,6 @@
             <hr>
         </div>
         <div>
-            <!-- <div class="row">
-                <div class="col-7">
-                    <h4 class="mt-5">Crear nueva promoción para envíos de WhatsApp</h4>
-                    <hr>
-                    <small>(Las imágenes se deben subir del tamaño deseado)</small>
-                    <app-editor (updatePreview)="updatePreview($event)"></app-editor>
-                </div>
-                <div class="col-5">
-                    <h4 class="mt-5">Vista previa</h4>
-                    <hr>
-                    <div *ngIf="!blankEditor" id="editorPreview" class="editor-preview">
-                    </div>
-                </div>
-                <button *ngIf="!blankEditor" class="btn btn-success btn-block" (click)="downloadImage()">Descargar imagen</button>
-			</div> -->
             <h4 class="mt-5">Drag & Drop</h4>
             <div class="promotion-box">
                 <div class="drag-drop-common logo-box" cdkDragBoundary=".promotion-box" cdkDrag>
@@ -240,3 +222,161 @@
         </div>
     </mat-tab>
 </mat-tab-group>
+-->
+<div class="container user-container">
+    <div class="user-menu">
+        <ul class="list-group">
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(0)">DATOS CLIENTE</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(1)">MAIL BIENVENIDA</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(2)">IMAGEN TABLET</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(3)">ESTABLECIMIENTOS</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(4)">CONEXIONES</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(5)">WHATSAPP</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(6)">APP</p>
+            </li>
+            <li routerLinkActive="active" class="list-group-item list-group-item-action">
+                <p (click)="showSection(7)">CLIENTES</p>
+            </li>
+        </ul>
+    </div>
+    <div class="section-container">
+        <div *ngIf="section === 0">
+            <form class="register-form" *ngIf="user">
+                <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Usuario" [(ngModel)]="user.username" name="username" required>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Password" [(ngModel)]="user.password" type="password" name="password">
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Nombre" [(ngModel)]="user.name" name="name" required>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Email" [(ngModel)]="user.email" type="email" name="email" required>
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Direccion" [(ngModel)]="user.address" name="address" required />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Twitter" [(ngModel)]="user.twitter" type="twitter" name="twitter" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Facebook" [(ngModel)]="user.facebook" type="facebook" name="facebook" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Instagram" [(ngModel)]="user.instagram" type="instagram" name="instagram" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Youtube" [(ngModel)]="user.youtube" type="youtube" name="youtube" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+        <div *ngIf="section === 1">
+            <form *ngIf="auth.isAdmin()" class="register-form">
+                <table class=" table-register" style="width: 100%" *ngIf="user" cellspacing="0">
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Servidor SMTP" [(ngModel)]="user.emailConfig.smtp" name="smtp" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Cuenta de correo" [(ngModel)]="user.emailConfig.emailAccount" type="email" name="emailAccount" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Puerto" [(ngModel)]="user.emailConfig.port" name="port" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-form-field class="register-full-width">
+                                <input matInput placeholder="Contraseña email" [(ngModel)]="user.emailConfig.emailPassword" type="password" name="emailPassword" />
+                            </mat-form-field>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <h4 *ngIf="auth.isAdmin()" class="text-center">Imagen email bienvenida</h4>
+            <table *ngIf="auth.isAdmin()" style="width: 100%">
+                <tbody>
+                    <tr style="height: 150px;">
+                        <td style="border: 1px solid lightgray">
+                            <img *ngIf="user.email_img && !email_imgURL" bind-src="user.email_img ? (backendImgEmailUrl + user.email_img): noImage" style="height: 150px">
+
+                            <input *ngIf="!user.email_img" (change)="selectEmailImage($event); preview('email', $event.target.files)" type="file" id="email_file">
+                            <img *ngIf="email_imgURL" [src]="email_imgURL" style="height: 150px">
+                        </td>
+                        <td>
+                            <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="user.email_img" style="margin-left: 20px; width: 40px; height: 150px;">X</button>
+                            <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="!user.email_img" style="margin-left: 20px; width: 40px; height: 150px;" disabled>X</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="section === 2">
+        </div>
+        <div *ngIf="section === 3">
+            <app-stores></app-stores>
+        </div>
+    </div>
+</div>

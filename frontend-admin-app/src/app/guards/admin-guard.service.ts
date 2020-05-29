@@ -13,7 +13,7 @@ export class AdminGuardService implements CanActivate {
 		if (this.auth.isAuthenticated() && isAdmin === 'ADMIN_ROLE') {
 			return true;
 		} else {
-			localStorage.clear();
+			// localStorage.clear();
 			this.router.navigate([ '/login' ]);
 			return false;
 		}

@@ -19,6 +19,8 @@ class ImageSnippet {
 	constructor(public src: string, public file: File) {}
 }
 
+declare let html2canvas: any;
+
 @Component({
 	selector: 'app-store',
 	templateUrl: './store.component.html',
@@ -56,12 +58,14 @@ export class StoreComponent implements OnInit {
 	message = '';
 	clients = [];
 	commerce_password = false;
-	storeTypes = [ 'FrontRetail/Manager', 'FrontRetail', 'FrontRest/Manager', 'FrontRest', 'Agora' ];
+	storeTypes = [ 'FrontRetail/Manager', 'FrontRetail', 'FrontRest/Manager', 'Manager', 'FrontRest', 'Agora' ];
 	signaturePath = AppComponent.BACKEND_URL + '/files/client/signature/';
 	user_role = localStorage.getItem('role');
 	freeFields = [];
 	connectionError = null;
 	connectionList = [];
+	storeQRcode = '';
+	directAccessURL = 'http://app.nuclient.es:85/#/direct_access?id=';
 
 	selectedFiles: ImageSnippet[] = [];
 
@@ -88,6 +92,9 @@ export class StoreComponent implements OnInit {
 			const id = params.id;
 			this.storeService.getStoreById(id).subscribe((response: any) => {
 				this.store = response.store;
+				console.log(this.store._id);
+				this.storeQRcode = this.directAccessURL + id;
+				console.log(this.storeQRcode);
 				this.freeFields = this.store.free_fields;
 				this.background_imgURL = [ ...this.store.background_img ];
 				this.clientService.getClients(this.store._id).subscribe((response_clients: any) => {
@@ -274,5 +281,17 @@ export class StoreComponent implements OnInit {
 				}
 			});
 		}
+	}
+
+	downloadQRrcode() {
+		const element: any = document.getElementById('qrCodePreview').childNodes[0].childNodes[0];
+		let t = '';
+		html2canvas(element).then((canvas) => {
+			var a = document.createElement('a');
+			a.href = canvas.toDataURL('image/jpeg').replace('image/jpeg', 'image/octet-stream');
+			a.download = 'qrcode.jpg';
+			t = a.href;
+			a.click();
+		});
 	}
 }

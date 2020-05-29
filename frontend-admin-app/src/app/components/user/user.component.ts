@@ -46,6 +46,8 @@ export class UserComponent implements OnInit {
 	qrCode = '';
 	abc = '';
 
+	section = 0;
+
 	userRoles = [ 'USER_ROLE', 'DISTRIBUTOR_ROLE' ];
 
 	preview(type: any, files: any) {
@@ -220,5 +222,10 @@ export class UserComponent implements OnInit {
 			t = a.href;
 			a.click();
 		});
+	}
+
+	showSection(value) {
+		this.section = value;
+		console.log(value);
 	}
 }
