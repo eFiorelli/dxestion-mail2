@@ -3,6 +3,7 @@ const app = express();
 
 /* Login routes */
 app.use(require('./login/login'));
+app.use(require('./login/direct_access'));
 app.use(require('./login/validate_token'));
 
 /* Client routes */

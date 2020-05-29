@@ -10,7 +10,7 @@ const {
 const app = express();
 const router = express.Router();
 
-router.get('/stores', [ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ], async (req, res) => {
+router.get('/stores', [ checkUserToken, checkUserRole ], async (req, res) => {
 	try {
 		let query = '';
 		if (!req.query.user_id && req.user.role === 'ADMIN_ROLE') {
@@ -18,7 +18,7 @@ router.get('/stores', [ checkUserToken, checkUserRole, checkDistributorRole, che
 		} else {
 			query = Store.find({
 				active: true,
-				user: req.query.user_id || req.user._id
+				user: [ req.query.user_id, req.user._id ]
 			});
 			query.select(
 				'_id name email username created_date database_url database_name database_port database_username database_password background_img logo_img allowed_connections'
@@ -52,7 +52,7 @@ router.get('/stores', [ checkUserToken, checkUserRole, checkDistributorRole, che
 	}
 });
 
-router.get('/store/:id', [ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ], async (req, res) => {
+router.get('/store/:id', [ checkUserToken, checkUserRole ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	try {

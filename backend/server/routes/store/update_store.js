@@ -11,129 +11,125 @@ let {
 const Store = require('../../models/store');
 const router = express.Router();
 
-router.put(
-	'/update/store/:id',
-	[ checkUserToken, checkUserRole, checkDistributorRole, checkAdminRole ],
-	async (req, res) => {
-		let body = req.body;
-		let id = req.params.id;
-		try {
-			let storeDB = await Store.findById(id);
-			if (!storeDB) {
-				return res.status(400).json({
-					ok: false,
-					message: 'There is no store with that ID',
-					type: 12
-				});
-			} else {
-				if (req.files) {
-					const images = [
-						{
-							type: 'background_1',
-							image: req.files.background_img_1
-						},
-						{
-							type: 'background_2',
-							image: req.files.background_img_2
-						},
-						{
-							type: 'background_3',
-							image: req.files.background_img_3
-						},
-						{
-							type: 'background_4',
-							image: req.files.background_img_4
-						},
-						{
-							type: 'background_5',
-							image: req.files.background_img_5
-						},
-						{
-							type: 'logo',
-							image: req.files.logo_image || ''
-						}
-					];
-					const response = await updateStoreImages(storeDB, images);
-					if (!response.ok) {
-						return res.status(400).json({
-							ok: false,
-							message: response.error,
-							type: 1
-						});
-					} else {
-						storeDB = response.storeDB;
+router.put('/update/store/:id', [ checkUserToken, checkUserRole ], async (req, res) => {
+	let body = req.body;
+	let id = req.params.id;
+	try {
+		let storeDB = await Store.findById(id);
+		if (!storeDB) {
+			return res.status(400).json({
+				ok: false,
+				message: 'There is no store with that ID',
+				type: 12
+			});
+		} else {
+			if (req.files) {
+				const images = [
+					{
+						type: 'background_1',
+						image: req.files.background_img_1
+					},
+					{
+						type: 'background_2',
+						image: req.files.background_img_2
+					},
+					{
+						type: 'background_3',
+						image: req.files.background_img_3
+					},
+					{
+						type: 'background_4',
+						image: req.files.background_img_4
+					},
+					{
+						type: 'background_5',
+						image: req.files.background_img_5
+					},
+					{
+						type: 'logo',
+						image: req.files.logo_image || ''
 					}
-				}
-
-				if (body.selected_free_fields) {
-					body.selected_free_fields = JSON.parse(body.selected_free_fields);
-				}
-				let updatedStore;
-				if (!body.password) {
-					updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
-						id: body._id,
-						name: body.name,
-						email: body.email,
-						username: body.username,
-						database_url: body.database_url,
-						database_name: body.database_name,
-						database_port: body.database_port,
-						database_username: body.database_username,
-						database_password: body.database_password,
-						user: body.user,
-						background_img: storeDB.background_img,
-						logo_img: storeDB.logo_img,
-						free_fields: body.selected_free_fields,
-						gpdr_text: body.gpdr_text,
-						store_type: body.store_type,
-						allowed_connections: body.allowed_connections
-					});
-				} else {
-					updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
-						id: body._id,
-						name: body.name,
-						email: body.email,
-						password: bcrypt.hashSync(body.password, 10),
-						username: body.username,
-						database_url: body.database_url,
-						database_name: body.database_name,
-						database_port: body.database_port,
-						database_username: body.database_username,
-						database_password: body.database_password,
-						user: body.user,
-						background_img: storeDB.background_img,
-						logo_img: storeDB.logo_img,
-						free_fields: body.selected_free_fields,
-						gpdr_text: body.gpdr_text,
-						store_type: body.store_type,
-						allowed_connections: body.allowed_connections
-					});
-				}
-				if (updatedStore) {
-					addToLog('info', `Store "${updatedStore.name}" updated by user "${req.user.username}"`);
-					return res.status(200).json({
-						ok: true,
-						message: 'User updated successfully',
-						store: storeDB,
-						type: 1
-					});
-				} else {
+				];
+				const response = await updateStoreImages(storeDB, images);
+				if (!response.ok) {
 					return res.status(400).json({
 						ok: false,
-						message: 'Error updating store',
+						message: response.error,
 						type: 1
 					});
+				} else {
+					storeDB = response.storeDB;
 				}
 			}
-		} catch (err) {
-			return res.status(500).json({
-				ok: false,
-				err: err,
-				type: 1
-			});
+
+			if (body.selected_free_fields) {
+				body.selected_free_fields = JSON.parse(body.selected_free_fields);
+			}
+			let updatedStore;
+			if (!body.password) {
+				updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
+					id: body._id,
+					name: body.name,
+					email: body.email,
+					username: body.username,
+					database_url: body.database_url,
+					database_name: body.database_name,
+					database_port: body.database_port,
+					database_username: body.database_username,
+					database_password: body.database_password,
+					user: body.user,
+					background_img: storeDB.background_img,
+					logo_img: storeDB.logo_img,
+					free_fields: body.selected_free_fields,
+					gpdr_text: body.gpdr_text,
+					store_type: body.store_type,
+					allowed_connections: body.allowed_connections
+				});
+			} else {
+				updatedStore = await Store.findByIdAndUpdate(storeDB._id, {
+					id: body._id,
+					name: body.name,
+					email: body.email,
+					password: bcrypt.hashSync(body.password, 10),
+					username: body.username,
+					database_url: body.database_url,
+					database_name: body.database_name,
+					database_port: body.database_port,
+					database_username: body.database_username,
+					database_password: body.database_password,
+					user: body.user,
+					background_img: storeDB.background_img,
+					logo_img: storeDB.logo_img,
+					free_fields: body.selected_free_fields,
+					gpdr_text: body.gpdr_text,
+					store_type: body.store_type,
+					allowed_connections: body.allowed_connections
+				});
+			}
+			if (updatedStore) {
+				addToLog('info', `Store "${updatedStore.name}" updated by user "${req.user.username}"`);
+				return res.status(200).json({
+					ok: true,
+					message: 'User updated successfully',
+					store: storeDB,
+					type: 1
+				});
+			} else {
+				return res.status(400).json({
+					ok: false,
+					message: 'Error updating store',
+					type: 1
+				});
+			}
 		}
+	} catch (err) {
+		return res.status(500).json({
+			ok: false,
+			err: err,
+			type: 1
+		});
 	}
-);
+});
 
 updateStoreImages = async (storeDB, images) => {
 	try {

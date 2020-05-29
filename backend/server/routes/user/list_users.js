@@ -1,6 +1,11 @@
 const express = require('express');
 const User = require('../../models/user');
-const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
+const {
+	checkUserToken,
+	checkAdminRole,
+	checkDistributorRole,
+	checkUserRole
+} = require('../../middlewares/authentication');
 const router = express.Router();
 
 router.get('/users', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
@@ -49,7 +54,7 @@ router.get('/users', [ checkUserToken, checkDistributorRole, checkAdminRole ], a
 	}
 });
 
-router.get('/user/:id', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
+router.get('/user/:id', [ checkUserToken, checkUserRole ], async (req, res) => {
 	const id = req.params.id;
 	const is_admin = req.user.role === 'ADMIN_ROLE';
 	const is_distributor = req.user.role === 'DISTRIBUTOR_ROLE';

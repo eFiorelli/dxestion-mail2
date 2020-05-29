@@ -51,11 +51,11 @@ let sendMail = async (store, client, user) => {
 			addToLog('info', `Successfully sent mail to client "${client.name}"`);
 			return true;
 		} else {
-			addToLog('error', `Error sending mail to client "${client.name}"`);
+			addToLog('warn', `Error sending mail to client "${client.name}"`);
 			return false;
 		}
 	} catch (err) {
-		addToLog('error', `Error sending mail to client "${client.name} - ${err}"`);
+		addToLog('warn', `Error sending mail to client "${client.name} - ${err}"`);
 		return false;
 	}
 };

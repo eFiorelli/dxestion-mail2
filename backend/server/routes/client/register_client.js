@@ -28,6 +28,10 @@ router.post('/register/client', checkUserToken, async (req, res) => {
 				client_insert = await sendClientToFRTFRSManager(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
 				break;
+			case 'Manager':
+				client_insert = await sendClientToFRTFRSManager(req.store, body);
+				await saveClient(client_insert, req.store, body, req.files, res);
+				break;
 			case 'Agora':
 				client_insert = await sendClientToAgora(req.store, body);
 				await saveClient(client_insert, req.store, body, req.files, res);
@@ -86,20 +90,11 @@ saveClient = async (client_insert, store, body, files, res) => {
 						addToLog('info', `Client "${client.name}" created by store "${store.name}"`);
 						const mail = await sendMail(store, client, user);
 						// const mail = true;
-						if (mail) {
-							addToLog('info', `Email sent to "${client.email}"`);
-							return res.status(200).json({
-								ok: true,
-								message: 'Client inserted',
-								type: 23
-							});
-						} else {
-							return res.status(400).json({
-								ok: true,
-								message: 'Error sending email',
-								type: 29
-							});
-						}
+						return res.status(200).json({
+							ok: true,
+							message: 'Client inserted',
+							type: 23
+						});
 					} else {
 						return res.status(400).json({
 							ok: false,
@@ -199,6 +194,14 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
 						}
 					}
 
+					if (connection_params.store_type === 'Manager') {
+						const sql_string_client_tariff = `insert into TARIFASCLIENTE (CODCLIENTE, IDTARIFAV, DESCRIPCION, POSICION, DTO, CODPROVEEDOR, CODEXTERNO) values (${max_id}, 2, 'TARIFA CLIENTES', 1,  0, 0, '' )`;
+						const client_tariff = await sql.query(sql_string_client_tariff);
+						if (client_tariff.rowsAffected[0] <= 0) {
+							return 2;
+						}
+					}
+
 					if (client.freeFields.length >= 0) {
 						const result = await saveFreeFields(max_id, client.freeFields);
 						if (result) {
@@ -217,6 +220,7 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
 			return 3;
 		}
 	} catch (err) {
+		console.log(err)
 		if (err.code === 'ESOCKET') {
 			return 3;
 		} else {
