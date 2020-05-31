@@ -18,8 +18,8 @@ export class LoginComponent implements OnInit {
 		private socket: SocketService
 	) {}
 
-	username = 'tienda1';
-	password = '1234';
+	username = '';
+	password = '';
 	credentials: Object;
 	showSpinner: boolean;
 	elem;

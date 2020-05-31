@@ -17,9 +17,11 @@ export class AuthService {
 			map((res: any) => {
 				if (res.ok) {
 					this.storeInfo = res;
+					console.log(res);
 					sessionStorage.setItem('token', this.storeInfo.token);
 					sessionStorage.setItem('session', res.session._id);
 					sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
+					sessionStorage.setItem('logo_image', this.storeInfo.store.logo_img);
 					sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
 					sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
 					return { ok: true, data: res };
@@ -35,9 +37,11 @@ export class AuthService {
 			map((res: any) => {
 				if (res.ok) {
 					this.storeInfo = res;
+					console.log(res);
 					sessionStorage.setItem('token', this.storeInfo.token);
 					sessionStorage.setItem('session', res.session._id);
 					sessionStorage.setItem('bg_image', this.storeInfo.store.background_img);
+					sessionStorage.setItem('logo_image', this.storeInfo.store.logo_img);
 					sessionStorage.setItem('gpdr_text', this.storeInfo.store.gpdr_text);
 					sessionStorage.setItem('ff', JSON.stringify(this.storeInfo.store.free_fields));
 					return { ok: true, data: res };
