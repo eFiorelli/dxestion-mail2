@@ -9,7 +9,7 @@
                 <div class="row" *ngIf="storeList" style="margin: 0px 20px 30px 20px">
                     <div *ngFor="let store of storeList" class="col-lg-3 col-md-4 col-sm-6" (click)="goToStore(store)" style="margin-top: 40px; cursor: pointer;">
                         <div class="card custom-store-card">
-                            <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}" style="height: 120px;">
+                            <img bind-src="store.logo_img ? (imagePath + store.logo_img): noImage" class="card-img-top custom-store-img" alt="{{ store.name }}">
                             <div class="card-body">
                                 <h5 class="card-title text-center text-capitalize"><u>{{store.name}}</u></h5>
                                 <p class="card-text custom-store-card-text"><b>{{ 'STORES_PAGE.USERNAME' | translate }}: </b>{{ store.username }}</p>
