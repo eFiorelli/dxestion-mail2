@@ -35,6 +35,8 @@ export class UsersComponent implements OnInit {
 	selectedTab;
 	message: any;
 	userRoles = [ 'USER_ROLE', 'DISTRIBUTOR_ROLE' ];
+	distributorList: any;
+	gmailSyncFlag = false;
 
 	user: any = {
 		username: '',
@@ -62,6 +64,9 @@ export class UsersComponent implements OnInit {
 	ngOnInit() {
 		this.clearUser();
 		this.getUsers();
+		this.userService.getDistributorUsers().subscribe((users: any) => {
+			this.distributorList = users.users;
+		});
 	}
 
 	clearUser() {
@@ -181,5 +186,41 @@ export class UsersComponent implements OnInit {
 				this.logo_imgURL = reader.result;
 			}
 		};
+	}
+
+	gmailSync(id: string) {
+		this.showSpinner = true;
+		this.userService.syncUserGmail(id).subscribe((response: any) => {
+			this.showSpinner = false;
+			if (response.ok) {
+				Swal.fire('Success', `Synced ${response.count} contacts`, 'success');
+			} else {
+				if (response.message) {
+					Swal.fire({
+						title: 'Authorize Google account:',
+						html: `Please, visit the following URL and copy the code in the box below: <br><br> <a target="_blank" href=${response.message}> Authorize Google Account</a>`,
+						icon: 'info',
+						input: 'text'
+					}).then((resp) => {
+						if (resp.value) {
+							this.sendAuth(id, resp.value);
+						}
+					});
+				} else {
+					Swal.fire('Info', `${response.error}`, 'info');
+				}
+			}
+		});
+	}
+
+	sendAuth(id: string, key: string) {
+		this.userService.sendURLAuth(id, key).subscribe((response: any) => {
+			this.showSpinner = false;
+			if (response.ok) {
+				Swal.fire('Success', 'Google account successfully synced', 'success');
+			} else {
+				Swal.fire('Error', response.message, 'error');
+			}
+		});
 	}
 }
