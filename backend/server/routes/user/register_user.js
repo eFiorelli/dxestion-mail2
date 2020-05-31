@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/register/user', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	let body = req.body;
-	const user = User.findById(req.user._id);
+	const user = await User.findById(req.user._id);
 
 	try {
 		const userDB = await User.findOne({
