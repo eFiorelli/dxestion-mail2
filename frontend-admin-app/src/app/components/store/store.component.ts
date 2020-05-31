@@ -46,7 +46,7 @@ export class StoreComponent implements OnInit {
 		free_fields: [],
 		selected_free_fields: '',
 		gpdr_text: '',
-		allowed_connections: 1
+		allowed_connections: 50000
 	};
 	userList: any;
 	logo_imgURL: any;

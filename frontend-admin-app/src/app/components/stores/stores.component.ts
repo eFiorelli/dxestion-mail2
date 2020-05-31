@@ -56,7 +56,7 @@ export class StoresComponent implements OnInit {
 	logo_imgURL: any;
 	message: any;
 	commerce_password: boolean = false;
-	storeTypes = [ 'FrontRetail/Manager', 'FrontRetail', 'FrontRest/Manager', 'FrontRest', 'Agora' ];
+	storeTypes = [ 'FrontRetail/Manager', 'Manager', 'FrontRetail', 'FrontRest/Manager', 'FrontRest', 'Agora' ];
 	selectedFiles: ImageSnippet[] = [];
 	freeFields = [];
 	connectionError = null;
