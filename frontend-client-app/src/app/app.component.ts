@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 
 @Component({
 	selector: 'app-root',
@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	title = 'frontend-app';
-	static BACKEND_URL = 'https://backendnuclient.serantes.pro';
+	static BACKEND_URL = 'http://backend.nuclient.es:85';
+	static SOCKET_URL = 'http://backend.nuclient.es:85';
 	// static BACKEND_URL = 'http://localhost:3000';
+	// static SOCKET_URL = 'http://localhost:3000';
 }

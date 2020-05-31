@@ -60,6 +60,10 @@ let storeSchema = new Schema({
 		type: Object,
 		required: false
 	},
+	client_tariff: {
+		type: Object,
+		required: false
+	},
 	background_img: {
 		type: [ String ],
 		required: false
