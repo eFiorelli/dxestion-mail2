@@ -202,7 +202,7 @@ export class HomeComponent implements OnInit {
 					icon: 'success',
 					heightAuto: false
 				}).then(() => {
-					// this.flip();
+					this.flip();
 				});
 			})
 			.catch((error) => {
