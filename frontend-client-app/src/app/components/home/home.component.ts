@@ -247,7 +247,8 @@ export class HomeComponent implements OnInit {
 		this.freeFields = JSON.parse(sessionStorage.getItem('ff'));
 		this.parseFreeFields();
 		setTimeout(() => {
-			this.router.navigate([ '/slider' ]);
+			window.location.href = sessionStorage.getItem('website');
+			// this.router.navigate([ '/slider' ]);
 		}, 1500);
 	}
 
