@@ -719,7 +719,8 @@
                                                                         <table width="100%" cellspacing="0" cellpadding="0">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td class="esd-block-image es-m-p0l" align="center"><a href="{{ user.name }}" target="_blank"><img src="https://maazi.es/img/maazi_og.jpg" alt="{{user.name}}" title="{{user.name}}logo" width="150" style="border-radius: 5px;"></a></td>
+                                                                                    {{!-- <td class="esd-block-image es-m-p0l" align="center"><a href="{{ user.name }}" target="_blank"><img src="https://maazi.es/img/maazi_og.jpg" alt="{{user.name}}" title="{{user.name}}logo" width="150" style="border-radius: 5px;"></a></td> --}}
+                                                                                    <td class="esd-block-image es-m-p0l" align="center"><a href="{{ user.name }}" target="_blank"><img src="{{config.backend_url}}{{config.email_img_path}}{{email_img}}" alt="{{user.name}}" title="{{user.name}}logo" width="150" style="border-radius: 5px;"></a></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
@@ -781,8 +782,8 @@
                                                                                 <tr>
                                                                                     <td class="esd-block-text es-m-txt-c es-p10t es-p10b" align="left">
                                                                                         <p style="line-height: 150%;">Gracias por registrarte en {{ store }}. Te mantendremos informado sobre las novedades, ofertas y descuentos de los que podrás disfrutar sólo por ser cliente.<br></p>
-																						<p style="line-height: 150%;">Desde este momento, podrás acceder a nuestra tienda online <a href="http://maazi.es">maazi.es</a> con el mail con el que te has registrado y con la pass: maazi2020 (una vez hayas accedido, podrás modificar tus datos de acceso en el panel de cliente).<br></p>
-																						<p style="line-height: 150%;">Gracias y nos vemos en Maazi.</p>
+																						<p style="line-height: 150%;">Desde este momento, podrás acceder a nuestra tienda online <a href="{{ website }}">{{ website }}</a> con el mail con el que te has registrado y con la pass: {{commerce_password}} (una vez hayas accedido, podrás modificar tus datos de acceso en el panel de cliente).<br></p>
+																						<p style="line-height: 150%;">Gracias y nos vemos en {{ store }}.</p>
                                                                                     </td>
                                                                                 </tr>
                                                                             </tbody>
@@ -829,7 +830,7 @@
                                                                                 </tr>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-text es-p5t es-p5b">
-                                                                                        <p style="line-height: 21px; font-size: 12px;"> Si usted desea darse de baja de toda notificación por parte de Maazi, deberá madar un mail con el asunto: BAJA a <a href="mailto:hola@maazi.es">hola@maazi.es</a></p>
+                                                                                        <p style="line-height: 21px; font-size: 12px;"> Si usted desea darse de baja de toda notificación por parte de {{store}}, deberá madar un mail con el asunto: BAJA a <a href="mailto:{{ user.email }}">{{user.email}}</a></p>
                                                                                     </td>
                                                                                 </tr>
                                                                                 <tr>

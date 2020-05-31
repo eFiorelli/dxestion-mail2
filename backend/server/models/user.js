@@ -54,6 +54,10 @@ let userSchema = new Schema({
 		type: String,
 		required: false
 	},
+	website: {
+		type: String,
+		required: false
+	},
 	role: {
 		type: String,
 		default: 'USER_ROLE',

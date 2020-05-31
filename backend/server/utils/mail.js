@@ -42,7 +42,9 @@ let sendMail = async (store, client, user) => {
 			facebook: user.facebook,
 			twitter: user.twitter,
 			instagram: user.instagram,
-			youtube: user.youtube
+			youtube: user.youtube,
+			website: user.website,
+			commerce_password: store.commerce_password
 		}
 	};
 	try {

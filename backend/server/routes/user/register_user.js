@@ -28,6 +28,7 @@ router.post('/register/user', [ checkUserToken, checkDistributorRole, checkAdmin
 				instagram: body.instagram,
 				twitter: body.twitter,
 				facebook: body.facebook,
+				website: body.website,
 				address: body.address,
 				googleSync: body.googleSync,
 				role: body.role,
