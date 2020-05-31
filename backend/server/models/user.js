@@ -81,8 +81,7 @@ let userSchema = new Schema({
 	},
 	distributor: {
 		type: Schema.Types.ObjectId,
-		ref: 'User',
-		required: [ true, 'Distributor is required' ]
+		ref: 'User'
 	}
 });
 
