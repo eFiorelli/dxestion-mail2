@@ -82,6 +82,7 @@ export class UsersComponent implements OnInit {
 			twitter: '',
 			facebook: '',
 			instagram: '',
+			website: '',
 			youtube: '',
 			emailConfig: {
 				smtp: '',
