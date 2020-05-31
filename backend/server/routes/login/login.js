@@ -109,6 +109,8 @@ storeLogin = async (req, res, storeDB, credentials) => {
 			});
 		}
 
+		const user = await User.findById(storeDB._id);
+
 		const token = jwt.sign({ store: storeDB }, process.env.SEED, { expiresIn: process.env.TOKEN_EXPIRATION });
 
 		const returnedStore = {
@@ -120,7 +122,8 @@ storeLogin = async (req, res, storeDB, credentials) => {
 			logo_img: storeDB.logo_img,
 			free_fields: storeDB.free_fields,
 			gpdr_text: storeDB.gpdr_text,
-			allowed_connections: storeDB.allowed_connections
+			allowed_connections: storeDB.allowed_connections,
+			website: user.website
 		};
 
 		const newSession = await session.createSession(returnedStore, req.session, req.sessionID);
