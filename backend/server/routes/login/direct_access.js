@@ -143,6 +143,7 @@ storeLogin = async (req, res, storeDB, credentials) => {
 directAccessStoreLogin = async (req, res, storeDB) => {
 
 	const token = jwt.sign({ store: storeDB }, process.env.SEED, { expiresIn: process.env.TOKEN_EXPIRATION });
+	const user = await User.findById(storeDB.user);
 
 	const returnedStore = {
 		_id: storeDB._id,
@@ -153,7 +154,8 @@ directAccessStoreLogin = async (req, res, storeDB) => {
 		logo_img: storeDB.logo_img,
 		free_fields: storeDB.free_fields,
 		gpdr_text: storeDB.gpdr_text,
-		allowed_connections: storeDB.allowed_connections
+		allowed_connections: storeDB.allowed_connections,
+		website: user.website
 	};
 
 	const newSession = await session.createSession(returnedStore, req.session, req.sessionID);
