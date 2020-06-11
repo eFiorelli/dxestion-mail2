@@ -7,6 +7,7 @@ let sendMail = async (store, client, user) => {
 		email_img_path: '/files/user/email/'
 	};
 	const emailConfig = user.emailConfig;
+	console.log(emailConfig);
 	const transporter = nodemailer.createTransport({
 		host: emailConfig.smtp,
 		port: emailConfig.port,
@@ -27,12 +28,13 @@ let sendMail = async (store, client, user) => {
 	};
 
 	transporter.use('compile', hbs(handlebarsOptions));
+	const templateName = emailConfig.emailAccount.split('@')[1].split('.')[0];
 	const mailOptions = {
 		from: ` ${emailConfig.emailAccount}`,
 		to: `${client.email}`,
 		subject: `Gracias por registrarse en ${store.name}`,
 		text: `Hemos recibido su solicitud. Muchas gracias`,
-		template: 'welcome',
+		template: templateName,
 		context: {
 			config: config,
 			client: client.name,
@@ -44,7 +46,8 @@ let sendMail = async (store, client, user) => {
 			instagram: user.instagram,
 			youtube: user.youtube,
 			website: user.website,
-			commerce_password: store.commerce_password
+			commerce_password: store.commerce_password,
+			email_content: user.email_text
 		}
 	};
 	try {
