@@ -14,7 +14,7 @@ router.post('/test/mail', [ checkUserToken, checkDistributorRole, checkAdminRole
 
 	const mail = await sendMail(store, client, user);
 	return res.status(200).json({
-		ok: true
+		ok: mail
 	});
 })
 
