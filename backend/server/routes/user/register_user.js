@@ -2,7 +2,21 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const { checkUserToken, checkAdminRole, checkDistributorRole } = require('../../middlewares/authentication');
 const User = require('../../models/user');
+const Store = require('../../models/store');
+const { sendMail } = require('../../utils/mail');
 const router = express.Router();
+
+router.post('/test/mail', [ checkUserToken, checkDistributorRole, checkAdminRole ], async(req, res) =>{
+	let body = req.body;
+	const user = await User.findById(req.body.id);
+	const store = await Store.findOne({user: user})
+	const client = { email: body.email, name: 'Prueba email'};
+
+	const mail = await sendMail(store, client, user);
+	return res.status(200).json({
+		ok: true
+	});
+})
 
 router.post('/register/user', [ checkUserToken, checkDistributorRole, checkAdminRole ], async (req, res) => {
 	let body = req.body;
@@ -32,6 +46,7 @@ router.post('/register/user', [ checkUserToken, checkDistributorRole, checkAdmin
 				address: body.address,
 				googleSync: body.googleSync,
 				role: body.role,
+				email_text: body.email_text,
 				emailConfig: JSON.parse(body.emailConfig),
 				distributor: user
 			});

@@ -38,6 +38,8 @@ export class UsersComponent implements OnInit {
 	distributorList: any;
 	gmailSyncFlag = false;
 
+	testEmail = '';
+
 	user: any = {
 		username: '',
 		password: '',
@@ -51,6 +53,7 @@ export class UsersComponent implements OnInit {
 		facebook: '',
 		instagram: '',
 		youtube: '',
+		email_text: '',
 		emailConfig: {
 			smtp: '',
 			port: '',
@@ -223,5 +226,18 @@ export class UsersComponent implements OnInit {
 				Swal.fire('Error', response.message, 'error');
 			}
 		});
+	}
+
+	checkEmail(){
+		if (this.testEmail.length < 3){
+			return;
+		}
+		this.userService.checkEmail(this.user._id, this.testEmail).subscribe((response: any) => {
+			if (response.ok){
+				Swal.fire('Success', 'Mail enviado correctamente', 'success');
+			} else {
+				Swal.fire('Error', 'Error enviando mail', 'error');
+			}
+		})
 	}
 }
