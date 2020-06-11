@@ -4,7 +4,8 @@ const hbs = require('nodemailer-express-handlebars');
 let sendMail = async (store, client, user) => {
 	const config = {
 		backend_url: process.env.BACKEND_URL,
-		email_img_path: '/files/user/email/'
+		email_img_path: '/files/user/email/',
+		logo_img_path: '/files/user/'
 	};
 	const emailConfig = user.emailConfig;
 	console.log(emailConfig);
