@@ -160,9 +160,18 @@
                                             <input matInput placeholder="Contraseña email" [(ngModel)]="user.emailConfig.emailPassword" type="password" name="emailPassword" />
                                         </mat-form-field>
                                     </td>
-                                </tr>
+								</tr>
+								<tr>
+									<td>
+										<mat-form-field class="register-full-width">
+                                            <input matInput placeholder="Email de prueba" [(ngModel)]="testEmail" type="" name="testEmail" />
+										</mat-form-field>
+										<button mat-raised-button color="primary" (click)="checkEmail()">Probar correo</button>
+									</td>
+								</tr>
                             </table>
-                        </form>
+						</form>
+						<br>
                         <h4 *ngIf="auth.isAdmin()" class="text-center">Imagen email bienvenida</h4>
                         <table *ngIf="auth.isAdmin()" style="width: 100%">
                             <tbody>
@@ -177,9 +186,17 @@
                                         <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="user.email_img" style="margin-left: 20px; width: 40px; height: 150px;">X</button>
                                         <button (click)="removeEmailImage(0)" class="btn btn-danger" *ngIf="!user.email_img" style="margin-left: 20px; width: 40px; height: 150px;" disabled>X</button>
                                     </td>
+								</tr>
+								<tr>
+                                    <td>
+                                        <mat-form-field class="register-full-width">
+                                            <textarea matInput rows="5" placeholder="Texto de protección de datos" [(ngModel)]="user.email_text" name="gpdr" style="padding: 10px; border-radius: 10px; border: 1px solid lightgray;"></textarea>
+                                        </mat-form-field>
+                                    </td>
                                 </tr>
                             </tbody>
-                        </table>
+						</table>
+
                     </div>
                 </div>
                 <mat-spinner [style.display]="showSpinner ? 'block' : 'none'"></mat-spinner>

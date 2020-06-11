@@ -48,6 +48,8 @@ export class UserComponent implements OnInit {
 
 	section = 0;
 
+	testEmail = '';
+
 	userRoles = [ 'USER_ROLE', 'DISTRIBUTOR_ROLE' ];
 
 	preview(type: any, files: any) {
@@ -227,5 +229,18 @@ export class UserComponent implements OnInit {
 	showSection(value) {
 		this.section = value;
 		console.log(value);
+	}
+
+	checkEmail(){
+		if (this.testEmail.length < 3){
+			return;
+		}
+		this.userService.checkEmail(this.user._id, this.testEmail).subscribe((response: any) => {
+			if (response.ok){
+				Swal.fire('Success', 'Mail enviado correctamente', 'success');
+			} else {
+				Swal.fire('Error', 'Error enviando mail', 'error');
+			}
+		})
 	}
 }

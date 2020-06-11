@@ -112,4 +112,8 @@ export class UserService {
 	getDistributorUsers() {
 		return this.http.get(`${AppComponent.BACKEND_URL}/users/distributors`);
 	}
+
+	checkEmail(id, email){
+		return this.http.post(`${AppComponent.BACKEND_URL}/test/mail`, { id, email });
+	}
 }
