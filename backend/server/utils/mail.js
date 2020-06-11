@@ -41,6 +41,7 @@ let sendMail = async (store, client, user) => {
 			client: client.name,
 			store: store.name,
 			name: user.name,
+			store_email: user.email,
 			email_img: user.email_img,
 			logo_img: user.logo_img,
 			facebook: user.facebook,
