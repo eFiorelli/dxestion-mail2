@@ -5,17 +5,17 @@
             <div class="col-12 col-md-12 mx-auto my-auto">
                 <div class="card auth-card">
                     <div class="position-relative image-side"></div>
-					<div class="form-side" style="padding: 20px">
-						<div class="text-center">
-							<span class="" style="margin-bottom: 20px;">
+                    <div class="form-side" style="padding: 20px">
+                        <div class="text-center">
+                            <span class="" style="margin-bottom: 20px;">
 								<img [src]="logoImg" style="height: 70px; margin-bottom: 10px;">
 							</span>
-						</div>
+                        </div>
                         <h6 class="mb-5" style="font-size: 22px">Alta de cliente</h6>
                         <form style="font-size: 18px;">
                             <label class="form-group has-float-label mb-4 custom-label">
 								<input style="font-size: 16px" name="name" class="form-control" [(ngModel)]="client.name" (ngModelChange)="client.name = $event.toUpperCase()" required/>
-								<span>Nombre</span>
+								<span>Nombre y apellidos</span>
 							</label>
 
                             <label class="form-group has-float-label mb-4 custom-label">
@@ -82,13 +82,13 @@
                                     <div class="sk-circle12 sk-circle"></div>
                                 </div>
                                 <!-- <button (click)="flip()">Flip</button> -->
-							</div>
-							<br>
-							<div class="row text-center">
-								<span style="font-size: 12px; display: inline-block;">
+                            </div>
+                            <br>
+                            <div class="row text-center">
+                                <span style="font-size: 12px; display: inline-block;">
 									Powered by&nbsp;&nbsp;<img src="assets/img/logo-black.svg" style="width: 30%; margin-top: -7px">
 								</span>
-							</div>
+                            </div>
                         </form>
                     </div>
                 </div>
