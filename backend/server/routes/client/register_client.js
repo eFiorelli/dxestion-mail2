@@ -193,10 +193,12 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
                             return 2;
                         }
                     }
-
+                    console.log(connection_params.store_type);
+                    console.log(connection_params.database);
                     if (connection_params.store_type === 'Manager' && connection_params.database === 'FIMSBURY') {
                         const sql_string_client_tariff = `insert into TARIFASCLIENTE (CODCLIENTE, IDTARIFAV, DESCRIPCION, POSICION, DTO, CODPROVEEDOR, CODEXTERNO) values (${max_id}, 2, 'TARIFA CLIENTES', 1,  0, 0, '' )`;
                         const client_tariff = await sql.query(sql_string_client_tariff);
+                        console.log(client_tariff);
                         if (client_tariff.rowsAffected[0] <= 0) {
                             return 2;
                         }
