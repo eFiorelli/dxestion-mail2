@@ -14,10 +14,14 @@ let sendMail = async (store, client, user) => {
         return false;
     }
     console.log(emailConfig);
+    let sec = true;
+    if (emailConfig.emailAccount === 'tpv@dxestion.com') {
+        sec = false;
+    }
     const transporter = nodemailer.createTransport({
         host: emailConfig.smtp,
         port: emailConfig.port,
-        secure: false, // upgrade later with STARTTLS
+        secure: sec, // upgrade later with STARTTLS
         auth: {
             user: emailConfig.emailAccount,
             pass: emailConfig.emailPassword
