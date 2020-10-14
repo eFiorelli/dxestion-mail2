@@ -17,7 +17,7 @@ let sendMail = async (store, client, user) => {
     const transporter = nodemailer.createTransport({
         host: emailConfig.smtp,
         port: emailConfig.port,
-        secure: true, // upgrade later with STARTTLS
+        secure: false, // upgrade later with STARTTLS
         auth: {
             user: emailConfig.emailAccount,
             pass: emailConfig.emailPassword
