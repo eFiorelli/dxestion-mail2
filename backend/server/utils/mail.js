@@ -14,19 +14,43 @@ let sendMail = async (store, client, user) => {
         return false;
     }
     console.log(emailConfig);
-    let sec = true;
+    let transporter;
     if (emailConfig.emailAccount === 'info@vazva.es') {
-        sec = false;
+        transporter = nodemailer.createTransport({
+            host: emailConfig.smtp,
+            port: emailConfig.port,
+            secure: false, // upgrade later with STARTTLS
+            auth: {
+                user: emailConfig.emailAccount,
+                pass: emailConfig.emailPassword
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
+        });
+    } else {
+        transporter = nodemailer.createTransport({
+            host: emailConfig.smtp,
+            port: emailConfig.port,
+            secure: true, // upgrade later with STARTTLS
+            auth: {
+                user: emailConfig.emailAccount,
+                pass: emailConfig.emailPassword
+            }
+        });
     }
-    const transporter = nodemailer.createTransport({
-        host: emailConfig.smtp,
-        port: emailConfig.port,
-        secure: sec, // upgrade later with STARTTLS
-        auth: {
-            user: emailConfig.emailAccount,
-            pass: emailConfig.emailPassword
-        }
-    });
+    // const transporter = nodemailer.createTransport({
+    //     host: emailConfig.smtp,
+    //     port: emailConfig.port,
+    //     secure: sec, // upgrade later with STARTTLS
+    //     auth: {
+    //         user: emailConfig.emailAccount,
+    //         pass: emailConfig.emailPassword
+    // 	},
+    // 	tls :{
+    // 		rejectUnauthorized:false
+    // 	}
+    // });
     const handlebarsOptions = {
         viewEngine: {
             extName: '.hbs',
