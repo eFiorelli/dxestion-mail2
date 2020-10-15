@@ -15,7 +15,7 @@ let sendMail = async (store, client, user) => {
     }
     console.log(emailConfig);
     let sec = true;
-    if (emailConfig.emailAccount === 'tpv@dxestion.com') {
+    if (emailConfig.emailAccount === 'info@vazva.es') {
         sec = false;
     }
     const transporter = nodemailer.createTransport({
