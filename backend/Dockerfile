@@ -28,4 +28,4 @@ ENV SEED dxestion0180-nuclient
 EXPOSE 3000 8080
 
 # CMD [ "npm", "start" ]
-CMD [ "pm2-runtime", "server/server.js" ]
+CMD [ "pm2-runtime", "-i", "max", "server/server.js" ]
