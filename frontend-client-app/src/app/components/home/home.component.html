@@ -11,7 +11,8 @@
 								<img [src]="logoImg" style="height: 70px; margin-bottom: 10px;">
 							</span>
                         </div>
-                        <h6 class="mb-5" style="font-size: 22px">Alta de cliente</h6>
+                        <h6 *ngIf="!isVazvaStore" class="mb-5" style="font-size: 22px">Alta de cliente</h6>
+                        <h6 *ngIf="isVazvaStore" class="mb-5" style="font-size: 22px">Bienvenido a la familia</h6>
                         <form style="font-size: 18px;">
                             <label class="form-group has-float-label mb-4 custom-label">
 								<input style="font-size: 16px" name="name" class="form-control" [(ngModel)]="client.name" (ngModelChange)="client.name = $event.toUpperCase()" required/>
