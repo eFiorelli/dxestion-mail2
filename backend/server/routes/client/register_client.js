@@ -161,7 +161,7 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
         if (connection) {
             const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
             let max_id;
-            if (connection_params.store_type = 'FrontRest/Manager') {
+            if (connection_params.store_type === 'FrontRest/Manager') {
                 max_id = (await sql.query `SELECT MAX(CODCLIENTE) + 1 as ID from CLIENTES`).recordset[0].ID
             } else {
                 max_id = (await sql.query `select
@@ -183,7 +183,11 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
                         .invoice_detail.cif}, ${client.invoice_detail.address}, ${client.invoice_detail.city}, ${client
                         .invoice_detail.province}, ${client.invoice_detail.zip_code})`;
                 } else {
-                    query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+                    if (connection_params.store_type === 'FrontRest/Manager') {
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G')`;
+                    } else {
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+                    }
                 }
                 if (query.code === 'EREQUEST') {
                     /* Bad SQL statement */
