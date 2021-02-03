@@ -33,13 +33,14 @@ let sendMail = async(store, client, user) => {
             transporter = nodemailer.createTransport({
                 host: emailConfig.smtp,
                 port: emailConfig.port,
-                secure: false, // upgrade later with STARTTLS
+                secure: true, // upgrade later with STARTTLS
                 auth: {
                     user: emailConfig.emailAccount,
                     pass: emailConfig.emailPassword
                 },
                 tls: {
-                    rejectUnauthorized: false
+                    rejectUnauthorized: false,
+                    ciphers: 'SSLv3',
                 }
             });
         } else {
