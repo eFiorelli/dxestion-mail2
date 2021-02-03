@@ -7,7 +7,7 @@ const { sendMail } = require('../../utils/mail');
 const sql = require('mssql');
 const router = express.Router();
 
-router.post('/register/client', checkUserToken, async (req, res) => {
+router.post('/register/client', checkUserToken, async(req, res) => {
     let body = req.body;
     let client_insert;
     try {
@@ -52,7 +52,7 @@ router.post('/register/client', checkUserToken, async (req, res) => {
     }
 });
 
-saveClient = async (client_insert, store, body, files, res) => {
+saveClient = async(client_insert, store, body, files, res) => {
     sql.close();
     try {
         switch (client_insert) {
@@ -144,7 +144,7 @@ saveClient = async (client_insert, store, body, files, res) => {
     }
 };
 
-sendClientToFRTFRSManager = async (connection_params, client) => {
+sendClientToFRTFRSManager = async(connection_params, client) => {
     const config = {
         user: connection_params.database_username,
         password: connection_params.database_password,
@@ -159,26 +159,31 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
             `mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
         );
         if (connection) {
-            const result = await sql.query`SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
-            const max_id = (await sql.query`select
-			case ISNULL(MAX(CODCLIENTE)+1,0)
-			when 0 then (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)
-			else ISNULL(MAX(CODCLIENTE)+1,0)
-			end as ID
-			FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
-			where
-			CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
-			CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0].ID;
+            const result = await sql.query `SELECT * from CLIENTES where (E_MAIL = ${client.email}) OR (TELEFONO1 = ${client.phone})`;
+            let max_id;
+            if (connection_params.store_type = 'FrontRest/Manager') {
+                max_id = (await sql.query `SELECT MAX(CODCLIENTE) + 1 as ID from CLIENTES`).recordset[0].ID
+            } else {
+                max_id = (await sql.query `select
+				case ISNULL(MAX(CODCLIENTE)+1,0)
+				when 0 then (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)
+				else ISNULL(MAX(CODCLIENTE)+1,0)
+				end as ID
+				FROM CLIENTES WITH(SERIALIZABLE, UPDLOCK)
+				where
+				CODCLIENTE <= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MAXIM' and USUARIO=1) and
+				CODCLIENTE >= (select VALOR from PARAMETROS where CLAVE='CONT' and SUBCLAVE='MINIM' and USUARIO=1)`).recordset[0].ID;
+            }
 
             const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
             if (result.recordset.length === 0) {
                 let query;
                 if (client.invoice_detail) {
-                    query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client
+                    query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE, CIF, DIRECCION1, POBLACION, PROVINCIA, CODPOSTAL) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password}, ${client
                         .invoice_detail.cif}, ${client.invoice_detail.address}, ${client.invoice_detail.city}, ${client
                         .invoice_detail.province}, ${client.invoice_detail.zip_code})`;
                 } else {
-                    query = await sql.query`insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+                    query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
                 }
                 if (query.code === 'EREQUEST') {
                     /* Bad SQL statement */
@@ -186,7 +191,7 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
                 }
                 if (query.rowsAffected[0] === 1) {
                     /* Client inserted */
-                    if (connection_params.store_type in [ 'FrontRetail/Manager', 'FrontRest/Manager' ]) {
+                    if (connection_params.store_type in ['FrontRetail/Manager', 'FrontRest/Manager']) {
                         const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, FO, IDCENTRAL, TALLA, COLOR) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '001',0, 1, 12, 0, '', ${client_id}, 0, 1, '.','.')`;
                         const rem_transactions = await sql.query(sql_string_rem_transactions);
                         if (rem_transactions.rowsAffected[0] <= 0) {
@@ -230,7 +235,7 @@ sendClientToFRTFRSManager = async (connection_params, client) => {
     }
 };
 
-sendClientToAgora = async (connection_params, client) => {
+sendClientToAgora = async(connection_params, client) => {
     sql.close();
     const config = {
         user: connection_params.database_username,
@@ -246,19 +251,19 @@ sendClientToAgora = async (connection_params, client) => {
             `mssql://${config.user}:${config.password}@${config.server}:${config.port}/${config.database}`
         );
         if (connection) {
-            const result = await sql.query`SELECT * from CUSTOMER where (EMAIL = ${client.email}) OR (TELEPHONE = ${client.phone})`;
-            const max_id = (await sql.query`select ISNULL(MAX(ID)+1,0) as ID FROM CUSTOMER WITH (SERIALIZABLE, UPDLOCK)`)
+            const result = await sql.query `SELECT * from CUSTOMER where (EMAIL = ${client.email}) OR (TELEPHONE = ${client.phone})`;
+            const max_id = (await sql.query `select ISNULL(MAX(ID)+1,0) as ID FROM CUSTOMER WITH (SERIALIZABLE, UPDLOCK)`)
                 .recordset[0].ID;
             if (result.recordset.length === 0) {
                 let query;
                 if (client.invoice_detail) {
-                    query = await sql.query`insert into CUSTOMER (ID, FISCALNAME, CIF, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client
+                    query = await sql.query `insert into CUSTOMER (ID, FISCALNAME, CIF, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client
                         .invoice_detail.cif ||
                         ''}, ${client.name}, ${client.phone}, ${config.email}, ${client.name}, 0.00, 1, 0, 0, '', ${client
                         .invoice_detail.address || ''}, ${client.invoice_detail.city || ''}, ${client.invoice_detail
                         .province || ''}, ${client.invoice_detail.zip_code || ''}, '')`;
                 } else {
-                    query = await sql.query`insert into CUSTOMER (ID, FISCALNAME, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client.name}, ${client.phone}, ${client.email}, ${client.name}, 0.00, 1, 0, 0, '', '', '', '', '', '')`;
+                    query = await sql.query `insert into CUSTOMER (ID, FISCALNAME, BUSINESSNAME, TELEPHONE, EMAIL, CONTACTPERSON, DISCOUNTRATE, SENDMAILING, APPLYSURCHARGE, SHOWNOTES, NOTES, STREET, CITY, REGION, ZIPCODE, ACCOUNTCODE) values (${max_id}, ${client.name}, ${client.name}, ${client.phone}, ${client.email}, ${client.name}, 0.00, 1, 0, 0, '', '', '', '', '', '')`;
                 }
 
                 if (query.code === 'EREQUEST') {
@@ -287,7 +292,7 @@ sendClientToAgora = async (connection_params, client) => {
     }
 };
 
-saveFreeFields = async (client_id, free_fields) => {
+saveFreeFields = async(client_id, free_fields) => {
     const ff = JSON.parse(free_fields);
     let sql_string = '';
     if (ff.length > 0) {
@@ -337,7 +342,7 @@ saveFreeFields = async (client_id, free_fields) => {
     }
 };
 
-addSignature = async (clientDB, res, signature) => {
+addSignature = async(clientDB, res, signature) => {
     try {
         let file = signature;
         extension = 'png';
