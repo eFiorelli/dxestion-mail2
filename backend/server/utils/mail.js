@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const hbs = require('nodemailer-express-handlebars');
 
-let sendMail = async (store, client, user) => {
+let sendMail = async(store, client, user) => {
     const config = {
         backend_url: process.env.BACKEND_URL,
         email_img_path: '/files/user/email/',
@@ -25,19 +25,35 @@ let sendMail = async (store, client, user) => {
                 pass: emailConfig.emailPassword
             },
             tls: {
-                rejectUnauthorized: false
+                rejectUnauthorized: false,
             }
         });
     } else {
-        transporter = nodemailer.createTransport({
-            host: emailConfig.smtp,
-            port: emailConfig.port,
-            secure: true, // upgrade later with STARTTLS
-            auth: {
-                user: emailConfig.emailAccount,
-                pass: emailConfig.emailPassword
-            }
-        });
+        if (emailConfig.emailAccount === 'dxestion@s292445604.mialojamiento.es') {
+            transporter = nodemailer.createTransport({
+                host: emailConfig.smtp,
+                port: emailConfig.port,
+                secure: false, // upgrade later with STARTTLS
+                auth: {
+                    user: emailConfig.emailAccount,
+                    pass: emailConfig.emailPassword
+                },
+                tls: {
+                    rejectUnauthorized: false,
+                    ciphers: 'SSLv3'
+                }
+            });
+        } else {
+            transporter = nodemailer.createTransport({
+                host: emailConfig.smtp,
+                port: emailConfig.port,
+                secure: true, // upgrade later with STARTTLS
+                auth: {
+                    user: emailConfig.emailAccount,
+                    pass: emailConfig.emailPassword
+                }
+            });
+        }
     }
     // const transporter = nodemailer.createTransport({
     //     host: emailConfig.smtp,
