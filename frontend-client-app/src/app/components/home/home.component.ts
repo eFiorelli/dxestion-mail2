@@ -99,8 +99,15 @@ export class HomeComponent implements OnInit {
             p.style.background = "url('../../../assets/img/vazva_bg.jpg') no-repeat center center";
             p.style.backgroundSize = 'cover';
         } else {
-            this.isVazvaStore = false;
-        }
+			this.isVazvaStore = false;
+			if (sessionStorage.getItem('store') === '601adeed8a4b3e00251e2e19') {
+				// const p: any = document.querySelector('.fixed-background');
+				const p: any = document.querySelector('.auth-card .image-side');
+				// p.style.background = "url('../../../assets/img/vazva_bg.jpg') no-repeat center center fixed";
+				p.style.background = "url('../../../assets/img/kohlanta_bg.png') no-repeat center center";
+				p.style.backgroundSize = 'cover';
+			}
+		}
     }
 
     parseFreeFields() {
