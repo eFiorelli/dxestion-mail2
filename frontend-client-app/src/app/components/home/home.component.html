@@ -30,7 +30,7 @@
 							</label>
 
                             <label class="form-group has-float-label mb-4 custom-label">
-								<input style="font-size: 16px" name="city" class="form-control" [(ngModel)]="client.city" required/>
+								<input style="font-size: 16px" name="city" class="form-control" [(ngModel)]="client.city" (ngModelChange)="client.city = $event.toUpperCase()" required/>
 								<span>Cuidad</span>
 							</label>
 
