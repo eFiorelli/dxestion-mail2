@@ -10,6 +10,10 @@
 	opacity: 1;
 }
 
+.img-w-100 {
+	width: auto;
+}
+
 .opacity {
 	filter: alpha(opacity=0);
 	opacity: 0;
@@ -170,4 +174,10 @@
 
 .custom-label{
 	font-size: 70% !important;
+}
+
+@media screen and (max-width: 650px){
+	.img-w-100 {
+		width: 100%;
+	}
 }

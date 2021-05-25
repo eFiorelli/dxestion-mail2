@@ -37,6 +37,7 @@ export class HomeComponent implements OnInit {
         email: '',
         name: '',
         phone: '',
+        city: '',
         signature: new Blob(),
         gpdr: false,
         freeFields: ''
@@ -255,6 +256,7 @@ export class HomeComponent implements OnInit {
             email: '',
             name: '',
             phone: '',
+			city: '',
             signature: new Blob(),
             gpdr: false,
             freeFields: ''

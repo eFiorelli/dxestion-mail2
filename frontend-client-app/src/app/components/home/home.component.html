@@ -8,7 +8,7 @@
                     <div class="form-side" style="padding: 20px">
                         <div class="text-center">
                             <span class="" style="margin-bottom: 20px;">
-								<img [src]="logoImg" style="height: 70px; margin-bottom: 10px;">
+								<img [src]="logoImg" class="img-w-100" style="height: 70px; margin-bottom: 10px;">
 							</span>
                         </div>
                         <h6 *ngIf="!isVazvaStore" class="mb-5" style="font-size: 22px">Alta de cliente</h6>
@@ -27,6 +27,11 @@
                             <label class="form-group has-float-label mb-4 custom-label">
 								<input style="font-size: 16px" name="phone" class="form-control" [(ngModel)]="client.phone" required/>
 								<span>Teléfono</span>
+							</label>
+
+                            <label class="form-group has-float-label mb-4 custom-label">
+								<input style="font-size: 16px" name="city" class="form-control" [(ngModel)]="client.city" required/>
+								<span>Cuidad</span>
 							</label>
 
                             <label class="form-group has-float-label mb-4 custom-label">

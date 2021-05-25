@@ -61,6 +61,7 @@ saveClient = async(client_insert, store, body, files, res) => {
                     name: body.name,
                     email: body.email,
                     phone: body.phone,
+                    city: body.city,
                     invoice_details: body.invoice_detail,
                     store: store
                 });
@@ -184,9 +185,9 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
                         .invoice_detail.province}, ${client.invoice_detail.zip_code})`;
                 } else {
                     if (connection_params.store_type === 'FrontRest/Manager') {
-                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G')`;
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G')`;
                     } else {
-                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G', '1', ${config.commerce_password})`;
                     }
                 }
                 if (query.code === 'EREQUEST') {
@@ -195,9 +196,20 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
                 }
                 if (query.rowsAffected[0] === 1) {
                     /* Client inserted */
-                    if (connection_params.store_type in ['FrontRetail/Manager', 'FrontRest/Manager']) {
+                    if (connection_params.store_type === 'FrontRetail/Manager') {
                         const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, FO, IDCENTRAL, TALLA, COLOR) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '001',0, 1, 12, 0, '', ${client_id}, 0, 1, '.','.')`;
                         const rem_transactions = await sql.query(sql_string_rem_transactions);
+                        if (rem_transactions.rowsAffected[0] <= 0) {
+                            return 2;
+                        }
+                    }
+                    if (connection_params.store_type === 'FrontRest/Manager') {
+                        const sql_string_rem_transactions = `insert into REM_TRANSACCIONES (TERMINAL, CAJA, CAJANUM, Z, TIPO, ACCION, SERIE, NUMERO, N, FECHA, HORA, FO, IDCENTRAL) values (CAST(SERVERPROPERTY('COMPUTERNAMEPHYSICALNETBIOS') AS NVARCHAR(40)), '',1, 1, 12, 0, '', ${client_id}, '', '', '', 0, 1)`;
+                        console.log('REM_TRANSACCIONES query: ');
+                        console.log(sql_string_rem_transactions);
+                        const rem_transactions = await sql.query(sql_string_rem_transactions);
+                        console.log('Rows affected');
+                        console.log(rem_transactions.rowsAffected[0])
                         if (rem_transactions.rowsAffected[0] <= 0) {
                             return 2;
                         }
