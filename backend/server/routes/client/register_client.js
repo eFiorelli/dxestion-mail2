@@ -70,6 +70,7 @@ saveClient = async(client_insert, store, body, files, res) => {
                     phone: body.phone,
                     store: store
                 });
+				console.log(existingClient);
                 if (existingClient.length === 0) {
                     if (files) {
                         const response = await addSignature(client, res, files.signature);
