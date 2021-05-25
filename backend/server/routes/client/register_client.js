@@ -70,7 +70,6 @@ saveClient = async(client_insert, store, body, files, res) => {
                     phone: body.phone,
                     store: store
                 });
-				console.log(existingClient);
                 if (existingClient.length === 0) {
                     if (files) {
                         const response = await addSignature(client, res, files.signature);
@@ -178,6 +177,8 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
             }
 
             const client_account = (parseFloat(4300000000) + parseFloat(max_id)).toString();
+			console.log(result);
+			console.log(max_id);
             if (result.recordset.length === 0) {
                 let query;
                 if (client.invoice_detail) {
