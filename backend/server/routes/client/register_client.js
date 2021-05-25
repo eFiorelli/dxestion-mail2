@@ -61,6 +61,7 @@ saveClient = async(client_insert, store, body, files, res) => {
                     name: body.name,
                     email: body.email,
                     phone: body.phone,
+                    city: body.city,
                     invoice_details: body.invoice_detail,
                     store: store
                 });
@@ -184,9 +185,9 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
                         .invoice_detail.province}, ${client.invoice_detail.zip_code})`;
                 } else {
                     if (connection_params.store_type === 'FrontRest/Manager') {
-                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G')`;
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G')`;
                     } else {
-                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, 'G', '1', ${config.commerce_password})`;
+                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G', '1', ${config.commerce_password})`;
                     }
                 }
                 if (query.code === 'EREQUEST') {
