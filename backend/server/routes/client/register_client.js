@@ -187,7 +187,11 @@ sendClientToFRTFRSManager = async(connection_params, client) => {
                         .invoice_detail.province}, ${client.invoice_detail.zip_code})`;
                 } else {
                     if (connection_params.store_type === 'FrontRest/Manager') {
-                        query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G')`;
+						if (connection_params.database_name === 'TRASPASADA') { /* Kohlanta database */
+							query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, TIPO, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, '1', 'G')`;
+						} else {
+							query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G')`;
+						}
                     } else {
                         query = await sql.query `insert into CLIENTES (CODCLIENTE, NOMBRECLIENTE, NOMBRECOMERCIAL, CODCONTABLE, E_MAIL, TELEFONO1, POBLACION, REGIMFACT, CODMONEDA, PASSWORDCOMMERCE) values (${max_id}, ${client.name}, ${client.name}, ${client_account}, ${client.email}, ${client.phone}, ${client.city}, 'G', '1', ${config.commerce_password})`;
                     }
