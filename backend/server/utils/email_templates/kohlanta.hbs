@@ -45,7 +45,7 @@
         }
 
         .bgBody {
-            background: #000000;
+            background: #dedada;
         }
 
         .bgItem {
@@ -200,7 +200,7 @@
 
     <script type="colorScheme" class="swatch active">
 
-        { "name":"Default", "bgBody":"000000", "link":"7E8564", "color":"AAAAAA", "bgItem":"ffffff", "title":"444444" }
+        { "name":"Default", "bgBody":"333333", "link":"7E8564", "color":"AAAAAA", "bgItem":"ffffff", "title":"444444" }
     </script>
 </head>
 
@@ -208,6 +208,9 @@
     offset="0" toppadding="0" leftpadding="0">
     <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody" align="center" style="font-family: Arial, serif;">
         <tbody>
+            <tr>
+                <td height="55"></td>
+            </tr>
             <tr>
                 <td>
                     <table width="600" border="0" cellspacing="0" cellpadding="0" align="center" class="MainContainer" bgcolor="white">
@@ -222,10 +225,16 @@
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="white">
                                             <tbody>
                                                 <tr>
+                                                    <td height="30"></td>
+                                                </tr>
+
+                                                <tr>
                                                     <td>
                                                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                             <tbody>
                                                                 <tr>
+                                                                    <td valign="top" width="28">&nbsp;</td>
+
                                                                     <td>
                                                                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                                                             <tbody>
@@ -233,7 +242,19 @@
                                                                                     <td valign="top">
                                                                                         <div class="contentEditableContainer contentImageEditable">
                                                                                             <div class="contentEditable">
-                                                                                                <img src="http://backend.nuclient.es:85/files/user/email/vazva_top.jpg" alt="vazva_15_years" data-default="placeholder" data-max-width="600" width="600" height="185" border="0" />
+                                                                                                <img src="{{config.backend_url}}{{config.logo_img_path}}{{logo_img}}" alt="{{user.name}}" data-default="placeholder" data-max-width="300" height="80" border="0" />
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </td>
+
+                                                                                    <td valign="top" width="200" class="spechide">
+                                                                                        &nbsp;
+                                                                                    </td>
+
+                                                                                    <td valign="middle" width="200" align="right">
+                                                                                        <div class="contentEditableContainer contentTextEditable">
+                                                                                            <div class="contentEditable" valign="middle">
+                                                                                                <a target="_blank" href="" style="font-size: 16px;"></a>
                                                                                             </div>
                                                                                         </div>
                                                                                     </td>
@@ -241,67 +262,29 @@
                                                                             </tbody>
                                                                         </table>
                                                                     </td>
+
+                                                                    <td valign="top" width="28">&nbsp;</td>
                                                                 </tr>
                                                             </tbody>
                                                         </table>
                                                     </td>
                                                 </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
 
-                                    <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                            <tbody>
                                                 <tr>
-                                                    <td valign="top" width="600">
-                                                        <div class="contentEditableContainer contentImageEditable">
-                                                            <div class="contentEditable">
-                                                                <img class="banner" src="http://backend.nuclient.es:85/files/user/email/vazva_mid.jpg" alt="vazva" data-default="placeholder" data-max-width="600" width="600" border="0" />
-                                                            </div>
-                                                        </div>
-                                                    </td>
+                                                    <td height="30"></td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
 
                                     <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="white">
-                                            <tr>
-                                                <td height="25" colspan="3"></td>
-                                            </tr>
-
-                                            <tr>
-                                                <td width="25"></td>
-
-                                                <td>
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-                                                        <tr>
-                                                            <td>
-                                                                <div class="contentEditableContainer contentTextEditable">
-                                                                    <div class="contentEditable">
-                                                                        <p style="font-size: 14px; color: #b8bbbe; margin: 0; text-align: center;">
-                                                                            BIENVENID@ A VAZVASTORES, <br> QUEREMOS COMPARTIR CONTIGO ESTE CÓDIGO QR PARA QUE TENGAS ACCESO A NUESTRAS NOVEDADES, EVENTOS Y OFERTAS ANTES QUE NADIE.
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td width="25"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative; margin-top: 25px; text-align: center">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                             <tbody>
                                                 <tr>
                                                     <td valign="top" width="600">
                                                         <div class="contentEditableContainer contentImageEditable">
                                                             <div class="contentEditable">
-                                                                <img class="banner" src="http://backend.nuclient.es:85/files/user/email/vazva_qr.png" alt="vazva" data-default="placeholder" data-max-width="300" width="300" border="0" />
+                                                                <img class="banner" src="{{config.backend_url}}{{config.email_img_path}}{{email_img}}" alt="{{name}}" data-default="placeholder" data-max-width="600" width="600" border="0" />
                                                             </div>
                                                         </div>
                                                     </td>
@@ -309,49 +292,8 @@
                                             </tbody>
                                         </table>
                                     </div>
-									                                    <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="white">
-                                            <tr>
-                                                <td height="25" colspan="3"></td>
-                                            </tr>
-                                            <tr>
-                                                <td width="25"></td>
-                                                <td>
-                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center">
-                                                        <tr>
-                                                            <td>
-                                                                <div class="contentEditableContainer contentTextEditable">
-                                                                    <div class="contentEditable">
-                                                                        <p style="font-size: 14px; color: #000; margin: 0; text-align: center;">
-																			KOHLANTA Desde este momento, podrás acceder a nuestra tienda online con el mail con el que te has registrado y con la contraseña: <b>vazva2020</b> (una vez hayas accedido, podrás modificar tus datos de acceso en el panel de cliente)
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td width="25"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative; margin-top: 25px">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                            <tbody>
-                                                <tr>
-                                                    <td valign="top" width="600">
-                                                        <div class="contentEditableContainer contentImageEditable">
-                                                            <div class="contentEditable">
-                                                                <a target="_blank" href="https://vazva.es">
-                                                                    <img class="banner" src="http://backend.nuclient.es:85/files/user/email/vazva_bottom.jpg" alt="vazva" data-default="placeholder" data-max-width="600" width="600" border="0" />
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+
+
                                     <div class="movableContent" style="border: 0px; padding-top: 0px; position: relative;">
                                         <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" bgcolor="white">
                                             <tr>
@@ -375,21 +317,23 @@
                                                             <td>
                                                                 <div class="contentEditableContainer contentTextEditable" style="padding: 0px 20px">
                                                                     <div class="contentEditable">
-                                                                        <p style="color: #b8bbbe; text-align: center;">
-                                                                            Si usted desea darse de baja de toda notificación por parte de VAZVA, deberá madar un mail con el asunto: BAJA a
-                                                                            <a href="mailto:{{ store_email }}">info@vazva.es</a>
+                                                                        <p style="color: black;">
+                                                                            Si usted desea darse de baja de toda notificación por parte de {{store}}, deberá madar un mail con el asunto: BAJA a
+                                                                            <a href="mailto:{{ store_email }}">administracion@kohlanta.es</a>
                                                                         </p>
                                                                         <br>
+                                                                        <br>
                                                                         <p style="text-align: center;">
-                                                                            <a style="color: white" target="_blank" href="{{ facebook }}">
+                                                                            <a target="_blank" href="{{ facebook }}">
                                                                                 <img style="display: inline-block" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/600px-Facebook_Logo_%282019%29.png" width="25px" data-customIcon="true" height="25px" alt="facebook icon" data-default="placeholder"
                                                                                     data-max-width="25px" />
                                                                             </a>
-                                                                            <a style="color: white" target="_blank" href="{{ youtube }}">
-                                                                                <img style="display: inline-block" src="https://logos-world.net/wp-content/uploads/2020/04/YouTube-Emblem.png" width="35px" data-customIcon="true" height="25px" alt="twitter icon" data-default="placeholder" data-max-width="35px" />
-                                                                            </a>
-                                                                            <a style="color: white" target="_blank" href="{{ instagram }}">
-                                                                                <img style="display: inline-block" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/1200px-Instagram-Icon.png" width="25px" data-customIcon="true" height="25px" alt="twitter icon" data-default="placeholder" data-max-width="25px"/>
+                                                                            {{!-- <a target="_blank" href="{{ twitter }}">
+                                                                                <img style="display: inline-block" src="https://logodownload.org/wp-content/uploads/2014/09/twitter-logo-2-1.png" width="25px" data-customIcon="true" height="25px" alt="twitter icon" data-default="placeholder" data-max-width="25px" />
+                                                                            </a> --}}
+                                                                            <a target="_blank" href="{{ instagram }}">
+                                                                                <img style="display: inline-block" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Instagram-Icon.png/1200px-Instagram-Icon.png" width="25px" data-customIcon="true" height="25px" alt="twitter icon" data-default="placeholder" data-max-width="25px"
+                                                                                />
                                                                             </a>
                                                                         </p>
                                                                         <br>
@@ -403,7 +347,7 @@
 
                                             <tr style="text-align: center;">
                                                 <td height="25">
-                                                    <p><img style="display: block; margin: 0px auto;" src="http://app.nuclient.es:85/assets/img/logo-black.svg" width="150px" height="36" /> © 2020<br /></p>
+                                                    <p><img style="display:block; margin: 0px auto;" src="{{config.backend_url}}/files/media/logo-black.png" width="150px" height="36px"/> © 2020<br /></p>
                                                 </td>
                                             </tr>
                                             <tr height="20"></tr>
@@ -416,6 +360,10 @@
                         </tbody>
                     </table>
                 </td>
+            </tr>
+
+            <tr>
+                <td height="55"></td>
             </tr>
         </tbody>
     </table>
