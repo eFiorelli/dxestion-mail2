@@ -78,7 +78,13 @@ let sendMail = async(store, client, user) => {
     };
 
     transporter.use('compile', hbs(handlebarsOptions));
-    const templateName = emailConfig.emailAccount.split('@')[1].split('.')[0];
+	let templateName;
+	if (emailConfig.emailAccount.split('@')[1].split('.')[0] === 'nuclient') {
+		templateName = user.username.toLowerCase();
+	} else {
+		templateName = emailConfig.emailAccount.split('@')[1].split('.')[0];
+	}
+    
     const mailOptions = {
         from: ` ${emailConfig.emailAccount}`,
         to: `${client.email}`,
