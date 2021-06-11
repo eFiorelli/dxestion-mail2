@@ -25,7 +25,7 @@ let sendMail = async(store, client, user) => {
                 pass: emailConfig.emailPassword
             },
             tls: {
-                rejectUnauthorized: false,
+                rejectUnauthorized: false
             }
         });
     } else {
@@ -40,19 +40,34 @@ let sendMail = async(store, client, user) => {
                 },
                 tls: {
                     rejectUnauthorized: false,
-                    ciphers: 'SSLv3',
+                    ciphers: 'SSLv3'
                 }
             });
         } else {
-            transporter = nodemailer.createTransport({
-                host: emailConfig.smtp,
-                port: emailConfig.port,
-                secure: true, // upgrade later with STARTTLS
-                auth: {
-                    user: emailConfig.emailAccount,
-                    pass: emailConfig.emailPassword
-                }
-            });
+            if (emailConfig.emailAccount === 'altas@nuclient.es') {
+                transporter = nodemailer.createTransport({
+                    host: emailConfig.smtp,
+                    port: emailConfig.port,
+                    secure: false,
+                    auth: {
+                        user: emailConfig.emailAccount,
+                        pass: emailConfig.emailPassword
+                    },
+                    tls: {
+                        ciphers: 'SSLv3'
+                    }
+                });
+            } else {
+                transporter = nodemailer.createTransport({
+                    host: emailConfig.smtp,
+                    port: emailConfig.port,
+                    secure: true, // upgrade later with STARTTLS
+                    auth: {
+                        user: emailConfig.emailAccount,
+                        pass: emailConfig.emailPassword
+                    }
+                });
+            }
         }
     }
     // const transporter = nodemailer.createTransport({
@@ -78,13 +93,13 @@ let sendMail = async(store, client, user) => {
     };
 
     transporter.use('compile', hbs(handlebarsOptions));
-	let templateName;
-	if (emailConfig.emailAccount.split('@')[1].split('.')[0] === 'nuclient') {
-		templateName = user.username.toLowerCase();
-	} else {
-		templateName = emailConfig.emailAccount.split('@')[1].split('.')[0];
-	}
-    
+    let templateName;
+    if (emailConfig.emailAccount.split('@')[1].split('.')[0] === 'nuclient') {
+        templateName = user.username.toLowerCase();
+    } else {
+        templateName = emailConfig.emailAccount.split('@')[1].split('.')[0];
+    }
+
     const mailOptions = {
         from: ` ${emailConfig.emailAccount}`,
         to: `${client.email}`,
