@@ -24,7 +24,7 @@ defaultEntryPoints = ["https","http"]
 
 [docker]
 endpoint = "unix:///var/run/docker.sock"
-domain = "nuclient.es:25501"
+domain = "nuclient.es"
 watch = true
 
 [acme]
