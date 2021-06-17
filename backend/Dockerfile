@@ -18,7 +18,7 @@ COPY . .
 RUN npm install pm2 -g
 
 ENV NODE_ENV prod
-ENV BACKEND_URL https://backend.nuclient.es:85
+ENV BACKEND_URL https://backend.nuclient.es
 ENV MONGO_URI mongodb://mongo:27017/nuClient
 ENV DB_USERNAME nuclient1
 ENV DB_PWD nuclient.1/1
