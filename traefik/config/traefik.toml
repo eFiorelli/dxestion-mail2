@@ -1,0 +1,36 @@
+debug = true
+InsecureSkipVerify = true
+
+[web]
+address = ":8080"
+  [web.auth.basic]
+   users = ["admin:$apr1$jc0xKaqs$1haUJKtZKmuuBiOd.1R891"]
+
+defaultEntryPoints = ["https","http"]
+
+[entryPoints]
+  [entryPoints.http]
+  address = ":80"
+    [entryPoints.http.redirect]
+    entryPoint = "https"
+  [entryPoints.https]
+  address = ":443"
+  [entryPoints.https.tls]
+#    [[entryPoints.https.tls.certificates]]
+#      certFile = "/etc/traefik/certs/nuclient.crt"
+#      keyFile = "/etc/traefik/certs/nuclient.key"
+
+[retry]
+
+[docker]
+endpoint = "unix:///var/run/docker.sock"
+domain = "nuclient.es"
+watch = true
+
+[acme]
+email = "soporte@dxestion.com"
+storage = "/etc/traefik/acme/acme.json"
+entryPoint = "https"
+onHostRule = true
+[acme.httpChallenge]
+entryPoint = "http"
