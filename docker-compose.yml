@@ -1,8 +1,6 @@
 version: "3"
 
 services:
-<<<<<<< HEAD
-=======
   traefik:
     image: traefik:v1.7.16
     # command: --api --docker --docker.domain=nuclient.es
@@ -22,31 +20,22 @@ services:
       - $PWD/traefik/config/acme.json:/etc/traefik/acme/acme.json
       # - $PWD/ssl_certs/common:/etc/traefik/certs
     container_name: traefik
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
   mongo:
     image: bitnami/mongodb:latest
     environment: 
       - MONGODB_ROOT_PASSWORD=ab.cd1/1
       - MONGODB_USERNAME=nuclient1
       - MONGODB_PASSWORD=nuclient.1/1
-<<<<<<< HEAD
       - MONGODB_DATABASE=nuClient
     volumes:
       - $PWD/data/:/bitnami
-    networks:
-      - database
     user: "0"
-    container_name: nuclient_mongo
-=======
-      - MONGODB_DATABASE=nuclient
-    volumes:
-      - $PWD/data/:/data/db
     ports:
       - "27017:27017"
     networks:
       - database
     container_name: mongo
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
+
   mongo-express:
     image: mongo-express
     restart: always
@@ -55,10 +44,7 @@ services:
       - "traefik.frontend.rule=Host:admindb.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8081"
-<<<<<<< HEAD
       - "traefik.docker.network=web"
-=======
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
     links:
       - mongo
     environment:
@@ -66,35 +52,23 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongo
       - ME_CONFIG_BASICAUTH_USERNAME=dxestion
       - ME_CONFIG_BASICAUTH_PASSWORD=Dxestion0180
-<<<<<<< HEAD
       - ME_CONFIG_MONGODB_ADMINUSERNAME=root
       - ME_CONFIG_MONGODB_ADMINPASSWORD=ab.cd1/1
-=======
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
     networks:
       - web
       - database
     container_name: mongo-express
-<<<<<<< HEAD
-=======
 
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
   backend:
     build:
       context: ./backend
     links:
       - mongo
     labels:
-<<<<<<< HEAD
-      - "traefik.backend=nuclientbackend"
-      - "traefik.frontend.rule=Host:backend.nuclient.es"
-      - "traefik.frontend.entryPoints=http,https"
       - "traefik.docker.network=web"
-=======
       - "traefik.backend=backend"
       - "traefik.frontend.rule=Host:backend.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
       - "traefik.port=3000"
     depends_on:
       - mongo
@@ -104,11 +78,7 @@ services:
     networks:
       - web
       - database
-<<<<<<< HEAD
     container_name: nuclient_backend
-=======
-    container_name: backend
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
 
   frontend-admin:
     build:
@@ -127,11 +97,7 @@ services:
       - web
     volumes:
       - $PWD/nginx_conf:/etc/nginx/conf.d
-<<<<<<< HEAD
     container_name: nuclient_web-admin
-=======
-    container_name: web-admin
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
   frontend-client:
     build:
       context: ./frontend-client-app
@@ -139,11 +105,8 @@ services:
       - backend
     labels:
       - "traefik.backend=web-client"
-<<<<<<< HEAD
-      - "traefik.frontend.rule=Host:app.nuclient.es"
-=======
+#      - "traefik.frontend.rule=Host:app.nuclient.es"
       - "traefik.frontend.rule=Host:nuclient.es, www.nuclient.es, web.nuclient.es"
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
@@ -153,11 +116,7 @@ services:
       - web
     volumes:
       - $PWD/nginx_conf:/etc/nginx/conf.d
-<<<<<<< HEAD
     container_name: nuclient_web-client
-=======
-    container_name: web-client
->>>>>>> 1490c59a85ab2c73af6a6a86bd65b00f533040b8
 networks:
   web:
     external: true
