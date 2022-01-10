@@ -98,6 +98,7 @@ services:
     volumes:
       - $PWD/nginx_conf:/etc/nginx/conf.d
     container_name: nuclient_web-admin
+
   frontend-client:
     build:
       context: ./frontend-client-app
@@ -105,8 +106,8 @@ services:
       - backend
     labels:
       - "traefik.backend=web-client"
-#      - "traefik.frontend.rule=Host:app.nuclient.es"
-      - "traefik.frontend.rule=Host:nuclient.es, www.nuclient.es, web.nuclient.es"
+      - "traefik.frontend.rule=Host:app.nuclient.es"
+      #- "traefik.frontend.rule=Host:nuclient.es, www.nuclient.es, web.nuclient.es"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=80"
     depends_on:
