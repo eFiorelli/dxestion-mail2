@@ -25,9 +25,10 @@ let sendMail = async(store, client, user) => {
                 pass: emailConfig.emailPassword
             },
             tls: {
-                rejectUnauthorized: false
-				/*10/01/22
-				/ciphers: 'SSLv3'*/
+                rejectUnauthorized: false,
+				ciphers: 'SSLv3'
+
+
             }
         });
     } else {
