@@ -15,7 +15,7 @@ let sendMail = async(store, client, user) => {
     } // PROBLEMA CONEXION
     console.log(emailConfig);
     let transporter;
-    if (emailConfig.emailAccount === 'vazvacard@vazva.es') {
+    if (emailConfig.emailAccount === 'info@vazva.es') { //vazvacard@vazva.es 12/01/22
         transporter = nodemailer.createTransport({
             host: emailConfig.smtp,
             port: emailConfig.port,
@@ -25,8 +25,8 @@ let sendMail = async(store, client, user) => {
                 pass: emailConfig.emailPassword
             },
             tls: {
-                rejectUnauthorized: false,
-				ciphers: 'SSLv3'
+                rejectUnauthorized: false
+				/*ciphers: 'SSLv3'*/
 
 
             }
