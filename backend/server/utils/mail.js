@@ -15,7 +15,7 @@ let sendMail = async(store, client, user) => {
     } // PROBLEMA CONEXION
     console.log(emailConfig);
     let transporter;
-    if (emailConfig.emailAccount === 'info@vazva.es') { //vazvacard@vazva.es 12/01/22
+    if (emailConfig.emailAccount === 'vazvacard@vazva.es') {
         transporter = nodemailer.createTransport({
             host: emailConfig.smtp,
             port: emailConfig.port,
